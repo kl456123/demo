@@ -1,0 +1,109 @@
+<%- include header %>
+
+
+<!--START:main-->
+<!-- Docs page layout -->
+<div class="bs-docs-header" id="content" style="background-image: url('')">
+    <div class="container">
+        <h1>商品</h1>
+    </div>
+</div>
+<script type="text/javascript">
+
+    //懒加载
+    // coutPerReq 用来设置每次点击加载更多后新出现的条目个数
+    var coutPerReq = 5;
+    var cur = parseInt("<%= data.length %>");
+    var reqObj = {text:1, cover: 1,number: 1,_id:1};
+    function handledata(d){
+        //错误代码: 0-正常; 1-指定类别不存在; 2-获取数据失败; 3-已加载所有
+        switch(d.statuscode){
+            default : break;
+            case 1: alert('非法请求');return;
+            case 2: alert('数据库错误，请联系管理员');return;
+            case 3:
+                getMoreItem = function(){};
+                //点击加载更多后，如没有更多条目，则“加载更多”隐藏，“已经是全部”显示
+                document.getElementById('morebtn').style.display = 'none';
+                document.getElementById('nomore').style.display = 'block';
+                break;
+        }
+        cur += coutPerReq;
+        var cs = d.data;
+        //获取对应的条目类型
+        cs.forEach(function(c){
+            document.getElementById('more').innerHTML +=
+                    '<div class="col-sm-6 col-md-4" >' +
+                        '<div class="thumbnail" style="min-height: 280px">' +
+                            '<a href="/detail/commodity/' + c._id + '">' +
+                                '<img src="/images/upload/commodity/' + c.cover + '" alt="...">' +
+                            '</a>' +
+                            '<div class="caption">' +
+                                '<h3>' + c.number + '</h3>' +
+                                '<p>' + c.text + '</p>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>';
+        });
+    }
+    var getMoreItem = function(){
+        getMore(cur, coutPerReq, 'commodity',reqObj, handledata);
+    };
+</script>
+
+<div class="container bs-docs-container">
+    <div class="row">
+
+        <div id="m-nav" class="visible-xs visible-sm">
+            <a href="/list/commodity">全部</a>
+            <a href="/list/commodity?cat=a">a</a>
+            <a href="/list/commodity?cat=b">b</a>
+            <a href="/list/commodity?cat=c">c</a>
+        </div>
+
+        <div class="col-md-2">
+            <div class="bs-docs-sidebar hidden-print hidden-xs hidden-sm" role="complementary">
+                <ul class="nav bs-docs-sidenav">
+                    <li><a href="/list/commodity">全部</a></li>
+                    <li><a href="/list/commodity?cat=a">a</a></li>
+                    <li><a href="/list/commodity?cat=b">b</a></li>
+                    <li><a href="/list/commodity?cat=c">c</a></li>
+                </ul>
+                <a class="back-to-top" href="#top">
+                    返回顶部
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-10" role="main">
+            <div class="bs-docs-section">
+                <h2 id="bookmark-detail-1" class="page-header">商品列表</h2>
+                <div class="main">
+                    <div class="row" id="more">
+                        <% data.forEach(function(o, i){ %><!--o 代表Obj 对象-->
+                        <div class="col-sm-6 col-md-4" >
+                            <div class="thumbnail" style="min-height: 280px">
+                                <a href="/detail/commodity/<%= o._id %>">
+                                    <img src="/images/upload/commodity/<%= o.cover %>" alt="...">
+                                </a>
+                                <div class="caption">
+                                    <h3><%= o.number %></h3>
+                                    <p><%= o.text %></p>
+                                </div>
+                            </div>
+                        </div>
+                        <% }); %>
+                    </div>
+                </div>
+                <div class="col-md-12" style="text-align: center;font-size: 25px;margin-top: 20px">
+                    <a id="morebtn" href="javascript: getMoreItem();">加载更多</a>
+                    <a id="nomore" style="display: none">已经是全部了</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!--END:main-->
+
+<%- include footer %>

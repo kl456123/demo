@@ -1,0 +1,149 @@
+<%- include header %>
+
+<style>
+    input,a{
+        margin: 3px 2px;
+    }
+    @media (max-width:768px ) {
+        form.getCommodity{
+            white-space: pre-line;
+            text-align: center;
+        }
+        .couIntro{
+            text-align: center;
+        }
+    }
+    .oPrice{
+        text-decoration: line-through;
+    }
+    .sPrice{
+    }
+</style>
+
+<!--START:main-->
+<!-- Docs page layout -->
+<div class="bs-docs-header" id="content" style="background-image: url('')">
+    <div class="container">
+        <h1>商品</h1>
+    </div>
+</div>
+
+<div class="container bs-docs-container">
+
+    <a href="/list/commodity">返回列表</a>
+
+    <div class="row">
+        <div class="col-md-9" role="main">
+
+            <div class="bs-docs-section">
+                <h2 id="bookmark-1" class="page-header"><%= data.text %></h2>
+
+                <div class="row">
+                    <div class="col-md-5">
+                        <img src="/images/upload/commodity/<%= data.cover %>"
+                             alt="<%= data.text %>"
+                             style="width: 100%;height: 100%">
+                    </div>
+                    <div class="col-md-7 couIntro" style="font-size: 16px;line-height: 28px">
+                        <form>
+                            简介：<%= data.text %>
+                            <br/>
+                            官方价：
+                            <span class="oPrice">oPrice</span>
+                            <br/>
+                            栎果价：
+                            <span class="sPrice">sPrice</span>
+                            <br/>
+                            类别：
+                            <input checked="checked" type="radio" name="1" value="a">类别1
+                            <input type="radio" name="1" value="b">类别2
+                            <br />
+                            数量：<input type="number" name="amount" style="width: 60px">
+                            <br />
+                            优惠活动：--
+                            <br/>
+                            <a>Like</a> |
+                            <a>Add To Cart</a> |
+                            <a>Buy now</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bs-docs-section">
+                <h2 id="bookmark-3" class="page-header">textarea</h2>
+                这里将显示富文本编辑器的内容
+                <div class="main" id="commodity-content"></div>
+            </div>
+
+            <div class="bs-docs-section">
+                <h2 id="bookmark-4" class="page-header">关联条目</h2>
+                <% if(rel){rel.forEach(function(o, i){ %>
+                <div class="row"
+                     style="border: 1px dashed #cfcfcf;margin: 5px 1px;padding:10px 1px;border-radius: 10px">
+                    <div class="col-md-4">
+                        <a href="/detail/o/<%= o._id %>">
+                            <img src="/images/upload/org/<%= o.cover %>" style="width: 100%;height: 100%">
+                        </a>
+
+                    </div>
+                    <div class="col-md-8">
+                        <p style="font-size: 16px">
+                            <a href="/detail/o/<%= o._id %>" style="font-size: 20px">
+                                <%= o.name %>
+                            </a>
+                            <br/>
+                            <%= o.intro %>
+                        </p>
+                    </div>
+                </div>
+                <% });} %>
+            </div>
+
+            <div class="bs-docs-section">
+                <h2 id="bookmark-5" class="page-header">评论</h2>
+                <%- include part/comment %>
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+            <div class="bs-docs-sidebar hidden-print hidden-xs hidden-sm" role="complementary">
+                <ul class="nav bs-docs-sidenav">
+
+                    <li>
+                        <a href="#bookmark-1">标题1</a>
+                    </li>
+                    <li>
+                        <a href="#bookmark-2">标签2</a>
+                    </li>
+                    <li>
+                        <a href="#bookmark-3">textarea</a>
+                    </li>
+                    <li>
+                        <a href="#bookmark-4">关联条目</a>
+                    </li>
+                    <li>
+                        <a href="#bookmark-5">评论</a>
+                    </li>
+                </ul>
+                <a class="back-to-top" href="#top">
+                    返回顶部
+                </a>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--END:main-->
+
+<script text="text/javascript">
+    //load and decode rich text
+    $(function () {
+        $("#commodity-content").html(HtmlDecode("<%= data.textarea %>"));
+    });
+</script>
+
+
+
+<%- include footer %>

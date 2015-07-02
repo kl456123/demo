@@ -1,0 +1,118 @@
+<div class="bs-docs-footer">
+    <div class="col-md-12" >
+        <div class="row" style="margin-bottom:20px ">
+            <div class="col-md-4">
+                <img src="" id="code">
+                <br />
+                [放置您的logo，或二维码]
+            </div>
+            <div class="col-md-4">
+                <h2>ligleEngine!</h2>
+                <p>技术讨论：171084470 QQ群 </p>
+                <p>联系电话：0411-3919-9931</p>
+                <p>电子邮箱：hi@ligle.net</p>
+            </div>
+            <div class="col-md-4">
+                <a href="/readme" style="font-size: 26px;color: #aeaeae;white-space: pre-line;">
+                    说明文档
+                </a>
+            </div>
+            <div class="col-md-12" style="margin: 5px 0px 0px 0px;padding: 10px 5px 10px 5px;">
+                <a href="http://www.miibeian.gov.cn/" target="_blank">津ICP备14006882号</a>
+                /
+                Power BY
+                LigleEngine X 1.0.5
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript-->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="/common/bootstrap/bootstrap.min.js"></script>
+<script src="/common/bootstrap/docs.min.js"></script>
+<script src="/common/validform/validform.min.js"></script>
+<script src="/common/link_select/link_select.js" type="text/javascript"></script>
+<script src="/common/layer/layer.js" type="text/javascript"></script>
+<script src="/common/layer/extend/layer.ext.js" type="text/javascript"></script>
+
+<script>
+    var _hmt = _hmt || [];
+    <!--ATTENTION do not directly decode user code to avoid xss attack or we should use summer-->
+    function HtmlEncode(s) {
+        return $('<div>').text(s).html();
+    }
+    function HtmlDecode(s) {
+        return $('<div>').html(s).text();
+    }
+    $(".demoform").Validform({
+        datatype: {
+            "*6-20": /^[^\s]{6,20}$/,
+            // 2~4个中文
+            "z2-6": /^[\u4E00-\u9FA5\uf900-\ufa2d]{2,6}$/
+        }
+    });
+    /*------------------------START:使用layer实现弹出框---------------------------------*/
+    //弹出框的测试，位置在 readme.ejs
+    layer.config({extend:'skin/moon/style.css'});
+    layer.config({
+        extend: ['skin/moon/style.css'], //加载新皮肤
+        skin: 'layer-ext-myskin' //一旦设定，所有弹层风格都采用此主题。
+    });
+
+    $('#layerTest').on('click', function(){
+        layer.open('1111111111111');
+    });
+    /*------------------------END:使用layer实现弹出框---------------------------------*/
+
+    //Q:这两个函数是用来写懒加载的吗？
+    function submit(urlStr,method,datatoup,callback){
+        $.ajax({
+            url:urlStr,
+            // data:$("#testPost").serialize(),
+            data:datatoup,
+            type:method,
+            success:function(data){
+                callback(data);
+            },
+            error:function(err){
+                console.log(err);
+            }
+        });
+    }
+    //Q:cn, tn, t, q 分别代表什么？
+    function getMore(cn, tn, t, q, callback){
+        var query = '';
+        if(q && typeof q == 'object' && q != {}){
+            for(var key in q)
+                query += key + '=' + q[key] + '&';
+        }
+        query = query.substr(0, query.length - 1);
+        var url = '/moreitem/' + t + '/' + cn + '/' + tn;
+        submit(url, 'get', query, function(data){
+            callback(data);
+        });
+    }
+
+    //Ajax获取手机验证短信
+    function getSmsByForm(d,succCB,errCB){
+        d.ajax=true;
+        $.ajax({
+            url:'/getSMS',
+            type:'POST',
+            data:d,
+            success:function(data){
+                succCB(data);
+            },
+            error:function(err){
+                errCB(err.responseJSON);
+            }
+        });
+    }
+
+
+</script>
+
+</body>
+</html>

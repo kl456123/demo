@@ -1,0 +1,87 @@
+<%- include a_header %>
+
+<div class="row">
+
+    <div class="col-lg-8">
+        <div class="panel panel-default">
+            <!--本单元标题-->
+            <div class="panel-heading">订单详情</div>
+            <!--本单元内容-->
+            <div class="panel-body" style="font-size:20px;">
+                订单编号：1222939304  <!--编号的规则需要制定-->
+                <br />
+                下单账号：<a href="#">13624241484</a> <!--是否可以点击后打开会员的详情-->
+                <br />
+                订单类型：货到付款
+                <br />
+                订单状态：待发货
+                <hr />
+                联系人：朱龙超
+                <br />
+                电话：13624241484
+                <br />
+                地址：辽宁 大连 甘井子区 理工大学西门
+                <br />
+                备注：无
+                <hr />
+                下单时间：yyyy-mm-dd 00:00:00
+                <br />
+                付款时间：yyyy-mm-dd 00:00:00
+                <br />
+                发货时间:yyyy-mm-dd 00:00:00
+                <br />
+                订单备注：
+                <br />
+                <textarea style="width:80%;"></textarea>
+                <hr />
+                订单总价：￥16
+                <table class="table table-hover" style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>名称</th>
+                        <th>单价</th>
+                        <th>数量</th>
+                        <th>小计</th>
+                    </tr>
+                    </thead>
+                    <tbody style="font-size: 16px">
+                    <tr>
+                        <td style="width: 250px">
+                            <a href="#">
+                                <img src="" style="width: 100px;height: 50px;background-color: #a1a1a1"><br />
+                            </a>
+                        </td>
+                        <td>
+                            商品的标题
+                        </td>
+                        <td>
+                            8
+                        </td>
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            <span><%= 8*2 %></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="panel panel-default">
+            <!--本单元标题-->
+            <div class="panel-heading">处理</div>
+            <!--本单元内容-->
+            <div class="panel-body">
+                <a class="btn btn-info">发货</a>
+                <a class="btn btn-danger">关闭订单</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<%- include a_footer %>

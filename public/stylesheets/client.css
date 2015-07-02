@@ -1,0 +1,31 @@
+input{
+    height: 25px;
+    margin: 10px auto;
+}
+.CAPTCHA{
+    height: 30px;
+}
+input#code{
+    width: 80px;
+}
+/*-----------------------START:TAB-------------------------*/
+#tab{
+
+}
+#tab .tab_menu{
+
+}
+#tab .tab_menu li{
+    cursor:pointer;
+    color: #d2d2d2;
+}
+#tab .tab_box{
+
+}
+#tab .tab_menu .selected{
+    color: #000000;
+}
+.tab_box div{
+
+}
+/*-----------------------START:TAB-------------------------*/

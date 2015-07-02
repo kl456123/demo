@@ -1,0 +1,70 @@
+<%- include a_header %>
+
+<!--START:main-->
+<div class="col-sm-12" id="content">
+    <div class="row">
+
+        <h2 style="margin: 10px 20px">商品</h2>
+
+        <div class="col-lg-12">
+            <div class="panel panel-info">
+                <!--本单元标题-->
+                <div class="panel-heading">添加</div>
+                <!--本单元内容-->
+                <div class="panel-body">
+                    <form method="post" enctype='multipart/form-data' class="demoform" action="/a_add/commodity">
+                        编号：
+                        <input type="text" name="number" datatype="" errormsg="亲，请输入正确信息~">
+                        <div class="Validform_checktip">编号</div>
+
+                        文字输入框
+                        <input type="text" name="text" datatype="" errormsg="亲，请输入正确信息~">
+                        <div class="Validform_checktip">input/text文本输入框</div>
+
+                        图片：<input type="file" name="cover" errormsg="亲，请输入正确信息~">
+                        <div class="Validform_checktip">input/file 图片</div>
+
+                        下拉菜单：
+                        <select name="select">
+                            <option value="a">a</option>
+                            <option value="b">b</option>
+                            <option value="c">c</option>
+                        </select>
+                        <div class="Validform_checktip">select 下拉菜单</div>
+
+                        <div class="selectList_area">
+                            类别：
+                            <select class="level1" name="level1">
+                            </select>
+                            <select class="level2" name="level2">
+                            </select>
+                            <select class="level3" name="level3">
+                            </select>
+                            <div class="Validform_checktip">select 多级联动下拉菜单</div>
+                        </div>
+
+                        文本输入域：
+                        <br/>
+                        <textarea id="summernote" class="summernote" name="textarea" datatype=""></textarea>
+                        <div class="Validform_checktip">textarea/summernote 文本输入框</div>
+
+                        <input type="submit" class="btn btn-info" value="保 存"/>
+                        <input type="reset"  class="btn btn-info" value="重 置" />
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--END:main-->
+<script type="text/javascript">
+    //多级联动菜单
+    $(function () {
+        var area = "/common/link_select/area.json";
+        var initArea = [];
+        initLinkSelect(".selectList_area",area,initArea);
+    });
+</script>
+<%- include a_footer %>
+

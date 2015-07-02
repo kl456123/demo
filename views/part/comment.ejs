@@ -1,0 +1,68 @@
+<!-- 此处获取为memberName为用户账号, 后期修改为昵称  -->
+<% if(!user){ %>
+<h3><a href="/login">登录</a>后可以评论哦~~~</h3>
+<% }else{ %>
+<form>
+    <%= user.name %>
+    <input type="text" id="memberName" name="memberName" hidden="hidden" value="<%= user.name %>">
+    <input type="text" id="memberId" name="memberId" hidden="hidden" value="<%= user._id %>">
+    <textarea id="contentMain" name="contentMain" style="width: 100%"></textarea>
+    <br />
+    <% } %>
+    <a id="commentPost"  class="btn-info btn-sm btn" onclick="commentPost();">评论</a><div id='tip'></div>
+</form>
+<% comment.forEach(function(o, i){ %>
+<div style="background-color: #f6f6f6;margin: 10px 0px;padding: 10px 10px">
+    <span><%= o.showTime %> | <%= o.memberName %><span>:</span></span>
+    <br/>
+    <span><%= o.content %></span>
+    <% if( delAuthority == 'true'){ %><!--delAuthority是个啥？-->
+    <span><a href="/comment/delete/<%= o._id %>">删除</a></span>
+    <% }else{ %>
+    <% if(user && (o.memberName == user.name)) { %>
+    <span><a href="/comment/delete/<%= o._id %>">删除</a></span>
+    <% } %>
+    <% } %>
+</div>
+<% }); %>
+
+<script>
+    /*使用Ajax优化评论*/
+
+    //数据打包
+    function commentPost(){
+        var d={};
+        d.memberName = document.getElementById('memberName').value;
+        d.memberId = document.getElementById('memberId').value;
+        d.content = document.getElementById('contentMain').value;
+        d.type = 'comment';
+        commentPostByForm(d,'<%= tarColl %>','<%= tarId %>',getSucc,getErr);
+    }
+    //使用Ajax发送数据
+    function commentPostByForm(d,tarColl,tarId,succCB,errCB){
+        $.ajax({
+            url:'/comment/'+ tarColl+'/' + tarId ,
+            type:'POST',
+            data:d,
+            success:function(data){
+                succCB(data);
+            },
+            error:function(err){
+                errCB(err.responseJSON);
+            }
+        });
+        console.log(d)
+    }
+    //处理结果响应
+    function getSucc(obj){
+        location.reload();
+        console.log('succ',obj);
+        document.getElementById('tip').innerHTML = '成功';
+    }
+    function getErr(obj){
+        console.log('err',obj);
+        document.getElementById('tip').innerHTML = '错误：'+obj.error;
+    }
+</script>
+
+<br>

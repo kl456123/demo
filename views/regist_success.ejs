@@ -1,0 +1,40 @@
+<%- include header %>
+
+<style type="text/css">
+    .caption p {
+        color: #b7b7b7;
+    }
+    textarea{
+        width: 100%;
+    }
+    input{
+        margin: 5px 5px ;
+    }
+</style>
+
+<!--START:main-->
+<!-- Docs page layout -->
+<div class="bs-docs-header" id="content" style="background-image: url('/images/c_img/top_bg_blue.jpg')">
+    <div class="container">
+        <h1 style="text-shadow: 2px 2px #202020">注册新会员</h1>
+    </div>
+</div>
+
+<div class="container bs-docs-container">
+     请注册邮件已经发送你的邮箱，请登陆邮箱确认。
+</div>
+<!--END:main-->
+
+<script type="text/javascript">
+    $(function () {
+        var area = "/common/link_select/area.json";
+        var initArea = [
+        ];
+        initLinkSelect(
+                ".selectList_area",
+                area,
+                initArea);
+    });
+</script>
+
+<%- include footer %>
