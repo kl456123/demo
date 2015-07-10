@@ -33,11 +33,17 @@ var cfg = {
 
 var ligle = require('ligle-engine')(cfg);
 
-var logger = ligle.util.logger('normal','DEBUG');
+var logger = ligle.util.logger('normal','INFO');
 // export something to use for other modules
 exports.ligle = ligle;
-exports.getLogger = ligle.util.logger;
+var getLogger = exports.getLogger = ligle.util.logger;
 
+// to suppress the verbose log
+getLogger('ligle-base','INFO');
+getLogger('ligle-middware','INFO');
+getLogger('ligle-routes','INFO');
+getLogger('ligle-model','INFO');
+getLogger('ligle-db','INFO');
 
 var UPDIR = settings.uploadPath;
 
