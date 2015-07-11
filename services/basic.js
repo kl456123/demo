@@ -40,7 +40,7 @@ router
     var obj = res.ligle.model;
     obj.get({_id:req.params.id},function(err,getObj){
       if(err) req.redirect('back');
-      getObj.setData(req.body);
+      getObj.addData(req.body);
       getObj.processFiles(req.files);
       getObj.save(function(err,savedObj){
         rd.renderEO('a_basic_detail',err,{data:getObj});

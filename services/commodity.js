@@ -31,7 +31,7 @@ router
     var rd = res.ligle.renderer;
     var obj = res.ligle.model;
     logger.debug(req.params.id);
-    obj.get({_id:req.params.id},function(err,getObj){
+    obj.get({_id:req.params.id},{sort:{_time:-1}},function(err,getObj){
       rd.renderEO('a_commodity_detail',err,{data:getObj});
     });
   })
@@ -40,7 +40,7 @@ router
     var obj = res.ligle.model;
     obj.get({_id:req.params.id},function(err,getObj){
       if(err) req.redirect('back');
-      getObj.setData(req.body);
+      getObj.addData(req.body);
       getObj.processFiles(req.files);
       getObj.save(function(err,savedObj){
         rd.renderEO('a_commodity_detail',err,{data:getObj});
@@ -56,7 +56,7 @@ router
     var obj = res.ligle.model;
     logger.debug(obj.hasOwnProperty('__upDir'));
     logger.debug(obj._getUpDir());
-    obj.getList({},function(err,objs){
+    obj.getList({},{sort:{_time:-1}},function(err,objs){
       rd.render('a_commodity',{commodity:objs});
     });
   });

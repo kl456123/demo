@@ -22,8 +22,8 @@
 
                         图片：<input type="file" name="cover">
                         <img class="thb" src="<%= data.cover?data.cover.path:'' %>" alt="无图" align="middle">
-                        <% if(data.pic){ %>
-                        &nbsp;&nbsp;&nbsp;图片名称：<%= data.cover %>
+                        <% if(data.cover){ %>
+                        &nbsp;&nbsp;&nbsp;图片名称：<%= data.cover.origin %>
                         <% } %>
                         <br>
 
