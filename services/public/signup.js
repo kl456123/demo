@@ -7,9 +7,18 @@ var cfg = {
 var moment = require('moment');//设置验证码过期时间
 var ms = require('ms');
 
-var ccMidware = require('../midware/check-code.js');
-var getCode = ccMidware.getCode;
-var checkCode = ccMidware.checkCode;
+// MD    表示中间件
+// MDGEN 表示中间件工厂
+
+var verifyCode = require('../midware/verify-code.js');
+var getCodeMD = verifyCode.getCode;
+var checkCodeMD = verifyCode.checkCode;
+
+var fieldChecker = require('../midware/field-checker.js');
+var checkSignUpMD = fieldChecker({
+  cellphone:'cellphone',
+  password:'password'
+});
 
 var Model = require('../model/member.js');
 
@@ -21,7 +30,7 @@ router
     var rd = res.ligle.renderer;
     rd.render('regist');
   })
-  .post(function(req,res){
+  .post(checkSignUpMD,function(req,res){
     var rd = res.ligle.renderer;
     if(req.body.codeSMS!==req.session.codeSMS ||
       'regist'!==req.session.type){
@@ -29,21 +38,25 @@ router
     }
 
     var aMember = new Model(req.body);
-    aMember.signUp(function(err, obj){
-      if(err) rd.renderEO('regist',{error:JSON.stringify(err)});
-      rd.renderEO('regist_verified',null,obj);
-    });
+    aMember.get({cellphone:aMember.cellphone},function(err,data){
+      if(err) return rd.renderEO('regist',{error:JSON.stringify(err)});
+      if(data) return rd.renderEO('regist',{error:'该手机号已注册'});
+      aMember.signUp(function(err, obj){
+        if(err) 
+          return rd.renderEO('regist_verified',null,obj);
+      });
+    })
   });
 
 // 获取图片验证码
 router
   .route('/getCode')
-  .get(getCode);
+  .get(getCodeMD);
 
 // 获取短信验证码
 router
   .route('/getSMS')
-  .post(checkCode,function(req,res){
+  .post(checkCodeMD,function(req,res){
     logger.trace('will try send SMS');
     var obj = res.ligle.model;
     obj.getSMS(req.body.type,function(err,obj){
@@ -61,4 +74,5 @@ router
   });
 
 module.exports = router;
+
 

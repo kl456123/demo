@@ -14,6 +14,8 @@ function exportFrom(dir){
   'logout',
   'signup',
   'forgotPW',
+  'status',
+  'member'
 ].forEach(exportFrom('./public/'));
 
 

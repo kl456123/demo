@@ -1,6 +1,7 @@
 
 var ligle = require('../index.js').ligle;
 var logger = ligle.util.logger('member.js');
+var crypto = require('crypto');
 
 // 模型
 module.exports = ligle.base.model.ModelBase.extend({
@@ -30,14 +31,24 @@ module.exports = ligle.base.model.ModelBase.extend({
     });
   },
   getSMS:function(type,callback){
+    // TODO: send SMS here, I should write a package for doing this
     callback(null,{codeSMS:'1234'});
   },
   signUp:function(callback){
-    if(this.codeSMS==='1234'){
-      this.save(callback);
-    }else{
-      callback(new Error('code SMS error'));
-    }
+    // TODO: will send REST if configured
+    var pwd = this.password;
+    this.password = crypto.createHash('md5').update(pwd).digest('hex');
+    this.save(callback);
+  },
+  logIn:function(cell,pwd,callback){
+    this.get({cellphone:cell},function(err,obj){
+      if(err) return callback(err);
+      if(!obj) return callback('not found user');
+      pwd = crypto.createHash('md5').update(pwd).digest('hex');
+      var objPwd = obj.password;
+      if(objPwd!==pwd) return callback('password incorrect');
+      return callback(null,obj);
+    });
   },
   coll:{name:'member',fields:{}},
   rest:{}

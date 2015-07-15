@@ -1,20 +1,17 @@
-
 var ligle = require('../index.js').ligle;
+var logger = ligle.util.logger('member');
 
 var pChecker = require('../midware/permission-checker.js');
 
-// 路由
-var router = ligle.base.routes.Router();
+
+var Model = require('../model/member.js');
+var router = ligle.base.routes.Router(Model);
 router
-  .route('/logout')
+  .route('/member')
   .get(pChecker.passIf('member','login'),function(req,res){
     var rd = res.ligle.renderer;
-    req.session.group='member';
-    req.session.status='logout';
-    req.session.user = null;
-
-    res.redirect('/');
-  })
+    rd.render('member',{data:req.session.user});
+  });
 
 module.exports = router;
 

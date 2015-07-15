@@ -39,12 +39,13 @@ exports.ligle = ligle;
 var getLogger = exports.getLogger = ligle.util.logger;
 
 // to suppress the verbose log
+/*
 getLogger('ligle-base','INFO');
 getLogger('ligle-middware','INFO');
 getLogger('ligle-routes','INFO');
 getLogger('ligle-model','INFO');
 getLogger('ligle-db','INFO');
-
+*/
 var UPDIR = settings.uploadPath;
 
 // wrap app into callback, so that we can do something before we
@@ -98,7 +99,7 @@ ligle.start(function(){
   app.use(serveStatic(path.join(__dirname, 'public')));
 
   app.use(function(req,res){
-	  res.render('error');
+	  res.ligle.renderer.render('error');
   });
 
   // development only
