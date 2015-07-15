@@ -59,6 +59,10 @@
                 obj.style.display ='block';
             })
         }
+	function onCaptcha(obj){
+	    var oldsrc = obj.src.split('?')[0];
+	    obj.src = oldsrc + '?t=' + Math.random(); 
+	}
         $(document).ready(function(){
             $.ajax({
                 url:'/getIsLogin',
@@ -73,7 +77,9 @@
                     console.log(err.responseJSON);
                 }
             });
-
+	    $('.CAPTCHA').each(function(i,obj){
+	        obj.onclick = function(){onCaptcha(obj)};
+	    });
         });
     </script>
 

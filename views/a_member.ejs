@@ -36,12 +36,14 @@
                         </tr>
                         </thead>
                         <tbody>
+                        <% data.forEach(function(o, i){ %>
                         <tr>
-                            <td>illidanswp@126.com</td>
-                            <td>372259918</td>
-                            <td>illidanswp</td>
-                            <td><a href="/a_member_detail" class="btn-info btn btn-sm">详情</a></td>
+                            <td><%= o.email %></td>
+                            <td><%= o.cellphone %></td>
+                            <td><%= o.nickname %></td>
+                            <td><a class="btn btn-warning btn-sm" href="/a_detail/member/<%= o._id %>">detail</a></td>
                         </tr>
+                        <% }); %>
                         </tbody>
                     </table>
                 </div>

@@ -33,7 +33,7 @@ var cfg = {
 
 var ligle = require('ligle-engine')(cfg);
 
-var logger = ligle.util.logger('normal','INFO');
+var logger = ligle.util.logger('normal','TRACE');
 // export something to use for other modules
 exports.ligle = ligle;
 var getLogger = exports.getLogger = ligle.util.logger;
@@ -88,8 +88,11 @@ ligle.start(function(){
   // 下，为什么必须放在这里，以及模块互相依赖的时候，是如何加载的）
   var localService = require('./services');
   for(var s  in localService){
-    logger.debug('adding routes:',s);
-    app.use(localService[s]);
+    var router = localService[s];
+    if(router instanceof Function){
+      logger.debug('adding routes:',s);
+      app.use(localService[s]);
+    }
   }
 
   app.use(serveStatic(path.join(__dirname, 'public')));

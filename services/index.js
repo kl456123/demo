@@ -1,4 +1,26 @@
+// engine export for submodules to use
+exports.ligle = require('../app.js').ligle;
 
-exports.test = require('./test.js');
-exports.basic = require('./basic.js');
-exports.commodity = require('./commodity.js');
+function exportFrom(dir){
+  return function(o){
+    exports[o] = require(dir+o);
+  };
+};
+
+// public part
+[
+  'home',
+  'login',
+  'logout',
+  'signup',
+  'forgotPW',
+].forEach(exportFrom('./public/'));
+
+
+// admin part
+[
+  'admin-basic',
+  'admin-commodity',
+  'admin-member',
+].forEach(exportFrom('./admin/'));
+

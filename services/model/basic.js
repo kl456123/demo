@@ -1,5 +1,6 @@
-var ligle = require('../app.js').ligle;
-var logger = require('../app.js').getLogger('basicModel');
+
+var ligle = require('../index.js').ligle;
+var logger = ligle.util.logger('basic.js');
 
 // 模型
 module.exports = ligle.base.model.ModelBase.extend({

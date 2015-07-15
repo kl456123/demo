@@ -1,8 +1,8 @@
-var ligle = require('../app.js').ligle;
-var testModel = require('./testModel.js');
+
+var ligle = require('../index.js').ligle;
 
 // 路由
-var router = ligle.base.routes.Router(testModel);
+var router = ligle.base.routes.Router();
 router
   .route('/')
   .get(function(req,res){

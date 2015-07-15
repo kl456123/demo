@@ -1,4 +1,4 @@
-var ligle = require('../app.js').ligle;
+var ligle = require('../index.js').ligle;
 
 // 模型
 module.exports = ligle.base.model.ModelBase.extend({
