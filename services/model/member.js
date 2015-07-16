@@ -2,7 +2,7 @@
 var ligle = require('../index.js').ligle;
 var logger = ligle.util.logger('member.js');
 var crypto = require('crypto');
-
+var tool = require('../common');
 // 模型
 module.exports = ligle.base.model.ModelBase.extend({
   __className:'member',
@@ -37,8 +37,20 @@ module.exports = ligle.base.model.ModelBase.extend({
   signUp:function(callback){
     // TODO: will send REST if configured
     var pwd = this.password;
-    this.password = crypto.createHash('md5').update(pwd).digest('hex');
+    this.password = tool.hashMD5(pwd);
     this.save(callback);
+  },
+  resetPw:function(callback){
+    self = this;
+    this.get({cellphone:this.cellphone},function(err,obj){
+      if(err) return callback('user not exists');
+      var pwd = self.password;
+      //logger.debug('set pwd:',pwd);
+      //logger.debug(obj.password);
+      obj.password = tool.hashMD5(pwd);
+      //logger.debug(obj.password);
+      obj.save(callback);
+    });
   },
   logIn:function(cell,pwd,callback){
     this.get({cellphone:cell},function(err,obj){
@@ -53,3 +65,6 @@ module.exports = ligle.base.model.ModelBase.extend({
   coll:{name:'member',fields:{}},
   rest:{}
 });
+
+
+

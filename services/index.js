@@ -13,14 +13,16 @@ function exportFrom(dir){
   'login',
   'logout',
   'signup',
-  'forgotPW',
+  'forgot-pw',
   'status',
-  'member'
+  'member',
+  'get-sms'
 ].forEach(exportFrom('./public/'));
 
 
 // admin part
 [
+  'admin',
   'admin-basic',
   'admin-commodity',
   'admin-member',

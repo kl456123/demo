@@ -2,7 +2,7 @@
 var ligle = require('../index.js').ligle;
 
 var fieldChecker = require('../midware/field-checker.js');
-var checkFormMD = fieldChecker({
+var checkForm = fieldChecker({
   cellphone:'cellphone',
   password:'password'
 });
@@ -17,7 +17,7 @@ router
     var rd = res.ligle.renderer;
     rd.render('login');
   })
-  .post(pChecker.passIf('member','logout'),checkFormMD,function(req,res){
+  .post(pChecker.passIf('member','logout'),checkForm,function(req,res){
     var rd = res.ligle.renderer;
     var obj = res.ligle.model;
     obj.logIn(req.body.cellphone,req.body.password,function(err,member){

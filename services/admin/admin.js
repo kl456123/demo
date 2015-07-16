@@ -1,16 +1,12 @@
 
 var ligle = require('../index.js').ligle;
+var logger = ligle.util.logger('admin');
 
-// 路由
 var router = ligle.base.routes.Router();
 router
-  .route('/')
+  .route('/admin')
   .get(function(req,res){
     var rd = res.ligle.renderer;
-    rd.render('index');
-  })
-  .post(function(req,res){
+    rd.render('a_index');
   });
-
 module.exports = router;
-
