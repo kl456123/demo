@@ -78,7 +78,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <!--登陆前显示“登陆”、“注册”-->
                 <!--登陆后显示“用户名”、“登出”-->
-		<% if(status==='logout'){ %>
+		<% if(!status || status==='logout'){ %>
                 <li><a class="logout" href="/login">登陆</a></li>
                 <li><a class="logout" href="/regist">注册</a></li>
                 <li><a class="logout" href="/forgot-password">找回密码</a></li>

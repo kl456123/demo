@@ -46,6 +46,8 @@ function checkPermission(validGroup,validStatus,group,status){
 
 exports.passIf = function(group,status){
   return function(req,res,next){
+    req.session.group = req.session.group||'member';
+    req.session.status = req.session.status||'logout';
     var result = checkPermission(
       group,
       status,
