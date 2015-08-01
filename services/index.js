@@ -16,7 +16,8 @@ function exportFrom(dir){
   'forgot-pw',
   'status',
   'member',
-  'get-sms'
+  'get-sms',
+  'get-code'
 ].forEach(exportFrom('./public/'));
 
 

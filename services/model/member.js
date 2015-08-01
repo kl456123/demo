@@ -31,8 +31,15 @@ module.exports = ligle.base.model.ModelBase.extend({
     });
   },
   getSMS:function(type,callback){
-    // TODO: send SMS here, I should write a package for doing this
-    callback(null,{codeSMS:'1234'});
+    var code = tool.sendSmsCode(
+      this.cellphone,
+      10,
+      function(err,res,body){
+        logger.trace('err:',err);
+        logger.trace('body:',body);
+      } // 这里是远端服务器成功确认的回调，暂时先只打个log。
+    );
+    callback(null,{codeSMS:code});
   },
   signUp:function(callback){
     // TODO: will send REST if configured

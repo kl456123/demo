@@ -1,19 +1,10 @@
 var ligle = require('../index.js').ligle;
 var logger = ligle.util.logger('verify-code');
-
+var common = require('../common');
 var ccap = require('ccap')({
   width: 180,
   height: 60,
-  generate: function(){
-    var str = '';
-    for(var i = 0; i<4; i++){
-      if(Math.random()>0.5)
-        str += String.fromCharCode(parseInt(Math.random()*26)+65);
-      else
-        str += parseInt(Math.random()*10);
-    }
-    return str;
-  }
+  generate: common.makeCodeGen(4)
 });
 var moment = require('moment');//设置验证码过期时间
 var ms = require('ms');
