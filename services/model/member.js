@@ -47,6 +47,17 @@ module.exports = ligle.base.model.ModelBase.extend({
     this.password = tool.hashMD5(pwd);
     this.save(callback);
   },
+  signUpEmail:function(callback){
+    // 发送邮件到邮箱，成功发送后返回。
+    var obj={}; // 渲染email模板使用的对象
+    var pwd = this.password;
+    this.password = tool.hashMD5(pwd);
+    tool.sendEmail(this.email,'signup',obj,function(err){
+      if(err) return callback(err);
+      this.status = 'unverified';
+      this.save(callback);
+    });
+  },
   resetPw:function(callback){
     self = this;
     this.get({cellphone:this.cellphone},function(err,obj){
@@ -63,6 +74,7 @@ module.exports = ligle.base.model.ModelBase.extend({
     this.get({cellphone:cell},function(err,obj){
       if(err) return callback(err);
       if(!obj) return callback('not found user');
+      if(obj.status && obj.status === 'unverified') return callback('unverfied user');
       pwd = crypto.createHash('md5').update(pwd).digest('hex');
       var objPwd = obj.password;
       if(objPwd!==pwd) return callback('password incorrect');
@@ -72,6 +84,14 @@ module.exports = ligle.base.model.ModelBase.extend({
   coll:{name:'member',fields:{}},
   rest:{}
 });
+
+
+
+
+
+
+
+
 
 
 

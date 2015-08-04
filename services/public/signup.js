@@ -5,7 +5,7 @@ var moment = require('moment');//设置验证码过期时间
 var ms = require('ms');
 
 var fieldChecker = require('../midware/field-checker.js');
-var checkSignUp = fieldChecker({
+var checkCellForm = fieldChecker({
   cellphone:'cellphone',
   password:'password'
 });
@@ -15,12 +15,12 @@ var Model = require('../model/member.js');
 // 路由
 var router = ligle.base.routes.Router(Model);
 router
-  .route('/regist(SMS)?')
+  .route('/registSMS')
   .get(function(req,res){
     var rd = res.ligle.renderer;
     rd.render('regist');
   })
-  .post(checkSignUp,function(req,res){
+  .post(checkCellForm,function(req,res){
     var rd = res.ligle.renderer;
     if(req.body.codeSMS!==req.session.codeSMS ||
       'regist'!==req.session.type){
@@ -34,6 +34,34 @@ router
       aMember.signUp(function(err, obj){
         if(err) rd.errorBack('注册失败'+err,req.xhr);
         return rd.successRender('regist_verified',obj,req.xhr);
+      });
+    })
+  });
+
+var verifyCode = require('../midware/verify-code.js');
+var checkCode = verifyCode.checkCode;
+var checkEmailForm = fieldChecker({
+  email:'email',
+  password:'password',
+  nickname:'name'
+});
+
+// 邮箱注册
+router
+  .route('/regist')
+  .get(function(req,res){
+    var rd = res.ligle.renderer;
+    rd.render('regist');
+  })
+  .post(checkCode,checkCellForm,function(req,res){
+    var rd = res.ligle.renderer;
+    var aMember = new Model(req.body);
+    aMember.get({email:aMember.email},function(err,data){
+      if(err) return rd.errorBack(err,req.xhr);
+      if(data) return rd.errorBack('该邮箱已注册',req.xhr);
+      aMember.signUpEmail(function(err, obj){
+        if(err) rd.errorBack('注册失败'+err,req.xhr);
+        return rd.successRender('regist_success',obj,req.xhr);
       });
     })
   });
