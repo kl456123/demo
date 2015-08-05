@@ -17,6 +17,15 @@ function checkEmail(email){
 		return [true,'ok'];
 }
 
+function checkUUID(uuid){
+  var re = new RegExp('[0-9a-f]{22}|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}', 'i');
+
+  if (!re.test(uuid)) 
+    return [false,'invalid uuid'];
+  else
+    return [true,'ok'];
+}
+
 function checkCellphone(number){
   var cellRegExp = /^1[3|4|5|8][0-9]\d{8}$/;
   if(!cellRegExp.test(number))
@@ -36,7 +45,8 @@ var checkers = {
   email:checkEmail,
   cellphone:checkCellphone,
   name:checkName,
-  password:checkPassword
+  password:checkPassword,
+  uuid:checkUUID
 };
 
 

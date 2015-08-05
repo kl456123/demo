@@ -3,10 +3,15 @@ var ligle = require('../index.js').ligle;
 var logger = ligle.util.logger('signup');
 var moment = require('moment');//设置验证码过期时间
 var ms = require('ms');
+var config = require('../config.js');
 
 var fieldChecker = require('../midware/field-checker.js');
 var checkCellForm = fieldChecker({
   cellphone:'cellphone',
+  password:'password'
+});
+var checkEmailForm = fieldChecker({
+  email:'email',
   password:'password'
 });
 
@@ -32,7 +37,7 @@ router
       if(err) return rd.errorBack(err,req.xhr);
       if(data) return rd.errorBack('该手机号已注册',req.xhr);
       aMember.signUp(function(err, obj){
-        if(err) rd.errorBack('注册失败'+err,req.xhr);
+        if(err) return rd.errorBack('注册失败'+err,req.xhr);
         return rd.successRender('regist_verified',obj,req.xhr);
       });
     })
@@ -45,6 +50,9 @@ var checkEmailForm = fieldChecker({
   password:'password',
   nickname:'name'
 });
+var checkToken = fieldChecker({
+  token:'uuid'
+});
 
 // 邮箱注册
 router
@@ -53,17 +61,36 @@ router
     var rd = res.ligle.renderer;
     rd.render('regist');
   })
-  .post(checkCode,checkCellForm,function(req,res){
+  .post(checkCode,checkEmailForm,function(req,res){
     var rd = res.ligle.renderer;
     var aMember = new Model(req.body);
     aMember.get({email:aMember.email},function(err,data){
       if(err) return rd.errorBack(err,req.xhr);
-      if(data) return rd.errorBack('该邮箱已注册',req.xhr);
+      if(data && data.status!=='unverified') return rd.errorBack('该邮箱已注册',req.xhr);
       aMember.signUpEmail(function(err, obj){
-        if(err) rd.errorBack('注册失败'+err,req.xhr);
+        if(err) return rd.errorBack('注册失败'+err,req.xhr);
         return rd.successRender('regist_success',obj,req.xhr);
       });
     })
+  });
+
+router
+  .route(config.verify.routes+'/:token')
+  .all(function(req,res,next){
+    req.body.token = req.params.token;
+    next();
+  })
+  .get(checkToken,function(req,res){
+    var aMember = new Model();
+    var rd = res.ligle.renderer;
+    aMember.get({signupToken:req.body.token},function(err,obj){
+      if(err) return rd.errorBack(err,req.xhr);
+      obj.status = 'email-verfied';
+      obj.save(function(err,obj){
+        if(err) return rd.errorBack(err,req.xhr);
+        return rd.successRender('regist_verified',obj,req.xhr);
+      });
+    });
   });
 
 

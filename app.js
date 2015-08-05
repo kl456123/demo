@@ -32,6 +32,7 @@ var cfg = {
 };
 
 var ligle = require('ligle-engine')(cfg);
+ligle.appname = 'demo';// 应用名称，发邮件的时候会使用。
 
 var logger = ligle.util.logger('normal','TRACE');
 // export something to use for other modules
