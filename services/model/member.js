@@ -46,17 +46,21 @@ module.exports = ligle.base.model.ModelBase.extend({
     );
     callback(null,{codeSMS:code});
   },
-  signUp:function(callback){
-    // TODO: will send REST if configured
+  _createUser:function(){
+    this.userName = ligle.globals.userPrefix + ligle.globals.userCount;
+    ligle.globals.userCount = ligle.globals.userCount+1;
     var pwd = this.password;
     this.password = tool.hashMD5(pwd);
+  },
+  signUp:function(callback){
+    // TODO: will send REST if configured
+    this._createUser();
     this.save(callback);
   },
   signUpEmail:function(callback){
     // 发送邮件到邮箱，成功发送后返回。
     var obj={}; // 渲染email模板使用的对象
-    var pwd = this.password;
-    this.password = tool.hashMD5(pwd);
+    this._createUser();
     var self = this;
     
     var token = uuid.v4();

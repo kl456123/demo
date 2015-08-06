@@ -66,7 +66,7 @@ router
     var aMember = new Model(req.body);
     aMember.get({email:aMember.email},function(err,data){
       if(err) return rd.errorBack(err,req.xhr);
-      if(data && data.status!=='unverified') return rd.errorBack('该邮箱已注册',req.xhr);
+      if(data) return rd.errorBack('该邮箱已注册',req.xhr);
       aMember.signUpEmail(function(err, obj){
         if(err) return rd.errorBack('注册失败'+err,req.xhr);
         return rd.successRender('regist_success',obj,req.xhr);

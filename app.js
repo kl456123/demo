@@ -52,7 +52,15 @@ var UPDIR = settings.uploadPath;
 // wrap app into callback, so that we can do something before we
 // start. such as: open database
 
+// engine plugins
+var pluginGlobals = require('ligle-plugin-globals');
+pluginGlobals(ligle);
+
 ligle.start(function(){
+  // init some globals config
+  ligle.globals.userCount = ligle.globals.userCount || 0;
+  ligle.globals.userPrefix = ligle.globals.userPrefix || 'user';
+
   var app = express();
 
   // all environments
