@@ -83,7 +83,9 @@ router
   .get(checkToken,function(req,res){
     var aMember = new Model();
     var rd = res.ligle.renderer;
-    aMember.get({signupToken:req.body.token},function(err,obj){
+    var query = {signupToken:req.body.token};
+
+    aMember.check(query,null,Model.checkEmailSignupToken,function(err,obj){
       if(err) return rd.errorBack(err,req.xhr);
       obj.status = 'email-verfied';
       obj.save(function(err,obj){

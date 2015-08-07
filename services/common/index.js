@@ -92,7 +92,7 @@ var sendSmsCode = exports.sendSmsCode = function(to,expire,callback){
     to:to,
     templateId:'1',
     appId:AppId,
-    datas:[code,expire.toString()]
+    datas:[code.toString(),expire.toString()]
   };
 
   // request调用信息:post选项
@@ -104,8 +104,9 @@ var sendSmsCode = exports.sendSmsCode = function(to,expire,callback){
     body:body,
     headers:headers
   };
-  request(postOptions, callback);
-  return code;
+  request(postOptions, function(err,res,body){
+    callback(err,code);
+  });
 };
 
 var nodemailer = require('nodemailer');
