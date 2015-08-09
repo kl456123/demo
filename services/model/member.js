@@ -102,6 +102,7 @@ var Model = module.exports = ligle.base.model.ModelBase.extend({
     });
   },
   check:function(toCheck,checker,callback){
+    logger.debug('tocheck',toCheck);
     if(!checker(this,toCheck)) {
       var msg = this.checkError;
       delete this.checkError;
@@ -115,14 +116,15 @@ var Model = module.exports = ligle.base.model.ModelBase.extend({
     var self = this;
     this.get({cellphone:this.cellphone},function(err,obj){
       if(err) return callback(err);
-      if(obj && obj.password) return callback(new Error('手机号已经被占用'));
+      if(obj && obj.cellInfo.status === STATUS.verified)
+        return callback(new Error('手机号已经被占用'));
       if(!self.password) return callback(new Error('没有指定密码'));
-      if(obj){// 说明已经发送过验证码。
-        delete self.cellInfo;delete self.emailInfo;
+      if(obj){// 对象已存在，那么更新一下值。
+        delete self.cellInfo;delete self.emailInfo;//info项不更新
         obj.addData(self);
         self = obj;
       }
-      self._createUser();
+      self._createUser();//创建用户和密码，如果已经创建则什么都不做
       if(self.cellInfo.status === STATUS.none) 
         self.cellInfo.status= STATUS.unsent;
       self.save(callback);
@@ -133,15 +135,17 @@ var Model = module.exports = ligle.base.model.ModelBase.extend({
     var self = this;
     this.get({email:this.email},function(err,obj){
       if(err) return callback(err);
-      if(obj && obj.password) return callback(new Error('邮箱已经被占用'));
+      if(obj && obj.emailInfo.status === STATUS.verified)
+        return callback(new Error('邮箱已经被占用'));
       if(!self.password) return callback(new Error('没有指定密码'));
-      if(obj){// 说明已经发送过验证码。
+      if(obj){
         delete self.cellInfo;delete self.emailInfo;
         obj.addData(self);
         self = obj;
       }
       self._createUser();
-      if(self.emailInfo.status === STATUS.none) self.emailInfo.status = STATUS.unsent;
+      if(self.emailInfo.status === STATUS.none) 
+        self.emailInfo.status = STATUS.unsent;
       self.save(callback);
     });
   },
@@ -278,7 +282,7 @@ var Model = module.exports = ligle.base.model.ModelBase.extend({
 
     var self = this;
     // 发送验证码
-    tool.sendSmsCodeFake(
+    tool.sendSmsCode(
       this.cellphone,
       minute,
       function(err,code){
@@ -343,8 +347,7 @@ var _checkExist=function(obj){
 };
 var _checkCellToken=function(obj,tokenValue){
   var info = obj.cellInfo;
-  logger.debug('check!cell!',info,tokenValue);
-  if(info.token.value!==tokenValue && 
+  if(info.token.value!==tokenValue ||
      info.token.type!==TYPE.signup){
     obj.checkError = '手机令牌不正确：'+tokenValue+' type:'+info.token.type;
     return false;
@@ -376,7 +379,7 @@ var _checkEmailLinkToken=function(obj,tokenValue){
 };
 var _checkEmailToken=function(obj,tokenValue){
   var info = obj.emailInfo;
-  if(info.token.value!==tokenValue &&
+  if(info.token.value!==tokenValue ||
      info.token.type!==TYPE.signup){
     obj.checkError = '邮箱令牌不正确：'+tokenValue+' type:'+info.token.type;
     return false;
@@ -386,17 +389,17 @@ var _checkEmailToken=function(obj,tokenValue){
 
 Model.checkEmailToken = function(obj,token){
   if(!_checkExist(obj)) return false;
-  return _checkEmailToken(obj);
+  return _checkEmailToken(obj,token);
 };
 
 Model.checkEmailLinkToken = function(obj,token){
   if(!_checkExist(obj)) return false;
-  return _checkEmailLinkToken(obj);
+  return _checkEmailLinkToken(obj,token);
 };
 
 Model.checkCellToken = function(obj,token){
   if(!_checkExist(obj)) return false;
-  return _checkCellToken(obj);
+  return _checkCellToken(obj,token);
 };
 
 Model.TYPE = TYPE;
