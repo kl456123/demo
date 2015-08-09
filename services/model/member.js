@@ -13,8 +13,12 @@ var deepEqual = ligle.util.deepEqual;
 var STATUS = {
   none:'无',
   unsent:'未发送验证',
-  unverfied:'未验证',
-  verfied:'已验证'
+  unverified:'未验证',
+  verified:'已验证'
+};
+var TYPE = {
+  signup:'signup',
+  reset:'reset'
 };
 
 // 模型
@@ -37,7 +41,8 @@ var Model = module.exports = ligle.base.model.ModelBase.extend({
   ],
   init:function(obj){
     this._super(obj);
-    this.status = this.status || {cell:STATUS.none,email:STATUS.none};
+    this.emailInfo = this.emailInfo || {status:STATUS.none,token:{}};
+    this.cellInfo = this.cellInfo || {status:STATUS.none,token:{}};
   },
   fillFields:function(){
     var self = this;
@@ -45,97 +50,136 @@ var Model = module.exports = ligle.base.model.ModelBase.extend({
       if(!(field in self)) self[field]='';
     });
   },
-  // 获取短信验证码，调用的时候将会创建账户。
-  getSMS:function(type,callback){
+  // 根据query得到用户：先查数据库，如果没有则新创建一个。
+  //   异步返回的obj一定具备userName项。但不一定有password。
+  _getOneUser:function(query,callback){
     var self = this;
-    this.get({cellphone:this.cellphone},function(err,obj){
+    this.get(query,function(err,obj){
+      if(err) return callback(err);
       if(!obj) {
         obj = self;
         obj._createUser();
       }
-      // 验证是否到了可以再次发送短信的时间
-      if(obj.cellSignupTokenSendTime){
-        var t = ms(config.signup.smsResendInterval);
-        var lastSent = moment(obj.cellSignupTokenSendTime);
-        if(lastSent.add(t,'ms')>moment() && 
-           obj.cellSignupTokenType === type){ // 只有同类验证码发送短信有时间限制
-          return callback(new Error('还没到可以再次发送短信的时候'));
-        }
-      }
-      // 保存验证码类型
-      obj.cellSignupTokenType=type;
-
-      // 保存发送时间
-      obj.cellSignupTokenSendTime = moment().toISOString();
-
-      // 记录短信验证码失效时间
-      var timespan = ms(config.signup.smsCodeExpiration);
-      obj.cellSignupTokenExpires = moment().add(timespan, 'ms').toISOString();
-      var timespan_min = timespan/ms('1 min');
-
-      // 发送验证码
-      tool.sendSmsCode(
-        obj.cellphone,
-        timespan_min,
-        function(err,code){
-          if(err) return callback(err);
-          self.cellSignupToken = code;
-          self.status.cell = STATUS.unverified;
-          // 保存用户账号到数据库
-          self.save(function(err,obj){
-            if(err) return callback(err);
-            return callback(null,{codeSMS:code});
-          });
-        }
-      );
+      callback(null,obj);
     });
   },
-  // 获取邮箱验证链接
-  getEmail:function(type,callback){
-    
+  // 获取短信验证码，调用的时候将会创建账户。
+  sendSMS:function(type,callback){
+    this._getOneUser({cellphone:this.cellphone},function(err,obj){
+      if(err) return callback(err);
+
+      if(!obj._checkSendSMS(type)) return callback(new Error(obj.errMsg));
+
+      obj._doSendSMS(type,callback);
+    });
+  },
+  // 发送邮箱验证码。TODO：这个函数不能调用，因为_doSendMail并没实现。
+  sendEmail:function(type,callback){
+    this._getOneUser({email:this.email},function(err,obj){
+      if(err) return callback(err);
+
+      if(!obj._checkSendEmail(type)) return callback(new Error(obj.errMsg));
+
+      obj._doSendEmail(type,callback);
+    });
+  },
+  // 发送邮箱验证链接
+  sendEmailLink:function(type,callback){
+    this._getOneUser({email:this.email},function(err,obj){
+      if(err) return callback(err);
+
+      if(!obj._checkSendEmailLink(type)) return callback(new Error(obj.errMsg));
+
+      obj._doSendEmailLink(type,callback);
+    });
   },
   // 检查函数，用来查证 短信验证码 或 邮箱验证令牌。 检查器在文件后面定义为类方法
-  check:function(query,toCheck,checker,callback){
+  queryCheck:function(query,toCheck,checker,callback){
+    var self=this;
     this.get(query,function(err,obj){
       if(err) return callback(err);
-      if(!checker(obj,toCheck)) return callback(this.checkError);
-      return callback(err,obj);
+      return obj.check(toCheck,checker,callback);
     });
   },
-  // 直接使用手机+密码注册。demo的例子里并没用到这个函数
+  check:function(toCheck,checker,callback){
+    if(!checker(this,toCheck)) {
+      var msg = this.checkError;
+      delete this.checkError;
+      return callback(new Error(msg));
+    }
+    return callback(null,this);
+  },
+
+  // 直接使用手机+密码注册。
   signUpCell:function(callback){
+    var self = this;
     this.get({cellphone:this.cellphone},function(err,obj){
       if(err) return callback(err);
-      if(obj) return callback(new Error('手机号已经被占用'));
-      if(!this.password) return callback(new Error('没有指定密码'));
-      this._createUser();
-      this.status.cell = STATUS.unsent;
-      this.save(callback);
+      if(obj && obj.password) return callback(new Error('手机号已经被占用'));
+      if(!self.password) return callback(new Error('没有指定密码'));
+      if(obj){// 说明已经发送过验证码。
+        delete self.cellInfo;delete self.emailInfo;
+        obj.addData(self);
+        self = obj;
+      }
+      self._createUser();
+      if(self.cellInfo.status === STATUS.none) 
+        self.cellInfo.status= STATUS.unsent;
+      self.save(callback);
     });
   },
   // 直接只用邮箱+密码注册。
   signUpEmail:function(callback){
-    // 发送邮件到邮箱，成功发送后返回。
-    var obj={}; // 渲染email模板使用的对象
-    this._createUser();
     var self = this;
-    
-    var token = uuid.v4();
-    this.emailSignupToken = token;
-
-    var timespan = ms(config.signup.tokenExpiration);
-    this.emailSignupTokenExpires = moment().add(timespan, 'ms').toDate();
-    
-    obj.username = this.nickname;
-    obj.appname = ligle.appname;
-    obj.url = [config.host+config.verify.routes,token].join('/');
-    
-    tool.sendTemplateEmail(this.email,'signup',obj,function(err){
+    this.get({email:this.email},function(err,obj){
       if(err) return callback(err);
-      self.status = 'unverified';
+      if(obj && obj.password) return callback(new Error('邮箱已经被占用'));
+      if(!self.password) return callback(new Error('没有指定密码'));
+      if(obj){// 说明已经发送过验证码。
+        delete self.cellInfo;delete self.emailInfo;
+        obj.addData(self);
+        self = obj;
+      }
+      self._createUser();
+      if(self.emailInfo.status === STATUS.none) self.emailInfo.status = STATUS.unsent;
       self.save(callback);
     });
   },
+  verifyCell:function(callback){
+    this.cellInfo.status = STATUS.verified;
+    this.cellInfo.token={};
+    this.save(callback);
+  },
+  verifyEmailLink:function(callback){
+    this.emailInfo.status = STATUS.verified;
+    this.emailInfo.token={};
+
+    delete this.uuid; 
+    this.save(callback);
+  },
+  // 一次性完成注册和验证：注意，此时表单项中有手机/邮箱验证码，这个是
+  // 通过页面ajax发送，用户查询手机/邮箱知道的。
+  signUpVerifyCell:function(tokenValue,callback){
+    var self = this;
+    this.signUpCell(function(err,obj){
+      if(err) return callback(err);
+      obj.check(tokenValue,Model.checkCellToken,function(err,obj){
+        if(err) return callback(err);
+        obj.verifyCell(callback);
+      });
+    });
+  },
+  // 这个函数不能使用，因为目前没做邮箱验证码逻辑，而是邮箱链接逻辑
+  signUpVerifyEmail:function(tokenValue,callback){
+    var self = this;
+    this.signUpEmail(function(err,obj){
+      if(err) return callback(err);
+      obj.check(tokenValue,Model.checkEmailToken,function(err,obj){
+        obj.verifyEmailLink(callback);
+      });
+    });
+  },
+  // TODO：找回密码重构
   resetPw:function(callback){
     self = this;
     this.get({cellphone:this.cellphone},function(err,obj){
@@ -148,50 +192,148 @@ var Model = module.exports = ligle.base.model.ModelBase.extend({
       obj.save(callback);
     });
   },
-  logIn:function(cell,pwd,callback){
+  _checkLoginPwd:function(pwd){
+    pwd = crypto.createHash('md5').update(pwd).digest('hex');
+    var hashedPwd = this.password;
+    if(hashedPwd!==pwd) return false;
+    return true;
+  },
+  // 登陆：验证用户才可以登陆。
+  //   设计上保持了扩展性：可以扩展为允许非验证用户登陆后验证。
+  logInCell:function(cell,pwd,callback){
     this.get({cellphone:cell},function(err,obj){
       if(err) return callback(err);
       if(!obj) return callback('not found user');
-      if(obj.status && obj.status === 'unverified') return callback('unverfied user');
-      pwd = crypto.createHash('md5').update(pwd).digest('hex');
-      var objPwd = obj.password;
-      if(objPwd!==pwd) return callback('password incorrect');
+
+      var info = obj.cellInfo;
+      if(info.status !== STATUS.verified) return callback('unverified user');
+      if(!obj._checkLoginPwd(pwd)) return callback('incorrect password');
+
       return callback(null,obj);
     });
   },
   logInEmail:function(email,pwd,callback){
+    var info = this.emailInfo;
+    var cfg = config.email;
     this.get({email:email},function(err,obj){
       if(err) return callback(err);
-      if(!obj) return callback('not found user');
-      if(obj.status && obj.status === 'unverified') return callback('unverfied user');
-      pwd = crypto.createHash('md5').update(pwd).digest('hex');
-      var objPwd = obj.password;
-      if(objPwd!==pwd) return callback('password incorrect');
+      if(!obj) return callback(new Error('not found user'));
+
+      var info = obj.emailInfo;
+      logger.debug(info);
+      if(info.status !== STATUS.verified) return callback(new Error('unverified user'));
+      if(!obj._checkLoginPwd(pwd)) return callback(new Error('incorrect password'));
+
       return callback(null,obj);
     });
   },
   _createUser:function(){
-    this.userName = ligle.globals.userPrefix + ligle.globals.userCount;
-    ligle.globals.userCount = ligle.globals.userCount+1;
+    if(!this.userName){
+      this.userName = ligle.globals.userPrefix + ligle.globals.userCount;
+      ligle.globals.userCount = ligle.globals.userCount+1;
+    }
     if(this.password){
       var pwd = this.password;
       this.password = tool.hashMD5(pwd);
     }
+  },
+  _checkSendSMS:function(type){
+    var info = this.cellInfo;
+    var cfg = config.cell;
+    if(info.token.sentTime){
+      var t = ms(cfg.token.resendInterval);
+      var lastSent = moment(info.token.sentTime);
+      if(lastSent.add(t,'ms')>moment() && 
+         info.token.type === type){ // 只有同类验证码发送短信有时间限制
+          this.errMsg = '还没到可以再次发送短信的时候';
+          return false;
+      }
+    }
+    return true;
+  },
+  _checkSendEmail:function(type){
+    var info = this.emailInfo;
+    var cfg = config.email;
+    if(info.status===STATUS.verified){
+      this.errMsg = '邮箱已经被占用';
+      return false;
+    }
+    return true;
+  },
+  _checkSendEmailLink:function(type){
+    var info = this.emailInfo;
+    var cfg = config.email;
+    if(info.status===STATUS.verified){
+      this.errMsg = '邮箱已经被占用';
+      return false;
+    }
+    return true;
+  },
+  _doSendSMS:function(type,callback){
+    var info = this.cellInfo;
+    var cfg = config.cell;
+
+    var expire = ms(cfg.token.expire);
+    var minute = expire/ms('1 min');
+
+    var self = this;
+    // 发送验证码
+    tool.sendSmsCodeFake(
+      this.cellphone,
+      minute,
+      function(err,code){
+        if(err) return callback(err);
+
+        info.token.type=type; 
+        info.token.sentTime = moment().toDate();
+        info.token.expire = moment().add(expire, 'ms').toDate();
+        info.token.value = code;
+
+        info.status = STATUS.unverified;
+
+        // 保存用户账号到数据库
+        self.save(function(err,obj){
+          if(err) return callback(err);
+          return callback(null,obj);
+        });
+      });
+  },
+  _doSendEmail:function(type,callback){
+    // TODO: 这个函数应该发送验证码邮件，还不实现，因此抛出异常。
+    throw new Error('unimplemented function _doSendMail');
+  },
+  _doSendEmailLink:function(type,callback){
+    var info = this.emailInfo;
+    var cfg = config.email;
+    var self = this;
+
+    var value = uuid.v4();
+    
+    // 渲染邮箱模板使用的对象（注意，不是数据库对象）
+    var obj ={};
+    obj.username = this.nickname;
+    obj.appname = ligle.appname;
+    obj.url = [config.host+cfg.routes.verify,value].join('/');
+    
+    tool.sendTemplateEmail(this.email,type,obj,function(err){
+      if(err) return callback(err);
+      var expire = ms(cfg.token.expire);
+      info.token.value = value;
+      info.token.expire = moment().add(expire, 'ms').toDate();
+      info.token.sentTime = moment().toDate();
+      info.token.type=type; 
+
+      info.status = STATUS.unverified;
+
+      self.uuid = value; // 方便根据uuid查找。
+      self.save(callback);
+    });    
   },
   coll:{name:'member',fields:{}},
   rest:{}
 });
 
 
-var _checkField=function(obj,toCheck){
-  for(var k in toCheck){
-    if(!deepEqual(obj[k],toCheck[k])){
-      obj.checkError = '检查项:（'+k+'）失败';
-      return false;
-    }
-  }
-  return true;
-};
 var _checkExist=function(obj){
   if(!obj) {
     obj.checkError = '找不到对象';
@@ -199,46 +341,63 @@ var _checkExist=function(obj){
   }
   return true;
 };
-
-Model.checkEmailSignupToken = function(obj,toCheck){
-  if(!_checkExist(obj)) return false;
-  if(!_checkField(obj,toCheck)) return false;
-
-  var expire = moment(obj.emailSignupTokenExpires);
-  if(expire > moment()) {
-    obj.checkError = '邮箱令牌过期';
+var _checkCellToken=function(obj,tokenValue){
+  var info = obj.cellInfo;
+  logger.debug('check!cell!',info,tokenValue);
+  if(info.token.value!==tokenValue && 
+     info.token.type!==TYPE.signup){
+    obj.checkError = '手机令牌不正确：'+tokenValue+' type:'+info.token.type;
     return false;
   }
-  if(obj.status.email !== STATUS.unverfied){
-    obj.checkError = '用户邮箱状态不正确:'+obj.status.email;
-    return false;
-  }
-  delete obj.emailSignupToken;
-  delete obj.emailSignupTokenExpires;
-  return true;
-};
-
-Model.checkCellSignupToken = function(obj,toCheck){
-  if(!_checkExist(obj)) return false;
-  if(!_checkField(obj,toCheck)) return false;
-
-  var expire = moment(obj.cellSignupTokenExpires);
-  if(expire > moment()) {
+  var expire = moment(info.token.expire);
+  if(expire < moment()) {
     obj.checkError = '手机令牌过期';
     return false;
   }
-  if(obj.status.cell !== STATUS.unverfied){
-    this.checkError = '用户手机状态不正确:'+obj.status.cell;
+  if(info.status !== STATUS.unverified){
+    obj.checkError = '用户手机状态不正确:'+info.status;
     return false;
   }
-  delete obj.cellSignupToken;
-  delete obj.cellSignupTokenExpires;
   return true;
 };
 
+var _checkEmailLinkToken=function(obj,tokenValue){
+  var info = obj.emailInfo;
+  var expire = moment(info.token.expire);
+  if(expire < moment()) {
+    obj.checkError = '邮箱令牌过期';
+    return false;
+  }
+  if(info.status !== STATUS.unverified){
+    obj.checkError = '用户邮箱状态不正确:'+info.status;
+    return false;
+  }
+  return true;
+};
+var _checkEmailToken=function(obj,tokenValue){
+  var info = obj.emailInfo;
+  if(info.token.value!==tokenValue &&
+     info.token.type!==TYPE.signup){
+    obj.checkError = '邮箱令牌不正确：'+tokenValue+' type:'+info.token.type;
+    return false;
+  }
+  _checkEmailLinkToken(obj,tokenValue);
+};
 
+Model.checkEmailToken = function(obj,token){
+  if(!_checkExist(obj)) return false;
+  return _checkEmailToken(obj);
+};
 
+Model.checkEmailLinkToken = function(obj,token){
+  if(!_checkExist(obj)) return false;
+  return _checkEmailLinkToken(obj);
+};
 
+Model.checkCellToken = function(obj,token){
+  if(!_checkExist(obj)) return false;
+  return _checkCellToken(obj);
+};
 
-
-
+Model.TYPE = TYPE;
+Model.STATUS = STATUS;

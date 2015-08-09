@@ -108,6 +108,10 @@ var sendSmsCode = exports.sendSmsCode = function(to,expire,callback){
     callback(err,code);
   });
 };
+exports.sendSmsCodeFake = function(to,expire,callback){
+  var code = smsCodeGen();
+  callback(null,code);
+};
 
 var nodemailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');

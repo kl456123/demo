@@ -22,7 +22,7 @@
                 <br />
                 验证码：<input type="text" name="code" id='code'>
                 <img class="CAPTCHA" src="/getCode"  alt="验证码" />
-                <a id="getSMS" href="javascript: getSMS();">获取短信验证码</a>
+                <a id="getSMS" href="javascript: getSignupSMS();">获取短信验证码</a>
                 <div id='smsMsg'></div>
                 短信验证：<input type="text" name="codeSMS">
                 <br />
@@ -57,12 +57,11 @@ function getErr(obj){
   console.log('err',obj);
   document.getElementById('smsMsg').innerHTML = '错误：'+obj.error;
 }
-function getSMS(){
+function getSignupSMS(){
   var d={};
   d.cellphone = document.getElementById('cellphone').value;
   d.code = document.getElementById('code').value;
-  d.type = 'regist';
-  getSmsByForm(d,getSucc,getErr);
+  getSmsByForm('/getSignupSMS',d,getSucc,getErr);
 }
 </script>
 <%- include footer %>

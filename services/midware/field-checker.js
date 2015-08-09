@@ -3,6 +3,7 @@ var ligle = require('../index.js').ligle;
 var logger = ligle.util.logger('field-checker');
 
 function checkName(name){
+  if(!name) return [false,'invalid name'];
 	if(name ==='sessions' || name ==='system.indexes' || name ==='' || name.match(/[\:\/\?\%\&\s=]/))
 		return [false,'invalid name'];
 	else
@@ -35,6 +36,7 @@ function checkCellphone(number){
 }
 
 function checkPassword(pwd){
+  if(!pwd) return [false,'password is empty'];
   if(pwd==='')
     return [false,'password is empty'];
   else

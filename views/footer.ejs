@@ -96,10 +96,9 @@
     }
 
     //Ajax获取手机验证短信
-    function getSmsByForm(d,succCB,errCB){
-        d.ajax=true;
+    function getSmsByForm(url,d,succCB,errCB){
         $.ajax({
-            url:'/getSMS',
+            url:url,
             type:'POST',
             data:d,
             success:function(data){

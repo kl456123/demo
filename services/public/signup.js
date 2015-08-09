@@ -5,6 +5,9 @@ var moment = require('moment');//设置验证码过期时间
 var ms = require('ms');
 var config = require('../config.js');
 
+var verifyCode = require('../midware/verify-code.js');
+var checkCode = verifyCode.checkCode;
+
 var fieldChecker = require('../midware/field-checker.js');
 var checkCellForm = fieldChecker({
   cellphone:'cellphone',
@@ -12,8 +15,13 @@ var checkCellForm = fieldChecker({
 });
 var checkEmailForm = fieldChecker({
   email:'email',
-  password:'password'
+  password:'password',
+  nickname:'name'
 });
+var checkToken = fieldChecker({
+  token:'uuid'
+});
+
 
 var Model = require('../model/member.js');
 
@@ -27,34 +35,22 @@ router
   })
   .post(checkCellForm,function(req,res){
     var rd = res.ligle.renderer;
-    if(req.body.codeSMS!==req.session.codeSMS ||
-      'regist'!==req.session.type){
-      return rd.errorBack('短信验证码错误',req.xhr);
-    }
-
     var aMember = new Model(req.body);
-    aMember.get({cellphone:aMember.cellphone},function(err,data){
-      if(err) return rd.errorBack(err,req.xhr);
-      if(data) return rd.errorBack('该手机号已注册',req.xhr);
-      aMember.signUp(function(err, obj){
-        if(err) return rd.errorBack('注册失败'+err,req.xhr);
-        return rd.successRender('regist_verified',obj,req.xhr);
-      });
-    })
+    var token = aMember.codeSMS;
+    delete aMember.codeSMS;
+    delete aMember.code;
+    aMember.signUpVerifyCell(token,function(err,obj){
+      if(err){
+        logger.info(err,err.message);
+        rd.errorBack(err.message,req.xhr);
+        return;
+      }
+      rd.successRender('regist_verified',obj,req.xhr);
+      return;
+    });
   });
 
-var verifyCode = require('../midware/verify-code.js');
-var checkCode = verifyCode.checkCode;
-var checkEmailForm = fieldChecker({
-  email:'email',
-  password:'password',
-  nickname:'name'
-});
-var checkToken = fieldChecker({
-  token:'uuid'
-});
-
-// 邮箱注册
+// 邮箱注册，通过链接验证
 router
   .route('/regist')
   .get(function(req,res){
@@ -64,18 +60,25 @@ router
   .post(checkCode,checkEmailForm,function(req,res){
     var rd = res.ligle.renderer;
     var aMember = new Model(req.body);
-    aMember.get({email:aMember.email},function(err,data){
-      if(err) return rd.errorBack(err,req.xhr);
-      if(data) return rd.errorBack('该邮箱已注册',req.xhr);
-      aMember.signUpEmail(function(err, obj){
-        if(err) return rd.errorBack('注册失败'+err,req.xhr);
-        return rd.successRender('regist_success',obj,req.xhr);
+    aMember.signUpEmail(function(err,obj){
+      if(err){
+        logger.info(err,err.message);
+        rd.errorBack(err.message,req.xhr);
+        return;
+      }
+      obj.sendEmailLink(Model.TYPE.signup,function(err,obj){
+        if(err){
+          logger.info(err,err.message);
+          rd.errorBack(err.message,req.xhr);
+          return;
+        }
+        rd.successRender('regist_success',obj,req.xhr);
       });
-    })
+    });
   });
 
 router
-  .route(config.verify.routes+'/:token')
+  .route(config.email.routes.verify+'/:token')
   .all(function(req,res,next){
     req.body.token = req.params.token;
     next();
@@ -83,18 +86,40 @@ router
   .get(checkToken,function(req,res){
     var aMember = new Model();
     var rd = res.ligle.renderer;
-    var query = {signupToken:req.body.token};
+    var token = req.body.token;
+    var query = {uuid:token};
 
-    aMember.check(query,null,Model.checkEmailSignupToken,function(err,obj){
-      if(err) return rd.errorBack(err,req.xhr);
-      obj.status = 'email-verfied';
-      obj.save(function(err,obj){
-        if(err) return rd.errorBack(err,req.xhr);
-        return rd.successRender('regist_verified',obj,req.xhr);
+    aMember.queryCheck(query,token,Model.checkEmailLinkToken,function(err,obj){
+      if(err){
+        logger.debug(err);
+        rd.errorRender('errorMsg',err.message,req.xhr);
+        return;
+      }
+      obj.verifyEmailLink(function(err,obj){
+        if(err){
+          logger.info(err,err.message);
+          rd.errorRender('errorMsg',err.message,req.xhr);
+          return;
+        }
+        rd.successRender('regist_verified',obj,req.xhr);
       });
     });
   });
 
+// 获取短信验证码
+router
+  .route('/getSignupSMS')
+  .post(checkCode,function(req,res){
+    var obj = new Model(req.body);
+    obj.sendSMS(Model.TYPE.signup,function(err,obj){
+      if(err){
+        logger.info(err);
+        res.status(403).json({error:err.message});
+        return;
+      }
+      res.sendStatus(204);
+    });
+  });
 
 module.exports = router;
 

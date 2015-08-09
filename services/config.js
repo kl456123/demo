@@ -1,13 +1,22 @@
 
 module.exports = {
-  signup:{
-    routes:'/regist',
-    tokenExpiration:'1 day',
-    smsCodeExpiration:'10 min',
-    smsResendInterval:'60 s'
+  email:{
+    routes:{
+      signup:'/regist',
+      verify:'/verify'
+    },
+    token:{
+      expire:'1 day'
+    }
   },
-  verify:{
-    routes:'/verify'
+  cell:{
+    routes:{
+      signup:'/registSMS'
+    },
+    token:{
+      resendInterval:'60 s',
+      expire:'10 min'
+    }
   },
   host:'http://localhost:4000'
 };
