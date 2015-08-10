@@ -1,6 +1,6 @@
 
 var ligle = require('../index.js').ligle;
-var logger = ligle.util.logger('signup');
+var logger = ligle.util.logger('signUp');
 var moment = require('moment');//设置验证码过期时间
 var ms = require('ms');
 var config = require('../config.js');
@@ -36,17 +36,12 @@ router
   .post(checkCellForm,function(req,res){
     var rd = res.ligle.renderer;
     var aMember = new Model(req.body);
-    var token = aMember.codeSMS;
+    var token = {value:aMember.codeSMS,type:Model.TYPE.signUp};
     delete aMember.codeSMS;
     delete aMember.code;
     aMember.signUpVerifyCell(token,function(err,obj){
-      if(err){
-        logger.info(err,err.message);
-        rd.errorBack(err.message,req.xhr);
-        return;
-      }
-      rd.successRender('regist_verified',obj,req.xhr);
-      return;
+      if(err) return rd.errorBack(err.message,req.xhr);
+      return rd.successRender('regist_verified',obj,req.xhr);;
     });
   });
 
@@ -60,20 +55,10 @@ router
   .post(checkCode,checkEmailForm,function(req,res){
     var rd = res.ligle.renderer;
     var aMember = new Model(req.body);
-    aMember.signUpEmail(function(err,obj){
-      if(err){
-        logger.info(err,err.message);
-        rd.errorBack(err.message,req.xhr);
-        return;
-      }
-      obj.sendEmailLink(Model.TYPE.signup,function(err,obj){
-        if(err){
-          logger.info(err,err.message);
-          rd.errorBack(err.message,req.xhr);
-          return;
-        }
-        rd.successRender('regist_success',obj,req.xhr);
-      });
+    aMember.signUpSendEmailLink(function(err,obj){
+      if(err) logger.info(err);
+      if(err) return rd.errorBack(err.message,req.xhr);
+      rd.successRender('regist_success',obj,req.xhr);
     });
   });
 
@@ -86,23 +71,10 @@ router
   .get(checkToken,function(req,res){
     var aMember = new Model();
     var rd = res.ligle.renderer;
-    var token = req.body.token;
-    var query = {uuid:token};
-
-    aMember.queryCheck(query,token,Model.checkEmailLinkToken,function(err,obj){
-      if(err){
-        logger.debug(err);
-        rd.errorRender('errorMsg',err.message,req.xhr);
-        return;
-      }
-      obj.verifyEmailLink(function(err,obj){
-        if(err){
-          logger.info(err,err.message);
-          rd.errorRender('errorMsg',err.message,req.xhr);
-          return;
-        }
-        rd.successRender('regist_verified',obj,req.xhr);
-      });
+    var token = {value:req.body.token,type:Model.TYPE.signUp};
+    aMember.checkVerifyEmailLink(token,function(err,obj){
+      if(err) return rd.errorRender('errorMsg',err.message,req.xhr);
+      return rd.successRender('regist_verified',obj,req.xhr);
     });
   });
 
@@ -111,7 +83,7 @@ router
   .route('/getSignupSMS')
   .post(checkCode,function(req,res){
     var obj = new Model(req.body);
-    obj.sendSMS(Model.TYPE.signup,function(err,obj){
+    obj.sendSMS(Model.TYPE.signUp,function(err,obj){
       if(err){
         logger.info(err);
         res.status(403).json({error:err.message});
@@ -122,5 +94,3 @@ router
   });
 
 module.exports = router;
-
-

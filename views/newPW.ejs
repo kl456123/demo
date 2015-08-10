@@ -22,7 +22,7 @@
 
 <div class="container bs-docs-container">
     <%= (!!locals.error)?error:'' %>
-     <form method="post" enctype='multipart/form-data' action="/forgot-password/<%=token%>">
+     <form method="post" enctype='multipart/form-data' action="/verifyReset/<%=token%>">
         新密码：<input type="password" name="password">
         <br />
         <input type="submit" value="修改密码">

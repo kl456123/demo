@@ -12,7 +12,7 @@ function exportFrom(dir){
   'home',
   'login',
   'logout',
-  'signup',
+  'sign-up',
   'forgot-pw',
   'status',
   'member',

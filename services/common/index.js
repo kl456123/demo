@@ -141,7 +141,7 @@ var sendEmail = exports.sendEmail = function(to,subject,content,callback){
 };
 
 var templates = {};
-templates.signup = {
+templates.signUp = {
   subject: '欢迎注册 <%- appname %>',
   text: [
     '<h2>您好 <%- username %></h2>',
@@ -154,7 +154,7 @@ templates.signup = {
 };
 
 // email already taken template
-templates.alreadysignup = {
+templates.occupy = {
   subject: '邮箱已经注册',
   text: [
     '<h2>您好 <%- username %></h2>',
@@ -167,8 +167,8 @@ templates.alreadysignup = {
   ].join('<br />')
 };
 
-// resend signup template
-templates.emailResendVerification = {
+// resend signUp template
+templates.resend = {
   subject: '完成您的注册',
   text: [
     '<h2>您好 <%- username %></h2>',
@@ -181,7 +181,7 @@ templates.emailResendVerification = {
 };
 
 // forgot password template
-templates.emailForgotPassword = {
+templates.reset = {
   subject: '重置密码',
   text: [
     '<h2>您好 <%- username %></h2>',
