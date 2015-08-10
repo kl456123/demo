@@ -228,7 +228,7 @@ var Model = module.exports = ligle.base.model.ModelBase.extend({
       }
       self._createUser();//创建用户和密码，如果已经创建则什么都不做
       var token = self[infoField].token.signUp;
-      if(token.status!==STATUS.unverified)// 如果没发送验证码
+      if(!token.status)// 如果从未没发送验证码
         token.status= STATUS.unsent;
       self.save(callback);
     });
@@ -408,7 +408,7 @@ var Model = module.exports = ligle.base.model.ModelBase.extend({
 
     var self = this;
     // 发送验证码
-    tool.sendSmsCodeFake( // sendSmsCodeFake 加了Fake后缀，将不会真发短信，便于调试
+    tool.sendSmsCode( // sendSmsCodeFake 加了Fake后缀，将不会真发短信，便于调试
       this.cellphone,
       minute,
       function(err,code){
