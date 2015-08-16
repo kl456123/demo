@@ -2,13 +2,13 @@
 
 <!--START:main-->
 <!-- Docs page layout -->
-<div class="bs-docs-header" id="content" style="background-image: url('/images/c_img/top_bg_blue.jpg')">
+<div id="content" style="background-image: url('/images/c_img/top_bg_blue.jpg')">
     <div class="container">
-        <h1 style="text-shadow: 2px 2px #202020">会员登陆</h1>
+        <h1>会员登陆</h1>
     </div>
 </div>
 
-<div id="tab" class="container bs-docs-container">
+<div id="tab" class="container">
     <%= (!!locals.error)?error:'' %>
     <ul class="tab_menu">
         <li class="selected">手机</li>
@@ -33,6 +33,19 @@
                 <input type="submit" value="登陆">
             </form>
         </div>
+    </div>
+</div>
+
+<div class="container">
+    <%= (!!locals.error)?error:'' %>
+    <div>
+        <form method="post" enctype='multipart/form-data' action="/login?redirect=/member">
+            账号：<input type="text" name="id">
+            <br />
+            密码：<input type="password" name="password">
+            <br />
+            <input type="submit" value="登陆">
+        </form>
     </div>
 </div>
 

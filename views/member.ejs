@@ -1,22 +1,10 @@
 <%- include header %>
 
-<style type="text/css">
-    .caption p {
-        color: #b7b7b7;
-    }
-    textarea{
-        width: 100%;
-    }
-    input{
-        margin: 5px 5px ;
-    }
-</style>
-
 <!--START:main-->
 <!-- Docs page layout -->
-<div class="bs-docs-header" id="content" style="background-image: url('/images/c_img/top_bg_blue.jpg')">
+<div class="bs-docs-header" id="content">
     <div class="container">
-        <h1 style="text-shadow: 2px 2px #202020">会员中心</h1>
+        <h1>会员中心</h1>
     </div>
 </div>
 
@@ -24,8 +12,8 @@
     <div class="row">
 
         <div class="col-md-2">
-            <div class="bs-docs-sidebar hidden-print hidden-xs hidden-sm" role="complementary">
-                <ul class="nav bs-docs-sidenav">
+            <div class="hidden-print hidden-xs hidden-sm" role="complementary">
+                <ul class="nav">
                     <li><a href="#bookmark-1">基本信息</a></li>
                     <li><a href="#bookmark-2">账号安全</a></li>
                 </ul>
@@ -39,6 +27,8 @@
             <div class="bs-docs-section" style="">
                 <h3 id="bookmark-1" class="page-header">基本信息</h3>
                 <form method="post" enctype='multipart/form-data'>
+                    会员ID：例如：ligle123456789
+                    <br />
                     邮箱：<input type="email" name="email" disabled="disabled" value="<%=data.email%>" ><a>更改登陆邮箱</a>
                     <br />
                     手机：<input type="cellphone" name="cellphone" disabled="disabled" value="<%=data.cellphone%>"><a>更改手机号码</a>
