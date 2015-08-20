@@ -8,42 +8,81 @@
         <h1>找回密码</h1>
     </div>
 </div>
-
-<div class="container bs-docs-container">
-    <%= (!!locals.error)?error:'' %>
-</div>
-
-<div id="tab" class="container bs-docs-container">
-    <%= (!!locals.error)?error:'' %>
-    <div>
-        <ul class="tab_menu">
-            <li class="selected">邮箱</li>
-            <li>手机</li>
-        </ul>
+<div class="container">
+    <div class="col-md-6">
+        <h1>
+            YOUR LOGO
+        </h1>
     </div>
-    <div class="tab_box">
-        <div>
-            <form method="post" enctype='multipart/form-data' action="/forgot-password">
-                邮箱：<input type="email" name="email">
-                <br />
-                <input type="submit" value="找回密码">
-            </form>
-        </div>
-        <div style="display: none">
-            <form method="post" enctype='multipart/form-data' action="/forgotPwSMS">
-                手机号：<input type="number" name="cellphone" id='cellphone'>
-                <br />
-                验证码：<input type="text" name="code" id='code'>
-                <img  class="CAPTCHA" src="/getCode"  alt="验证码" />
-                <a id="getSMS" href="javascript: getResetSMS();">获取短信验证码</a>
-                <div id='smsMsg'></div>
-                短信验证码：<input type="text" name="codeSMS">
-                <br />
-                设置新密码：<input type="password" name="password">
-                <br />
-                <input type="submit" value="设置">
-            </form>
-        </div>
+    <%= (!!locals.error)?error:'' %>
+    <div class="col-md-6">
+        <form method="post" class="ligle-form" enctype='multipart/form-data' action="/forgotPwSMS">
+            <table>
+                <tr>
+                    <th colspan="2">
+                        <h3>使用手机号码快速找回</h3>
+                    </th>
+                </tr>
+                <tr>
+                    <th>手机号：</th>
+                    <td><input type="number" name="cellphone" id='cellphone'></td>
+                </tr>
+                <tr>
+                    <th>验证码：</th>
+                    <td>
+                        <input type="text" name="code" id='code'>
+                        <img  class="CAPTCHA" src="/getCode"  alt="验证码" />
+                    </td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td>
+                        <div id='smsMsg'></div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>短信验证码：</th>
+                    <td>
+                        <input id='code' type="text" name="codeSMS" maxlength="6">
+                        <a id="getSMS" class="btn-info btn btn-sm" href="javascript: getResetSMS();">获取短信验证码</a>
+                    </td>
+                </tr>
+                <tr>
+                    <th>设置新密码：</th>
+                    <td><input type="password" name="password"></td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td><input type="submit" class="ligle-input-lg" value="完成"></td>
+                </tr>
+            </table>
+            <a class="ligle-switch">使用邮箱找回</a>
+        </form>
+        <form method="post" class="ligle-form" enctype='multipart/form-data' action="/forgot-password">
+            <table>
+                <tr>
+                    <th colspan="2">
+                        <h3>使用邮箱找回</h3>
+                    </th>
+                </tr>
+                <tr>
+                    <th>邮箱：</th>
+                    <td><input type="email" name="email"></td>
+                </tr>
+                <tr>
+                    <th>验证码：</th>
+                    <td>
+                        <input type="text" name="code" id='code'>
+                        <img  class="CAPTCHA" src="/getCode"  alt="验证码" />
+                    </td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td><input type="submit" value="发送验证邮件"></td>
+                </tr>
+            </table>
+            <a class="ligle-switch">使用手机号码快速找回</a>
+        </form>
     </div>
 </div>
 

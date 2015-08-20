@@ -2,50 +2,64 @@
 
 <!--START:main-->
 <!-- Docs page layout -->
-<div id="content" style="background-image: url('/images/c_img/top_bg_blue.jpg')">
+<div id="content">
     <div class="container">
         <h1>会员登陆</h1>
     </div>
 </div>
 
-<div id="tab" class="container">
-    <%= (!!locals.error)?error:'' %>
-    <ul class="tab_menu">
-        <li class="selected">手机</li>
-        <li>邮箱</li>
-    </ul>
-    <div class="tab_box">
-        <div>
-            <form method="post" enctype='multipart/form-data' action="/loginSMS?redirect=/member">
-                手机：<input type="number" name="cellphone">
-                <br />
-                密码：<input type="password" name="password">
-                <br />
-                <input type="submit" value="登陆">
-            </form>
-        </div>
-        <div style="display: none">
-            <form method="post" enctype='multipart/form-data' action="/login?redirect=/member">
-                邮箱：<input type="email" name="email">
-                <br />
-                密码：<input type="password" name="password">
-                <br />
-                <input type="submit" value="登陆">
-            </form>
-        </div>
-    </div>
-</div>
-
 <div class="container">
+    <div class="col-md-6">
+
+        <h1>YOUR LOGO</h1>
+    </div>
     <%= (!!locals.error)?error:'' %>
-    <div>
-        <form method="post" enctype='multipart/form-data' action="/login?redirect=/member">
-            账号：<input type="text" name="id">
-            <br />
-            密码：<input type="password" name="password">
-            <br />
-            <input type="submit" value="登陆">
+    <div class="col-md-6">
+
+        <form class="ligle-form" method="post" enctype='multipart/form-data' action="/login?redirect=/member">
+            <table>
+                <tr>
+                    <th>账号</th>
+                    <td><input type="text" name="id" value="会员ID/手机/邮箱"></td>
+                </tr>
+                <tr>
+                    <th>密码</th>
+                    <td><input type="password" name="password"></td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td><input class="ligle-input-lg" type="submit" value="登陆"></td>
+                </tr>
+            </table>
         </form>
+
+        <div id="tab" class="col-md-12">
+            <%= (!!locals.error)?error:'' %>
+            <ul class="tab_menu">
+                <li class="selected">手机</li>
+                <li>邮箱</li>
+            </ul>
+            <div class="tab_box" style="margin: auto auto">
+                <div>
+                    <form method="post" enctype='multipart/form-data' action="/loginSMS?redirect=/member">
+                        手机：<input type="number" name="cellphone">
+                        <br />
+                        密码：<input type="password" name="password">
+                        <br />
+                        <input type="submit" value="登陆">
+                    </form>
+                </div>
+                <div style="display: none">
+                    <form method="post" enctype='multipart/form-data' action="/login?redirect=/member">
+                        邮箱：<input type="email" name="email">
+                        <br />
+                        密码：<input type="password" name="password">
+                        <br />
+                        <input type="submit" value="登陆">
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

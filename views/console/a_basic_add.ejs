@@ -3,11 +3,8 @@
 <!--START:main-->
 <div class="col-sm-12" id="content">
     <div class="row">
-
         <h2 style="margin: 10px 20px">基本类型</h2>
-
-	<%=locals.msg?locals.msg:''%>
-
+        <%=locals.msg?locals.msg:''%>
         <div class="col-lg-12">
             <div class="panel panel-info">
                 <!--本单元标题-->
@@ -15,44 +12,54 @@
                 <!--本单元内容-->
                 <div class="panel-body">
                     <form method="post" enctype='multipart/form-data' class="demoform" action="/a_add/basic">
-                        编号
-                        <input type="text" name="number" datatype="" errormsg="亲，请输入正确信息~">
-                        <div class="Validform_checktip">input/text编号</div>
-
-                        文字输入框
-                        <input type="text" name="text" datatype="" errormsg="亲，请输入正确信息~">
-                        <div class="Validform_checktip">input/text文本输入框</div>
-
-                        图片：<input type="file" name="cover" errormsg="亲，请输入正确信息~">
-                        <div class="Validform_checktip">input/file 图片</div>
-
-                        下拉菜单：
-                        <select name="cat">
-                            <option value="a">a</option>
-                            <option value="b">b</option>
-                            <option value="c">c</option>
-                        </select>
-                        <div class="Validform_checktip">select 下拉菜单</div>
-
-                        <div class="selectList_area">
-                            类别：
-                            <select class="level1" name="level1">
-                            </select>
-                            <select class="level2" name="level2">
-                            </select>
-                            <select class="level3" name="level3">
-                            </select>
-                            <div class="Validform_checktip">select 多级联动下拉菜单</div>
-                        </div>
-
-                        文本输入域：
-                        <br/>
-                        <textarea id="summernote" class="summernote" name="textarea" datatype=""></textarea>
-                        <div class="Validform_checktip">textarea/summernote 文本输入框</div>
-
-                        <input type="submit" class="btn btn-info" value="保 存"/>
-                        <input type="reset"  class="btn btn-info" value="重 置" />
-
+                        <table class="table table-hover">
+                            <tr>
+                                <th>编号:</th>
+                                <td><input type="text" name="number" datatype="*"></td>
+                            </tr>
+                            <tr>
+                                <th>标题:</th>
+                                <td><input type="text" name="title" datatype="*"></td>
+                            </tr>
+                            <tr>
+                                <th>图片：</th>
+                                <td><input type="file" name="cover" datatype="*"></td>
+                            </tr>
+                            <tr>
+                                <th>类别：</th>
+                                <td>
+                                    <select name="cat">
+                                        <option value="a">a</option>
+                                        <option value="b">b</option>
+                                        <option value="c">c</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>所在地：</th>
+                                <td>
+                                    <div class="selectList_area">
+                                        <select class="level1" name="pro">
+                                        </select>
+                                        <select class="level2" name="city">
+                                        </select>
+                                        <select class="level3" name="dis">
+                                        </select>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>详情：</th>
+                                <td><textarea id="summernote" class="summernote" name="textarea" datatype=""></textarea></td>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <td>
+                                    <input type="submit" class="btn btn-info btn-md" value="保 存"/>
+                                    <input type="reset"  class="btn btn-default btn-xs" value="重 置" />
+                                </td>
+                            </tr>
+                        </table>
                     </form>
                 </div>
             </div>

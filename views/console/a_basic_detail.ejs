@@ -14,45 +14,61 @@
                 <!--本单元内容-->
                 <div class="panel-body">
                     <form method="post" enctype='multipart/form-data'>
-                        编号：<input type="text" value="<%= data.number %>" name="number">
-                        <br/>
-
-                        文本输入框：<input type="text" value="<%= data.text %>" name="text">
-                        <br/>
-
-                        图片：<input type="file" name="cover">
-                        <img class="thb" src="<%= data.cover?data.cover.path:'' %>" alt="无图" align="middle">
-                        <% if(data.cover){ %>
-                        &nbsp;&nbsp;&nbsp;图片名称：<%= data.cover.origin %>
-                        <% } %>
-                        <br>
-
-                        下拉菜单：
-                        <% var catobj = {a: 'a', b: 'b', c: 'c'}; %>
-                        <select name="cat">
-                            <% for(var key in catobj){ %>
-                            <option value="<%= key %>" <% if(data.cat == key){ %>selected="selected" <% } %>><%= catobj[key] %></option>
-                            <% } %>
-                        </select>
-                        <br />
-
-                        <div class="selectList_area">
-                            类别：
-                            <select class="level1" name="level1">
-                            </select>
-                            <select class="level2" name="level2">
-                            </select>
-                            <select class="level3" name="level3">
-                            </select>
-                        </div>
-
-                        文字输入域：
-                        <br/>
-                        <textarea id="summernote" class="summernote" name="textarea"><%= data.textarea %></textarea>
-                        <br/>
-
-                        <button class="btn btn-warning" type="submit">保存</button>
-
+                        <table class="table table-hover">
+                            <tr>
+                                <th>编号:</th>
+                                <td><input type="text" name="number" value="<%= data.number %>" datatype="*"></td>
+                            </tr>
+                            <tr>
+                                <th>标题:</th>
+                                <td><input type="text" name="title" datatype="*"></td>
+                            </tr>
+                            <tr>
+                                <th>图片：</th>
+                                <td>
+                                    <input type="file" name="cover" datatype="*">
+                                    <img class="thb" src="<%= data.cover?data.cover.path:'' %>" alt="无图" align="middle">
+                                    <% if(data.cover){ %>
+                                    &nbsp;&nbsp;&nbsp;图片名称：<%= data.cover.origin %>
+                                    <% } %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>类别：</th>
+                                <td>
+                                    <% var catobj = {a: 'a', b: 'b', c: 'c'}; %>
+                                    <select name="cat">
+                                        <% for(var key in catobj){ %>
+                                        <option value="<%= key %>" <% if(data.cat == key){ %>selected="selected" <% } %>><%= catobj[key] %></option>
+                                        <% } %>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>所在地：</th>
+                                <td>
+                                    <div class="selectList_area">
+                                        <select class="level1" name="pro">
+                                        </select>
+                                        <select class="level2" name="city">
+                                        </select>
+                                        <select class="level3" name="dis">
+                                        </select>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>详情：</th>
+                                <td><textarea id="summernote" class="summernote" name="textarea" datatype=""><%= data.textarea %></textarea></td>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <td>
+                                    <button class="btn btn-warning btn-md" type="submit">保存</button>
+                                    <input type="reset"  class="btn btn-default btn-xs" value="重 置" />
+                                </td>
+                            </tr>
+                        </table>
                     </form>
                 </div>
             </div>

@@ -22,7 +22,7 @@
         </div>
 
         <div class="col-md-8" role="main">
-            <div class="bs-docs-section">
+            <div>
                 <form method="post" enctype='multipart/form-data'>
                     <table>
                         <tr>
@@ -37,14 +37,14 @@
                         <tr>
                             <th>手机：</th>
                             <td>
-                                <input type="cellphone" name="cellphone" disabled="disabled" value="<%=data.cellphone%>"> |
-                                <a>更改手机号码</a>
+                                <%=data.cellphone%> |
+                                <a>更改/绑定手机号码</a>
                             </td>
                         </tr>
                         <tr>
                             <th>邮箱：</th>
                             <td>
-                                <input type="email" name="email" disabled="disabled" value="<%=data.email%>" > |
+                                <%=data.email%> |
                                 <a href="">更改登陆邮箱</a>
                             </td>
                         </tr>

@@ -7,46 +7,84 @@
     </div>
 </div>
 
-<div id="tab" class="container bs-docs-container">
-    <%= (!!locals.error)?error:'' %>
-    <div>
-        <ul class="tab_menu">
-            <li class="selected">手机注册</li>
-            <li>邮箱注册</li>
-        </ul>
+<div class="container bs-docs-container">
+    <div class="col-md-6">
+        <h1>YOUR LOGO</h1>
     </div>
-    <div class="tab_box">
-        <div>
-            <form method="post" enctype='multipart/form-data' action="/registSMS">
-                手机号：<input type="number" name="cellphone" id='cellphone'>
-                <br />
-                验证码：<input type="text" name="code" id='code'>
-                <img class="CAPTCHA" src="/getCode"  alt="验证码" />
-                <a id="getSMS" href="javascript: getSignupSMS();">获取短信验证码</a>
-                <div id='smsMsg'></div>
-                短信验证：<input type="text" name="codeSMS">
-                <br />
-                设置密码：<input type="password" name="password">
-                <br />
-                <input type="submit" value="注册">
-            </form>
-        </div>
-        <div style="display: none">
-            <form method="post" enctype='multipart/form-data' action="/regist">
-                邮箱：<input type="email" name="email">
-                <br />
-                密码：<input type="password" name="password">
-                <br />
-                昵称：<input type="text" name="nickname">
-                <br />
-                验证码：<input type="text" name="code">
-                <img class="CAPTCHA" src="/getCode"  alt="验证码" />
-                <br />
-                <input type="submit" value="注册">
-            </form>
-        </div>
+    <%= (!!locals.error) ? error : '' %>
+    <div class="col-md-6">
+        <form class="ligle-form" method="post" enctype='multipart/form-data' action="/registSMS">
+            <table>
+                <tr>
+                    <th>手机号码</th>
+                    <td><input class="ligle-input-lg" type="text" name="cellphone" id='cellphone'></td>
+                </tr>
+                <tr>
+                    <th>设置密码</th>
+                    <td><input class="ligle-input-lg" type="password" name="password"></td>
+                </tr>
+                <tr>
+                    <th>验证码</th>
+                    <td>
+                        <input class="ligle-input-md" type="text" name="code" maxlength="4">
+                        <img class="CAPTCHA" src="/getCode" alt="验证码"/>
+                        <div id='smsMsg'></div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>短信验证</th>
+                    <td>
+                        <input class="ligle-input-md" type="text" name="codeSMS" maxlength="6">
+                        <a id="getSMS" class="btn-info btn btn-sm" href="javascript: getSignupSMS();">获取短信验证码</a>
+                    </td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td><input type="checkbox" name="">我已经阅读并且同意<a>网站用户条款</a></td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td>
+                        <input type="submit" class="ligle-input-lg" value="注册">
+                        <a>使用邮箱进行注册</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <form class="ligle-form" method="post" enctype='multipart/form-data' action="/registSMS">
+            <table>
+                <tr>
+                    <th>电子邮箱</th>
+                    <td><input class="ligle-input-lg" type="text" name="cellphone" id='cellphone'></td>
+                </tr>
+                <tr>
+                    <th>设置密码</th>
+                    <td><input class="ligle-input-lg" type="password" name="password"></td>
+                </tr>
+                <tr>
+                    <th>验证码</th>
+                    <td>
+                        <input class="ligle-input-md" type="text" name="code" maxlength="4">
+                        <img class="CAPTCHA" src="/getCode" alt="验证码"/>
+                        <div id='smsMsg'></div>
+                    </td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td><input type="checkbox" name="">我已经阅读并且同意<a>网站用户条款</a></td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td>
+                        <input type="submit" class="ligle-input-lg" value="注册">
+                        <a>使用手机号码进行注册</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
     </div>
 </div>
+
 <!--END:main-->
 <script>
 function getSucc(obj){

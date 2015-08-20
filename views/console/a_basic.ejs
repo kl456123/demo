@@ -3,26 +3,14 @@
 <!--START:main box-->
 <div class="col-sm-12" id="content">
     <div class="row">
-        <h2 style="margin: 10px 20px">基本</h2>
+        <h2 style="margin: 10px 20px">基本 / <a href="/a_add/basic" class="btn btn-info ">添加基本类型</a></h2>
 
         <div class="col-lg-12">
             <div class="panel panel-default">
-                <!--本单元标题-->
-                <div class="panel-heading">添加</div>
-                <!--本单元内容-->
-                <div class="panel-body">
-                    <a href="/a_add/basic" class="btn btn-info ">添加基本类型</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-12">
-            <div class="panel panel-default">
-                <!--本单元标题-->
                 <div class="panel-heading">筛选</div>
-                <!--本单元内容-->
                 <div class="panel-body">
                     <form method="get">
+                        <!-- /btn-group -->
                         关键字：
                         <input type="text" name="keyword">
                         <button class="btn btn-info btn-sm" type="submit">确定</button>
@@ -42,8 +30,7 @@
                         <tr>
                             <th>编号</th>
                             <th>文本</th>
-                            <th>删除</th>
-                            <th>详情</th>
+                            <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -51,8 +38,10 @@
                         <tr>
                             <td><%= o.number %></td>
                             <td><%= o.text %></td>
-                            <td><a class="btn btn-danger btn-sm" onclick="cfm('/a_del/basic/<%= o._id %>');">delete</a></td>
-                            <td><a class="btn btn-warning btn-sm" href="/a_detail/basic/<%= o._id %>">detail</a></td>
+                            <td>
+                                <a class="btn btn-warning btn-md" href="/a_detail/basic/<%= o._id %>">查看</a>
+                                <a class="btn btn-danger btn-xs" onclick="cfm('/a_del/basic/<%= o._id %>');">删除</a>
+                            </td>
                         </tr>
                         <% }); %>
                         </tbody>
@@ -64,5 +53,5 @@
 </div>
 
 <!--END:main box-->
-
+<%- include ../part/page %>
 <%- include a_footer %>
