@@ -6,7 +6,7 @@ router
   .route('/')
   .get(function(req,res){
     var rd = res.ligle.renderer;
-    rd.render('index');
+    rd.render('client/index');
   })
   .post(function(req,res){
   });

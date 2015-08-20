@@ -14,7 +14,7 @@ router
     logger.debug(req.params.id);
     obj.get({_id:req.params.id},function(err,getObj){
       getObj.fillFields();
-      rd.renderEO('a_member_detail',err,getObj);
+      rd.renderEO('console/a_member_detail',err,getObj);
     });
   })
   .post(function(req,res){
@@ -25,7 +25,7 @@ router
       getObj.addData(req.body);
       getObj.processFiles(req.files);
       getObj.save(function(err,savedObj){
-        rd.renderEO('a_member_detail',err,getObj);
+        rd.renderEO('console/a_member_detail',err,getObj);
       });
     });
   });
@@ -36,7 +36,7 @@ router
     var rd = res.ligle.renderer;
     var obj = res.ligle.model;
     obj.getList({},function(err,objs){
-      rd.render('a_member',{data:objs});
+      rd.render('console/a_member',{data:objs});
     });
   });
 

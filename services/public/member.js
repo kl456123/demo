@@ -20,7 +20,7 @@ router
   .route('/member')
   .get(pChecker.passIf('member','login'),function(req,res){
     var rd = res.ligle.renderer;
-    rd.render('member',{data:req.session.user});
+    rd.render('member/member',{data:req.session.user});
   })
   .post(pChecker.passIf('member','login'),checkPhone,function(req,res){
     var rd = res.ligle.renderer;

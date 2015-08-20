@@ -7,6 +7,6 @@ router
   .route('/admin')
   .get(function(req,res){
     var rd = res.ligle.renderer;
-    rd.render('a_index');
+    rd.render('console/a_index');
   });
 module.exports = router;

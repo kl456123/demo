@@ -9,7 +9,7 @@ router
   .route('/a_add/basic')
   .get(function(req,res){
     var rd = res.ligle.renderer;
-    rd.render('a_basic_add');
+    rd.render('console/a_basic_add');
   })
   .post(function(req,res){
     var rd = res.ligle.renderer;
@@ -20,7 +20,7 @@ router
     obj.save(function(err,savedObj){
       var msg = err? err:'success saved!';
       logger.trace('saved Id',savedObj._id);
-      rd.renderEO('a_basic_add',err,{msg:msg});
+      rd.renderEO('console/a_basic_add',err,{msg:msg});
     });
   });
 
@@ -32,7 +32,7 @@ router
     var obj = res.ligle.model;
     logger.debug(req.params.id);
     obj.get({_id:req.params.id},function(err,getObj){
-      rd.renderEO('a_basic_detail',err,{data:getObj});
+      rd.renderEO('console/a_basic_detail',err,{data:getObj});
     });
   })
   .post(function(req,res){
@@ -43,7 +43,7 @@ router
       getObj.addData(req.body);
       getObj.processFiles(req.files);
       getObj.save(function(err,savedObj){
-        rd.renderEO('a_basic_detail',err,{data:getObj});
+        rd.renderEO('console/a_basic_detail',err,{data:getObj});
       });
     });
   });
@@ -55,7 +55,7 @@ router
     var rd = res.ligle.renderer;
     var obj = res.ligle.model;
     obj.getList({},function(err,objs){
-      rd.render('a_basic',{basic:objs});
+      rd.render('console/a_basic',{basic:objs});
     });
   });
 
