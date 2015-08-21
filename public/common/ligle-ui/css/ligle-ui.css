@@ -40,3 +40,10 @@ input{
 .ligle-switch{
 
 }
+.btn-ligle{
+    background-color: #582635;
+    color: #ffffff;
+}
+.btn-ligle:hover{
+    color: #ffffff;
+}

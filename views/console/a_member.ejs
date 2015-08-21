@@ -3,25 +3,11 @@
 <!--START:main-->
 <div class="col-sm-12" id="content">
     <div class="row">
-        <h2 style="margin: 10px 20px">会员 </h2>
+        <p style="margin: 10px 20px;font-size: 30px">
+            会员
+        </p>
 
-        <div class="col-lg-12">
-            <div class="panel panel-default">
-                <!--本单元标题-->
-                <div class="panel-heading">筛选</div>
-                <!--本单元内容-->
-                <div class="panel-body">
-                    <form>
-                        关键字：
-                        <input type="text">
-
-                        <button class="btn btn-info btn-sm">确定</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-12">
+        <div class="col-lg-9">
             <div class="panel panel-default">
                 <!--本单元标题-->
                 <div class="panel-heading">会员列表</div>
@@ -42,16 +28,38 @@
                             <td><%= o.email %></td>
                             <td><%= o.cellphone %></td>
                             <td><%= o.nickname %></td>
-                            <td><a class="btn btn-warning btn-sm" href="/a_detail/member/<%= o._id %>">detail</a></td>
+                            <td>
+                                <a class="btn btn-success btn-sm" href="/a_detail/basic/">查看</a>
+                                <a class="btn btn-xs" onclick="cfm('/a_del/basic/');">删除</a>
+                            </td>
                         </tr>
                         <% }); %>
                         </tbody>
                     </table>
                 </div>
             </div>
+            <%- include ../part/page %>
         </div>
+
+        <div class="col-lg-3">
+            <div class="panel panel-default">
+                <!--本单元标题-->
+                <div class="panel-heading">筛选</div>
+                <!--本单元内容-->
+                <div class="panel-body">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search for...">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" style="position: relative;top: 2px">搜索</button>
+                            </span>
+                    </div><!-- /input-group -->
+                </div>
+            </div>
+        </div>
+
+
     </div>
 </div>
 <!--END:main-->
-<%- include ../part/page %>
+
 <%- include a_footer %>

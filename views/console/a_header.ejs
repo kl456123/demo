@@ -60,49 +60,63 @@
 
 <body>
 <!--START:header bar-->
-<div class="head">
-    <a href="/a_logout" type="button"  class="logout" style="">
-        登出
-    </a>
-    <a href="/admin" style="color: #ffffff;text-decoration: none">
-        <span style="position:relative;top:10px;left: 25px;font-size: 25px">控制台[Console]</span>
-    </a>
-</div>
+<header class="header-console">
+    <a href="" target="_blank" class="appName">Application Name</a>
+    <ul class="nav-right">
+        <li>
+            <a><i class="fa fa-sign-out fa-fw"></i></a>
+        </li>
+        <li>
+            <a><i class="fa  fa-info fa-fw"></i></a>
+        </li>
+    </ul>
+</header>
 <!--END:header bar-->
 <!--START:menu bar-->
-<div class="nav-box">
-    <div class="nav-title">
-        <i class="glyphicon glyphicon-dashboard"></i> 概况
+<div>
+    <div class="sidebar-wrapper">
+        <div class="logo-ligle">
+            <img src="images/base/logo-ligle.png"><span>-Console</span>
+        </div>
+        <ul class="nav-sidebar">
+            <li>
+                <a class="shortcuts-project" data-placement="right" href="/admin" title="Project">
+                    <i class="fa fa-dashboard fa-fw"></i>
+                    <span>仪表盘</span>
+                </a>
+            </li>
+            <li>
+                <a class="shortcuts-project" data-placement="right" href="/a_basic" title="Project">
+                    <i class="fa fa-edit fa-fw"></i>
+                    <span>内容编辑</span>
+                </a>
+            </li>
+            <li>
+                <a class="shortcuts-project" data-placement="right" href="/a_member" title="Project">
+                    <i class="fa fa-users fa-fw"></i>
+                    <span>会员管理</span>
+                </a>
+            </li>
+            <li>
+                <a class="shortcuts-project" data-placement="right" href="/a_pics" title="Project">
+                    <i class="fa fa-picture-o fa-fw"></i>
+                    <span>图库</span>
+                </a>
+            </li>
+            <li>
+                <a class="shortcuts-project" data-placement="right" href="/a_setAdmin" title="Project">
+                    <i class="fa fa-shield fa-fw"></i>
+                    <span>管理员</span>
+                </a>
+            </li>
+            <li>
+                <a class="shortcuts-project" data-placement="right" href="/a_changePW" title="Project">
+                    <i class="fa fa-key fa-fw"></i>
+                    <span>修改密码</span>
+                </a>
+            </li>
+        </ul>
     </div>
-    <div class="nav-list">
-        <li><a href="/admin">仪表盘</a></li>
-    </div>
-    <!---->
-    <div class="nav-title">
-        <i class="glyphicon glyphicon-pencil"></i> 管理
-    </div>
-    <div class="nav-list">
-        <li><a href="/a_basic">基础类型</a></li>
-        <li><a href="/a_member">会员管理</a></li>
-    </div>
-    <!---->
-    <div class="nav-title">
-        <i class="glyphicon glyphicon-picture"></i> 素材
-    </div>
-    <div class="nav-list">
-        <li><a href="#">图库</a></li>
-    </div>
-    <!---->
-    <div class="nav-title">
-        <i class="glyphicon glyphicon-cog"></i> 安全
-    </div>
-    <div class="nav-list">
-        <li><a href="/a_setAdmin">设置管理员</a></li>
-    </div>
-    <div class="nav-list">
-        <li><a href="/a_changePW">修改密码</a></li>
-    </div>
-</div>
-<!--END:menu bar-->
+    <div class="content-wrapper">
+        <div class="content">
 
-<div class="main-box">
