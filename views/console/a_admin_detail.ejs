@@ -1,11 +1,13 @@
 <%- include a_header %>
+
+
 <!--START:main-->
-<div class="col-sm-6" id="content">
+<div class="col-sm-12" id="content">
     <div class="row">
-        <p class="ligle-page-title">
-            基本
-        </p>
-        <div class="col-lg-12">
+
+        <p class="ligle-page-title">管理员</p>
+
+        <div class="col-lg-6">
             <div class="panel panel-default">
                 <!--本单元标题-->
                 <div class="panel-heading">详情</div>
@@ -15,7 +17,7 @@
                         <table class="table table-hover">
                             <tr>
                                 <th>编号:</th>
-                                <td><input type="text" name="number" value="<%= data.number %>" datatype="*"></td>
+                                <td><input type="text" name="number" value="" datatype="*"></td>
                             </tr>
                             <tr>
                                 <th>标题:</th>
@@ -25,21 +27,13 @@
                                 <th>图片：</th>
                                 <td>
                                     <input type="file" name="cover" datatype="*">
-                                    <img class="thb" src="<%= data.cover?data.cover.path:'' %>" alt="无图" align="middle">
-                                    <% if(data.cover){ %>
-                                    &nbsp;&nbsp;&nbsp;图片名称：<%= data.cover.origin %>
-                                    <% } %>
+
                                 </td>
                             </tr>
                             <tr>
                                 <th>类别：</th>
                                 <td>
-                                    <% var catobj = {a: 'a', b: 'b', c: 'c'}; %>
-                                    <select name="cat">
-                                        <% for(var key in catobj){ %>
-                                        <option value="<%= key %>" <% if(data.cat == key){ %>selected="selected" <% } %>><%= catobj[key] %></option>
-                                        <% } %>
-                                    </select>
+
                                 </td>
                             </tr>
                             <tr>
@@ -56,10 +50,6 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th>详情：</th>
-                                <td><textarea id="summernote" class="summernote" name="textarea" datatype=""><%= data.textarea %></textarea></td>
-                            </tr>
-                            <tr>
                                 <th></th>
                                 <td>
                                     <button class="btn btn-warning btn-md" type="submit">保存</button>
@@ -71,22 +61,24 @@
                 </div>
             </div>
         </div>
+        <div class="col-lg-6">
+            <div class="panel panel-danger">
+                <!--本单元标题-->
+                <div class="panel-heading">注意！</div>
+                <!--本单元内容-->
+                <div class="panel-body">
+                    您正处于最高权限(root权限)下，您可以对于其他管理员的信息进行修改。
+                    <br />
+                    请妥善管理好您的root账号密码！
+
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <!--END:main-->
 
-<script text="text/javascript">
-    //多级联动菜单
-    $(function () {
-        var area = "/common/link_select/area.json";
-        var initArea = [
-            "<%= data.level1 %>",
-            "<%= data.level2 %>",
-            "<%= data.level3 %>"
-        ];
-        initLinkSelect(".selectList_area",area,initArea);
-    });
-</script>
+
 
 <%- include a_footer %>
 

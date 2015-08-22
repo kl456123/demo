@@ -4,18 +4,13 @@
 <!-- Docs page layout -->
 <div id="content">
     <div class="container">
-        <h1>注册新会员</h1>
+        <h1>更改/绑定登陆邮箱</h1>
     </div>
 </div>
 
 <div class="container">
-    <%= (!!locals.error)?error:'' %>
-    <form method="post" enctype='multipart/form-data' action="/regist/resend-verification">
+    <form method="post" class="ligle-form" enctype='multipart/form-data' action="">
         <table>
-            <tr>
-                <td></td>
-                <td>重新发送验证邮件</td>
-            </tr>
             <tr>
                 <td>邮箱：</td>
                 <td><input type="text" name="email"></td>
@@ -32,6 +27,14 @@
                 <td></td>
                 <td><input type="submit" class="btn-info" value="发送验证邮件"></td>
             </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <a href="/change_expired" class="btn btn-warning">测试示例：邮件过期</a>
+                    <a href="/change_success" class="btn btn-success">测试示例：修改成功</a>
+                </td>
+            </tr>
+
         </table>
     </form>
 </div>

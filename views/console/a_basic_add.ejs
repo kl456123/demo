@@ -3,10 +3,12 @@
 <!--START:main-->
 <div class="col-sm-12" id="content">
     <div class="row">
-        <h2 style="margin: 10px 20px">基本类型</h2>
+        <p class="ligle-page-title">
+            基本
+        </p>
         <%=locals.msg?locals.msg:''%>
-        <div class="col-lg-12">
-            <div class="panel panel-info">
+        <div class="col-lg-6">
+            <div class="panel panel-default">
                 <!--本单元标题-->
                 <div class="panel-heading">添加</div>
                 <!--本单元内容-->
@@ -67,15 +69,5 @@
     </div>
 </div>
 <!--END:main-->
-
-<script type="text/javascript">
-    //多级联动菜单
-    $(function () {
-        var area = "/common/link_select/area.json";
-        var initArea = [];
-        initLinkSelect(".selectList_area",area,initArea);
-    });
-</script>
-
 <%- include a_footer %>
 

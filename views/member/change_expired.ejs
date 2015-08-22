@@ -4,17 +4,16 @@
 <!-- Docs page layout -->
 <div id="content">
     <div class="container">
-        <h1>注册新会员</h1>
+        <h1>更改/绑定登陆邮箱</h1>
     </div>
 </div>
 
 <div class="container">
-    <%= (!!locals.error)?error:'' %>
-    <form method="post" enctype='multipart/form-data' action="/regist/resend-verification">
+    <form method="post" class="ligle-form" enctype='multipart/form-data' action="">
         <table>
             <tr>
                 <td></td>
-                <td>重新发送验证邮件</td>
+                <td>链接已过期，请重新经行验证</td>
             </tr>
             <tr>
                 <td>邮箱：</td>

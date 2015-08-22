@@ -3,7 +3,7 @@
 
 <!--START:main-->
 <!-- Docs page layout -->
-<div class="bs-docs-header" id="content">
+<div id="content">
     <div class="container">
         <h1>找回密码</h1>
     </div>
@@ -16,72 +16,69 @@
     </div>
     <%= (!!locals.error)?error:'' %>
     <div class="col-md-6">
-        <form method="post" class="ligle-form" enctype='multipart/form-data' action="/forgotPwSMS">
+        <form metdod="post" class="ligle-form mode-cellphone" enctype='multipart/form-data' action="/forgotPwSMS">
             <table>
                 <tr>
-                    <th colspan="2">
-                        <h3>使用手机号码快速找回</h3>
-                    </th>
+                    <td>手机号：</td>
+                    <td><input type="text" name="cellphone" id='cellphone'></td>
                 </tr>
                 <tr>
-                    <th>手机号：</th>
-                    <td><input type="number" name="cellphone" id='cellphone'></td>
-                </tr>
-                <tr>
-                    <th>验证码：</th>
+                    <td>验证码：</td>
                     <td>
                         <input type="text" name="code" id='code'>
                         <img  class="CAPTCHA" src="/getCode"  alt="验证码" />
                     </td>
                 </tr>
                 <tr>
-                    <th></th>
+                    <td></td>
                     <td>
                         <div id='smsMsg'></div>
                     </td>
                 </tr>
                 <tr>
-                    <th>短信验证码：</th>
+                    <td>短信验证码：</td>
                     <td>
-                        <input id='code' type="text" name="codeSMS" maxlength="6">
+                        <input id='code' type="text" name="codeSMS" maxlengtd="6">
                         <a id="getSMS" class="btn-info btn btn-sm" href="javascript: getResetSMS();">获取短信验证码</a>
                     </td>
                 </tr>
                 <tr>
-                    <th>设置新密码：</th>
+                    <td>设置新密码：</td>
                     <td><input type="password" name="password"></td>
                 </tr>
                 <tr>
-                    <th></th>
-                    <td><input type="submit" class="ligle-input-lg" value="完成"></td>
+                    <td></td>
+                    <td><input type="submit" class="ligle-input-lg btn-success" value="完成"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><a class="switch-mode btn-default btn-xs btn">使用邮箱找回密码</a></td>
                 </tr>
             </table>
-            <a class="ligle-switch">使用邮箱找回</a>
         </form>
-        <form method="post" class="ligle-form" enctype='multipart/form-data' action="/forgot-password">
+        <form metdod="post" class="ligle-form mode-email" enctype='multipart/form-data' action="/forgot-password" style="display: none">
             <table>
                 <tr>
-                    <th colspan="2">
-                        <h3>使用邮箱找回</h3>
-                    </th>
-                </tr>
-                <tr>
-                    <th>邮箱：</th>
+                    <td>邮箱：</td>
                     <td><input type="email" name="email"></td>
                 </tr>
                 <tr>
-                    <th>验证码：</th>
+                    <td>验证码：</td>
                     <td>
                         <input type="text" name="code" id='code'>
                         <img  class="CAPTCHA" src="/getCode"  alt="验证码" />
                     </td>
                 </tr>
                 <tr>
-                    <th></th>
-                    <td><input type="submit" value="发送验证邮件"></td>
+                    <td></td>
+                    <td><input type="submit" class="btn-warning" value="发送验证邮件"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><a class="switch-mode btn-default btn-xs btn">使用手机号码找回密码</a></td>
                 </tr>
             </table>
-            <a class="ligle-switch">使用手机号码快速找回</a>
+
         </form>
     </div>
 </div>

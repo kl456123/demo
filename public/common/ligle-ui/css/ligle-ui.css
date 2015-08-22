@@ -47,3 +47,20 @@ input{
 .btn-ligle:hover{
     color: #ffffff;
 }
+.form-control{
+    display: inline;
+}
+.ligle-a{
+    color: #000000;
+    cursor: pointer;
+}
+.ligle-checkbox{
+    height: 20px;
+    width: 20px;
+    position: relative;
+    top: 5px;
+
+}
+.ligle-checkbox{
+
+}

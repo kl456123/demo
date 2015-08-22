@@ -259,7 +259,9 @@ ul.nav-sidebar{
     opacity: 0.5;
     transition: 0.3s;
 }
-
+.ligle-page-title{
+    margin: 10px 20px;font-size: 30px
+}
 
 
 

@@ -2,13 +2,13 @@
 
 <!--START:main-->
 <!-- Docs page layout -->
-<div class="bs-docs-header" id="content">
+<div id="content">
     <div class="container">
         <h1>会员中心</h1>
     </div>
 </div>
 
-<div class="container bs-docs-container">
+<div class="container">
     <div class="row">
 
         <div class="col-md-2">
@@ -32,20 +32,25 @@
                         </tr>
                         <tr>
                             <th>会员ID：</th>
-                            <td>ligle123456789</td>
+                            <td>
+                                <input type="text" class="ligle-input-md" value="ligle123456789" disabled="disabled"
+                                       style="border: 0px;background-color: #ffffff">
+                            </td>
                         </tr>
                         <tr>
                             <th>手机：</th>
                             <td>
-                                <%=data.cellphone%> |
-                                <a>更改/绑定手机号码</a>
+                                <input type="text" class="ligle-input-md" value="<%=data.cellphone%>" disabled="disabled"
+                                       style="border: 0px;background-color: #ffffff"> |
+                                <a href="/changeCellphone">更改/绑定手机号码</a>
                             </td>
                         </tr>
                         <tr>
                             <th>邮箱：</th>
                             <td>
-                                <%=data.email%> |
-                                <a href="">更改登陆邮箱</a>
+                                <input type="text" class="ligle-input-md" value="<%=data.email%>" disabled="disabled"
+                                       style="border: 0px;background-color: #ffffff"> |
+                                <a href="/changeEmail">更改/绑定登陆邮箱</a>
                             </td>
                         </tr>
                         <tr>
@@ -56,7 +61,7 @@
                         <tr>
                             <th>昵称：</th>
                             <td>
-                                <input type="text" name="nickname" value="<%=data.nickname%>">
+                                <input type="text" name="nickname"  value="<%=data.nickname%>">
                             </td>
                         </tr>
                         <tr>
@@ -75,7 +80,7 @@
                         </tr>
                         <tr>
                             <th>签名档：</th>
-                            <td><textarea name="signature"><%=data.signature%></textarea></td>
+                            <td><textarea class="form-control" name="signature"><%=data.signature%></textarea></td>
                         </tr>
                         <tr>
                             <th></th>

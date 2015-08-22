@@ -3,10 +3,9 @@
 <!--START:main-->
 <div class="col-sm-12" id="content">
     <div class="row">
-        <p style="margin: 10px 20px;font-size: 30px">
+        <p class="ligle-page-title">
             会员
         </p>
-
         <div class="col-lg-9">
             <div class="panel panel-default">
                 <!--本单元标题-->
@@ -29,8 +28,8 @@
                             <td><%= o.cellphone %></td>
                             <td><%= o.nickname %></td>
                             <td>
-                                <a class="btn btn-success btn-sm" href="/a_detail/basic/">查看</a>
-                                <a class="btn btn-xs" onclick="cfm('/a_del/basic/');">删除</a>
+                                <a class="btn btn-success btn-sm" href="/a_detail/member/<%= o._id%>">查看</a>
+                                <a class="btn btn-xs" onclick="cfm('/a_del/member/<%= o._id%>');">删除</a>
                             </td>
                         </tr>
                         <% }); %>
