@@ -108,7 +108,7 @@ ligle.start(function(){
   app.use(serveStatic(path.join(__dirname, 'public')));
 
   app.use(function(req,res){
-	  res.ligle.renderer.render('error');
+	  res.ligle.renderer.render('part/error');
   });
 
   // development only

@@ -1,0 +1,61 @@
+<%- include header %>
+
+<!--START:main-->
+<!-- Docs page layout -->
+<div class="bs-docs-header" id="content">
+    <div class="container">
+        <h1>确认订单</h1>
+    </div>
+</div>
+<form>
+<div class="container bs-docs-container">
+    <div class="row">
+        <div class="col-md-6">
+            <h3>收货人信息</h3>
+            <div style="background-color: #e8e8e8;">
+                <span style="font-size: 20px">solosleeping</span>
+                <br />
+                151****5236
+                <br />
+                辽宁 大连 甘井子区 理工大学西门
+                <br />
+                <a>编辑收货人信息</a>
+            </div>
+
+            <h3>支付方式</h3>
+            <div style="font-size: 20px">
+                <input type="radio" name="payMode" value="COD">货到付款<br /><!--这里可以还满XX免费送货-->
+                <input type="radio" name="payMode" value="OP">在线支付<br />
+            </div>
+
+            <h3>备注信息</h3>
+            <div style="">
+                <textarea></textarea>
+            </div>
+            <h3>系统补充的信息</h3>
+            <div style="">
+                下单账号：<br />
+                下单时间：
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h3>商品列表</h3>
+            <div>
+                <img src="" style="width: 200px;height: 100px;background-color: #e1e1e1;">
+                <span>
+                    名称
+                    单价x数量=小计
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="position:fixed;bottom:0px;height: 60px;width:100%;background-color:#2c2c2c;z-index:9;color:#ffffff;
+padding-top: 20px;text-align: center">
+    应付总额：<span style="font-size: 20px">￥999.00</span>
+    <a class="btn btn-default" style="position: relative;top: -5px">提交订单</a>
+</div>
+</form>
+<!--END:main-->
+
+<%- include footer %>

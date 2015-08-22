@@ -19,7 +19,7 @@ router
   .route('/loginSMS')
   .get(pChecker.passIf('member','logout'),function(req,res){
     var rd = res.ligle.renderer;
-    rd.render('login');
+    rd.render('member/login');
   })
   .post(pChecker.passIf('member','logout'),checkForm,function(req,res){
     var rd = res.ligle.renderer;
@@ -36,7 +36,7 @@ router
   .route('/login')
   .get(pChecker.passIf('member','logout'),function(req,res){
     var rd = res.ligle.renderer;
-    rd.render('login');
+    rd.render('member/login');
   })
   .post(pChecker.passIf('member','logout'),checkEmailForm,function(req,res){
     var rd = res.ligle.renderer;

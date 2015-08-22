@@ -1,0 +1,97 @@
+<%- include header %>
+
+<script type="text/javascript">
+    //懒加载
+    // coutPerReq 用来设置每次点击加载更多后新出现的条目个数
+    var coutPerReq = 1;
+    var cur = parseInt("<%= data.length %>");
+    var reqObj = {text:1, cover: 1,number: 1,_id:1};
+    function handledata(d){
+        //错误代码: 0-正常; 1-指定类别不存在; 2-获取数据失败; 3-已加载所有
+        switch(d.statuscode){
+            default : break;
+            case 1: alert('非法请求');return;
+            case 2: alert('数据库错误，请联系管理员');return;
+            case 3:
+                getMoreItem = function(){};
+                //点击加载更多后，如没有更多条目，则“加载更多”隐藏，“已经是全部”显示
+                document.getElementById('morebtn').style.display = 'none';
+                document.getElementById('nomore').style.display = 'block';
+                break;
+        }
+        cur += coutPerReq;
+        var cs = d.data;
+        //获取对应的条目类型
+        cs.forEach(function(c){
+            document.getElementById('more').innerHTML +=
+                    '<div class="col-sm-6 col-md-4" >' +
+                            '<div class="thumbnail" style="min-height: 280px">' +
+                            '<a href="/detail/basic' + c._id + '">' +
+                            '<img src="/images/upload/basic/' + c.cover + '" alt="...">' +
+                            '</a>' +
+                            '<div class="caption">' +
+                            '<h3>' + c.number + '</h3>' +
+                            '<p>' + c.text + '</p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>';
+        });
+    }
+    var getMoreItem = function(){
+        getMore(cur, coutPerReq, 'basic',reqObj, handledata);
+    };
+</script>
+
+<!--START:main-->
+<!-- Docs page layout -->
+<div class="bs-docs-header" id="content">
+    <div class="container">
+        <h1 style="text-shadow: 2px 2px #202020">基础类型</h1>
+    </div>
+</div>
+
+<div class="container bs-docs-container">
+    <div class="row">
+        <div class="col-md-9" role="main">
+
+            <div class="bs-docs-section">
+                <h3 id="bookmark-detail-1" class="page-header">内容列表</h3>
+                <div class="row">
+                    <% data.forEach(function(o,i){ %>
+                    <div class="col-sm-6 col-md-4">
+                        <div class="thumbnail">
+                            <a href="/detail/basic/<%= o._id %>">
+                                <img src="/images/upload/basic/<%= o.cover %>" alt="...">
+                            </a>
+                            <div class="caption">
+                                <h3><%= o.number %></h3>
+                                <p><%= o.text %></p>
+                            </div>
+                        </div>
+                    </div>
+                    <% }); %>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="bs-docs-sidebar hidden-print hidden-xs hidden-sm" role="complementary">
+                <ul class="nav bs-docs-sidenav">
+
+                    <li>
+                        <a href="#bookmark-detail-1">
+                            列表
+                        </a>
+                    </li>
+                </ul>
+                <a class="back-to-top" href="#top">
+                    返回顶部
+                </a>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--END:main-->
+
+<%- include footer %>

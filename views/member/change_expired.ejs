@@ -1,0 +1,39 @@
+<%- include header %>
+
+<!--START:main-->
+<!-- Docs page layout -->
+<div id="content">
+    <div class="container">
+        <h1>更改/绑定登陆邮箱</h1>
+    </div>
+</div>
+
+<div class="container">
+    <form method="post" class="ligle-form" enctype='multipart/form-data' action="">
+        <table>
+            <tr>
+                <td></td>
+                <td>链接已过期，请重新经行验证</td>
+            </tr>
+            <tr>
+                <td>邮箱：</td>
+                <td><input type="text" name="email"></td>
+            </tr>
+            <tr>
+                <td>验证码：</td>
+                <td>
+                    <input class="ligle-input-md" type="text" name="code" maxlengtd="4">
+                    <img class="CAPTCHA" src="/getCode" alt="验证码"/>
+                    <div id='smsMsg'></div>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" class="btn-info" value="发送验证邮件"></td>
+            </tr>
+        </table>
+    </form>
+</div>
+<!--END:main-->
+
+<%- include footer %>

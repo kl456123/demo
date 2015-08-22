@@ -1,0 +1,20 @@
+<%- include header %>
+<!--START:main-->
+<!-- Docs page layout -->
+<div id="content">
+    <div class="container">
+        <h1>找回密码</h1>
+    </div>
+</div>
+
+<div class="container">
+    <%= (!!locals.error)?error:'' %>
+     <form method="post" enctype='multipart/form-data' action="/verifyReset/<%=token%>">
+        新密码：<input type="password" name="password">
+        <br />
+        <input type="submit" value="修改密码">
+    </form>
+</div>
+<!--END:main-->
+
+<%- include footer %>

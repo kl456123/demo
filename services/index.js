@@ -24,7 +24,6 @@ function exportFrom(dir){
 [
   'admin',
   'admin-basic',
-  'admin-commodity',
   'admin-member',
 ].forEach(exportFrom('./admin/'));
 

@@ -31,7 +31,7 @@ router
   .get(function(req,res){
     var rd = res.ligle.renderer;
     var obj = res.ligle.model;
-    rd.render('findPW');
+    rd.render('member/findPW');
   })
   .post(checkCellForm,function(req,res){
     var rd = res.ligle.renderer;
@@ -41,7 +41,7 @@ router
     delete aMember.code;
 
     aMember.resetVerifyCell(token,function(err,obj){
-      rd.renderEO('findPW','changedPW',err,obj);
+      rd.renderEO('member/findPW','member/changedPW',err,obj);
     });
   });
 
@@ -51,14 +51,14 @@ router
   .get(function(req,res){
     var rd = res.ligle.renderer;
     var obj = res.ligle.model;
-    rd.render('findPW');
+    rd.render('member/findPW');
   })
   .post(checkEmailForm,function(req,res){
     var rd = res.ligle.renderer;
     var aMember = new Model(req.body);
 
     aMember.resetSendEmailLink(function(err,obj){
-      rd.renderEO('findPW','sentPW',err,obj);
+      rd.renderEO('member/findPW','member/sentPW',err,obj);
     });
   });
 
@@ -75,7 +75,7 @@ router
     var token = {value:req.body.token,type:Model.TYPE.reset};
     aMember.checkEmailLink(token,function(err,obj){
       if(obj) obj.token = req.body.token;
-      rd.renderEO('errorMsg','newPW',err,obj);
+      rd.renderEO('member/errorMsg','member/newPW',err,obj);
     });
   })
   .post(checkPwdForm,function(req,res){
@@ -86,7 +86,7 @@ router
     aMember.setPwdEmailLink(token,function(err,obj){
       obj = obj ||{};
       obj.token = req.body.token;
-      rd.renderEO('newPW','changedPW',err,obj);
+      rd.renderEO('member/newPW','member/changedPW',err,obj);
     });
   });
 

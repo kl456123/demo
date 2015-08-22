@@ -1,0 +1,46 @@
+<%- include header %>
+
+<!--START:main-->
+<!-- Docs page layout -->
+<div id="content">
+    <div class="container">
+        <h1>更改/绑定登陆手机号码</h1>
+    </div>
+</div>
+
+<div class="container">
+    <form method="post" class="ligle-form" enctype='multipart/form-data' action="">
+        <table>
+            <tr>
+                <td>手机号码：</td>
+                <td><input class="ligle-input-lg" type="text" name="cellphone" id='cellphone'></td>
+            </tr>
+            <tr>
+                <td>验证码：</td>
+                <td>
+                    <input class="ligle-input-md" type="text" name="code" maxlengtd="4">
+                    <img class="CAPTCHA" src="/getCode" alt="验证码"/>
+                    <div id='smsMsg'></div>
+                </td>
+            </tr>
+            <tr>
+                <td>短信验证：</td>
+                <td>
+                    <input class="ligle-input-md" type="text" name="codeSMS" maxlengtd="6">
+                    <a id="getSMS" class="btn-info btn btn-sm" href="javascript: getSignupSMS();">获取短信验证码</a>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" class="btn-info" value="确认更改"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><a href="/change_success" class="btn btn-success">测试示例：修改成功</a></td>
+            </tr>
+        </table>
+    </form>
+</div>
+<!--END:main-->
+
+<%- include footer %>

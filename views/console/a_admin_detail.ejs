@@ -1,0 +1,84 @@
+<%- include a_header %>
+
+
+<!--START:main-->
+<div class="col-sm-12" id="content">
+    <div class="row">
+
+        <p class="ligle-page-title">管理员</p>
+
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <!--本单元标题-->
+                <div class="panel-heading">详情</div>
+                <!--本单元内容-->
+                <div class="panel-body">
+                    <form method="post" enctype='multipart/form-data'>
+                        <table class="table table-hover">
+                            <tr>
+                                <th>编号:</th>
+                                <td><input type="text" name="number" value="" datatype="*"></td>
+                            </tr>
+                            <tr>
+                                <th>标题:</th>
+                                <td><input type="text" name="title" datatype="*"></td>
+                            </tr>
+                            <tr>
+                                <th>图片：</th>
+                                <td>
+                                    <input type="file" name="cover" datatype="*">
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>类别：</th>
+                                <td>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>所在地：</th>
+                                <td>
+                                    <div class="selectList_area">
+                                        <select class="level1" name="pro">
+                                        </select>
+                                        <select class="level2" name="city">
+                                        </select>
+                                        <select class="level3" name="dis">
+                                        </select>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <td>
+                                    <button class="btn btn-warning btn-md" type="submit">保存</button>
+                                    <input type="reset"  class="btn btn-default btn-xs" value="重 置" />
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="panel panel-danger">
+                <!--本单元标题-->
+                <div class="panel-heading">注意！</div>
+                <!--本单元内容-->
+                <div class="panel-body">
+                    您正处于最高权限(root权限)下，您可以对于其他管理员的信息进行修改。
+                    <br />
+                    请妥善管理好您的root账号密码！
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--END:main-->
+
+
+
+<%- include a_footer %>
+

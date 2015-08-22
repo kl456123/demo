@@ -20,7 +20,7 @@ router
   .route('/member')
   .get(pChecker.passIf('member','login'),function(req,res){
     var rd = res.ligle.renderer;
-    rd.render('member',{data:req.session.user});
+    rd.render('member/member',{data:req.session.user});
   })
   .post(pChecker.passIf('member','login'),checkPhone,function(req,res){
     var rd = res.ligle.renderer;
@@ -57,4 +57,29 @@ router
     });
   });
 
+//测试用的路由
+router
+  .route('/changeEmail')
+  .get(function(req,res){
+    var rd = res.ligle.renderer;
+    rd.render('member/changeEmail');
+  });
+router
+  .route('/changeCellphone')
+  .get(function(req,res){
+    var rd = res.ligle.renderer;
+    rd.render('member/changeCellphone');
+  });
+router
+  .route('/change_expired')
+  .get(function(req,res){
+    var rd = res.ligle.renderer;
+    rd.render('member/change_expired');
+  });
+router
+  .route('/change_success')
+  .get(function(req,res){
+    var rd = res.ligle.renderer;
+    rd.render('member/change_success');
+  });
 module.exports = router;
