@@ -1,17 +1,36 @@
 
 <div style="text-align: center">
-    <span>
-        <a class="btn-default btn-sm btn" href="#">上一页</a>
+    <span id="previous">
+        <a class="btn-default btn-sm btn" href="?page=<%= curPage-1 %>">上一页</a>
     </span>
-    <span>
-        <a class="btn-default btn-sm btn" href="">下一页</a>
+    <span id="next">
+        <a class="btn-default btn-sm btn" href="?page=<%= curPage+1 %>">下一页</a>
     </span>
 
-    <span>当前第___页</span>
-    <span>| 共___页</span>
+    <span>当前第<%= curPage %>页</span>
+    <span>| 共<%= totalPage %>页</span>
     |
     <span>
         跳转到第<input type="number" id="toPage" style="width: 50px">页
         <button class="btn-success btn btn-xs" onclick="jumpToPage()">确定</button>
     </span>
 </div>
+
+<script>
+    function jumpToPage(){
+        var page = $('#toPage').val();
+        if(page > <%= totalPage %>){
+            location.search = '?page='+<%= totalPage %>;
+        }else if( page <= 0 ){
+            location.search = '?page=1';
+        }else{
+            location.search = '?page='+page;
+        }
+    }
+    $(document).ready(function(){
+        if(<%= curPage %> <= 1) $('#previous a').attr('disabled', 'disabled');
+        if(<%= curPage %> >= <%= totalPage %>) $('#next a').attr('disabled', 'disabled');
+    });
+
+</script>
+
