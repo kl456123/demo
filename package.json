@@ -1,6 +1,6 @@
 {
-  "name": "ligleEngine",
-  "version": "1.2.3",
+  "name": "demo",
+  "version": "1.3.0",
   "private": true,
   "scripts": {
     "start": "node app.js"
@@ -18,10 +18,12 @@
     "errorhandler": "1.4.0",
     "express": "4.13.0",
     "express-session": "1.11.3",
-    "ligle-util": "0.2.3",
-    "ligle-base": "0.2.6",
-    "ligle-engine": "0.2.7",
-    "ligle-plugin-globals": "1.0.0",
+    "ligle-util": "0.3.0",
+    "ligle-db": "0.3.0",
+    "ligle-model": "0.3.0",
+    "ligle-midware": "0.3.0",
+    "ligle-engine": "0.3.0",
+    "ligle-plugin-globals": "1.0.1",
     "log4js": "0.6.26",
     "method-override": "2.3.3",
     "moment": "2.10.3",

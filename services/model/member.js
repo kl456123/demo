@@ -1,4 +1,4 @@
-
+var app = require('../../app.js');
 var ligle = require('../index.js').ligle;
 var logger = ligle.util.logger('member.js');
 var crypto = require('crypto');
@@ -22,7 +22,7 @@ var TYPE = {
 };
 
 // 模型
-var Model = module.exports = ligle.base.model.ModelBase.extend({
+var Model = module.exports = ligle.model.ModelBase.extend({
   __className:'member',
   __upDir:'member',
   _toFill:[
@@ -442,7 +442,7 @@ var Model = module.exports = ligle.base.model.ModelBase.extend({
     // 渲染邮箱模板使用的对象（注意，不是数据库对象）
     var obj ={};
     obj.username = this.nickname;
-    obj.appname = ligle.appname;
+    obj.appname = app.appname;
     obj.url = [config.host+cfg.urlSent[type],value].join('/');
     logger.debug('emailing:',obj);
     

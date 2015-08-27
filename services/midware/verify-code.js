@@ -14,7 +14,6 @@ var RFSession = require('../model/race-free-session.js');
 var rfSession = new RFSession();
 
 var checkCode= exports.checkCode = function(req,res,next){
-  var rd = res.ligle.renderer;
   var ajax = req.xhr;
   var code = req.body.code.toLowerCase();
   delete req.body.code;//删除body中的验证码，免得存入数据库。
@@ -23,17 +22,17 @@ var checkCode= exports.checkCode = function(req,res,next){
     var originCode = data.code.toLowerCase();
     if(!data.code){
       logger.trace('checking','服务器没有生成验证码');
-      return rd.errorBack('服务器没有生成验证码',ajax);
+      return res.rd.errorBack('服务器没有生成验证码',ajax);
     }
     if(!code){
       logger.trace('checking','提交的表单没有找到验证码项');
-      return rd.errorBack('提交的表单没有找到验证码项',ajax);
+      return res.rd.errorBack('提交的表单没有找到验证码项',ajax);
     }
     if(originCode === code)
       next();
     else{
       logger.trace('checking','验证码错误');
-      return rd.errorBack('验证码错误',ajax);
+      return res.rd.errorBack('验证码错误',ajax);
     }
   });
 };
@@ -47,7 +46,6 @@ var getCode = exports.getCode = function(req,res,next){
   var rfSess = new RFSession();
 
   rfSess.get({sid:req.sessionID},function(err,data){
-    var rd = res.ligle.renderer;
     if(err) return res.end();
     if(!data) data = new RFSession();
     data.addData({sid:req.sessionID,code:code});
