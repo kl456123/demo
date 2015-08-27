@@ -1,4 +1,4 @@
-
+var app = require('../../app.js');
 var ligle = require('../index.js').ligle;
 var logger = ligle.util.logger('signUp');
 var moment = require('moment');//设置验证码过期时间
@@ -15,8 +15,7 @@ var checkCellForm = fieldChecker({
 });
 var checkEmailForm = fieldChecker({
   email:'email',
-  password:'password',
-  nickname:'name'
+  password:'password'
 });
 var checkToken = fieldChecker({
   token:'uuid'
@@ -26,22 +25,20 @@ var checkToken = fieldChecker({
 var Model = require('../model/member.js');
 
 // 路由
-var router = ligle.base.routes.Router(Model);
+var router = app.Router();
 router
   .route('/registSMS')
   .get(function(req,res){
-    var rd = res.ligle.renderer;
-    rd.render('member/regist');
+    res.rd.render('member/regist');
   })
   .post(checkCellForm,function(req,res){
-    var rd = res.ligle.renderer;
     var aMember = new Model(req.body);
     var token = {value:aMember.codeSMS,type:Model.TYPE.signUp};
     delete aMember.codeSMS;
     delete aMember.code;
     aMember.signUpVerifyCell(token,function(err,obj){
-      if(err) return rd.errorBack(err.message,req.xhr);
-      return rd.successRender('member/regist_verified',obj,req.xhr);;
+      if(err) return res.rd.errorBack(err.message,req.xhr);
+      return res.rd.successRender('member/regist_verified',obj,req.xhr);;
     });
   });
 
@@ -49,16 +46,14 @@ router
 router
   .route('/regist')
   .get(function(req,res){
-    var rd = res.ligle.renderer;
-    rd.render('member/regist');
+    res.rd.render('member/regist');
   })
   .post(checkCode,checkEmailForm,function(req,res){
-    var rd = res.ligle.renderer;
     var aMember = new Model(req.body);
     aMember.signUpSendEmailLink(function(err,obj){
       if(err) logger.info(err);
-      if(err) return rd.errorBack(err.message,req.xhr);
-      rd.successRender('member/regist_success',obj,req.xhr);
+      if(err) return res.rd.errorBack(err.message,req.xhr);
+      res.rd.successRender('member/regist_success',obj,req.xhr);
     });
   });
 
@@ -70,11 +65,10 @@ router
   })
   .get(checkToken,function(req,res){
     var aMember = new Model();
-    var rd = res.ligle.renderer;
     var token = {value:req.body.token,type:Model.TYPE.signUp};
     aMember.checkVerifyEmailLink(token,function(err,obj){
-      if(err) return rd.errorRender('errorMsg',err.message,req.xhr);
-      return rd.successRender('member/regist_verified',obj,req.xhr);
+      if(err) return res.rd.errorRender('errorMsg',err.message,req.xhr);
+      return res.rd.successRender('member/regist_verified',obj,req.xhr);
     });
   });
 

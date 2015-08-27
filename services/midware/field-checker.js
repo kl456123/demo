@@ -66,8 +66,7 @@ var checker = module.exports=function(checkCfg){
       var result = checkers[checkCfg[key]](req.body[key]);
       var pass = result[0],msg = result[1];
       if(!pass){
-        var rd = res.ligle.renderer;
-        rd.errorBack(msg,req.xhr);
+        res.rd.errorBack(msg,req.xhr);
         return;
       }
     }

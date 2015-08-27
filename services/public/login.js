@@ -1,5 +1,6 @@
-
+var app = require('../../app.js');
 var ligle = require('../index.js').ligle;
+var logger = ligle.util.logger('login','TRACE');
 
 var fieldChecker = require('../midware/field-checker.js');
 var checkForm = fieldChecker({
@@ -14,18 +15,16 @@ var checkEmailForm = fieldChecker({
 var pChecker = require('../midware/permission-checker.js');
 
 var Model = require('../model/member.js');
-var router = ligle.base.routes.Router(Model);
+var router = app.Router();
 router
   .route('/loginSMS')
   .get(pChecker.passIf('member','logout'),function(req,res){
-    var rd = res.ligle.renderer;
-    rd.render('member/login');
+    res.rd.render('member/login');
   })
   .post(pChecker.passIf('member','logout'),checkForm,function(req,res){
-    var rd = res.ligle.renderer;
-    var obj = res.ligle.model;
+    var obj = new Model();
     obj.logInCell(req.body.cellphone,req.body.password,function(err,member){
-      if(err) return rd.errorBack(err);
+      if(err) return res.rd.errorBack(err);
       req.session.group='member';
       req.session.status='login';
       req.session.user = member;
@@ -35,14 +34,12 @@ router
 router
   .route('/login')
   .get(pChecker.passIf('member','logout'),function(req,res){
-    var rd = res.ligle.renderer;
-    rd.render('member/login');
+    res.rd.render('member/login');
   })
   .post(pChecker.passIf('member','logout'),checkEmailForm,function(req,res){
-    var rd = res.ligle.renderer;
-    var obj = res.ligle.model;
+    var obj = new Model();
     obj.logInEmail(req.body.email,req.body.password,function(err,member){
-      if(err) return rd.errorBack(err.message,req.xhr);
+      if(err) return res.rd.errorBack(err.message,req.xhr);
       req.session.group='member';
       req.session.status='login';
       req.session.user = member;

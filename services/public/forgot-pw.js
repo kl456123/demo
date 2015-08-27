@@ -1,4 +1,4 @@
-
+var app = require('../../app.js');
 var ligle = require('../index.js').ligle;
 var logger = ligle.util.logger('forgot-pw');
 var config = require('../config.js');
@@ -23,25 +23,22 @@ var checkToken = fieldChecker({
 
 // 路由
 var Model = require('../model/member.js');
-var router = ligle.base.routes.Router(Model);
+var router = app.Router();
 
 // 手机找回密码
 router
   .route(config.cell.routes.reset) 
   .get(function(req,res){
-    var rd = res.ligle.renderer;
-    var obj = res.ligle.model;
-    rd.render('member/findPW');
+    res.rd.render('member/findPW');
   })
   .post(checkCellForm,function(req,res){
-    var rd = res.ligle.renderer;
     var aMember = new Model(req.body);
     var token = {value:aMember.codeSMS,type:Model.TYPE.reset};
     delete aMember.codeSMS;
     delete aMember.code;
 
     aMember.resetVerifyCell(token,function(err,obj){
-      rd.renderEO('member/findPW','member/changedPW',err,obj);
+      res.rd.renderEO('member/findPW','member/changedPW',err,obj);
     });
   });
 
@@ -49,16 +46,13 @@ router
 router
   .route(config.email.routes.reset)
   .get(function(req,res){
-    var rd = res.ligle.renderer;
-    var obj = res.ligle.model;
-    rd.render('member/findPW');
+    res.rd.render('member/findPW');
   })
   .post(checkEmailForm,function(req,res){
-    var rd = res.ligle.renderer;
     var aMember = new Model(req.body);
 
     aMember.resetSendEmailLink(function(err,obj){
-      rd.renderEO('member/findPW','member/sentPW',err,obj);
+      res.rd.renderEO('member/findPW','member/sentPW',err,obj);
     });
   });
 
@@ -70,23 +64,21 @@ router
     next();
   })
   .get(checkToken,function(req,res){
-    var rd = res.ligle.renderer;
     var aMember = new Model();
     var token = {value:req.body.token,type:Model.TYPE.reset};
     aMember.checkEmailLink(token,function(err,obj){
       if(obj) obj.token = req.body.token;
-      rd.renderEO('member/errorMsg','member/newPW',err,obj);
+      res.rd.renderEO('member/errorMsg','member/newPW',err,obj);
     });
   })
   .post(checkPwdForm,function(req,res){
-    var rd = res.ligle.renderer;
     var token = {value:req.body.token,type:Model.TYPE.reset};
     var aMember = new Model(req.body);
     delete aMember.token;
     aMember.setPwdEmailLink(token,function(err,obj){
       obj = obj ||{};
       obj.token = req.body.token;
-      rd.renderEO('member/newPW','member/changedPW',err,obj);
+      res.rd.renderEO('member/newPW','member/changedPW',err,obj);
     });
   });
 

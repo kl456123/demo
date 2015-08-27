@@ -1,11 +1,11 @@
-
+var app = require('../../app.js');
 var ligle = require('../index.js').ligle;
 var logger = ligle.util.logger('status');
 
 var pChecker = require('../midware/permission-checker.js');
 
 // 路由
-var router = ligle.base.routes.Router();
+var router = app.Router();
 router
   .route('/getIsLogin')
   .get(function(req,res){

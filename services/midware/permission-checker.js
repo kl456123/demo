@@ -54,11 +54,9 @@ exports.passIf = function(group,status){
       req.session.group,
       req.session.status
     );
-    var rd = res.ligle.renderer;
-    logger.debug(result);
     if(result.ok)
       next();
     else
-      rd.errorBack(result.msg,req.xhr);
+      res.rd.errorBack(result.msg,req.xhr);
   };
 };

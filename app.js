@@ -17,36 +17,30 @@ var serveStatic = require('serve-static');
 var mongoStore = require('connect-mongo')(session);
 var settings = require('./settings');
 var cfg = {
-//  logLevel:'DEBUG', // TODO add log control
-  'ligle-model':{
+  loggerLevel:'DEBUG',
+  model:{
     upDir:'./public/images/upload/',
     staticDir:'/images/upload/'
   },
-  'ligle-db': { 
-    db: 'ligleEngine', 
+  db: { 
+    db: 'demo', 
     host: '127.0.0.1', 
     port: 27017
   },
-  'ligle-routes': {
+  midware: {
   }
 };
 
 var ligle = require('ligle-engine')(cfg);
-ligle.appname = 'demo';// 应用名称，发邮件的时候会使用。
 
 var logger = ligle.util.logger('normal','TRACE');
-// export something to use for other modules
-exports.ligle = ligle;
-var getLogger = exports.getLogger = ligle.util.logger;
 
-// to suppress the verbose log
-/*
-getLogger('ligle-base','INFO');
-getLogger('ligle-middware','INFO');
-getLogger('ligle-routes','INFO');
-getLogger('ligle-model','INFO');
-getLogger('ligle-db','INFO');
-*/
+// export for services to use
+exports.getLogger = ligle.util.logger;
+exports.appname = 'demo';// 应用名称，发邮件的时候会使用。
+exports.Router = express.Router.bind(express);
+exports.ligle = ligle;
+
 var UPDIR = settings.uploadPath;
 
 // wrap app into callback, so that we can do something before we
@@ -57,6 +51,12 @@ var pluginGlobals = require('ligle-plugin-globals');
 pluginGlobals(ligle);
 
 ligle.start(function(){
+//  // 为了兼容考虑，先这么写
+//  ligle.base = {};
+//  ligle.base.db = ligle.db;
+//  ligle.base.model = ligle.model;
+//  ligle.base.midware = ligle.midware;
+  
   // init some globals config
   ligle.globals.userCount = ligle.globals.userCount || 0;
   ligle.globals.userPrefix = ligle.globals.userPrefix || 'user';
@@ -67,7 +67,6 @@ ligle.start(function(){
   app.set('port', process.env.PORT || settings.port);
   app.set('views', path.join(__dirname, 'views'));
   app.set('view engine', 'ejs');
-
 
   app.use(favicon(settings.faviconPath ? __dirname + '/public/images/favicon.ico' : ''));
   app.use(methodOverride()); 
@@ -87,6 +86,7 @@ ligle.start(function(){
   app.use(flash()); // used to save message into req temporarily
 
   // new framework
+  app.use(ligle.midware.addRenderer);
 
   // engine里面的服务，并没有完成，因此先不要使用，先自己开发。
   // var globalService = ligle.service;
@@ -108,7 +108,7 @@ ligle.start(function(){
   app.use(serveStatic(path.join(__dirname, 'public')));
 
   app.use(function(req,res){
-	  res.ligle.renderer.render('part/error');
+	  res.rd.render('part/error');
   });
 
   // development only
