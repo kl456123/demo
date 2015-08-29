@@ -14,12 +14,12 @@ var checkEmailForm = fieldChecker({
 
 var pChecker = require('../midware/permission-checker.js');
 
-var Model = require('../model/member.js');
+var Model = ligle.model.Member;
 var router = app.Router();
 router
   .route('/loginSMS')
   .get(pChecker.passIf('member','logout'),function(req,res){
-    res.rd.render('member/login');
+    res.rd.render('client-member/login');
   })
   .post(pChecker.passIf('member','logout'),checkForm,function(req,res){
     var obj = new Model();
@@ -34,7 +34,7 @@ router
 router
   .route('/login')
   .get(pChecker.passIf('member','logout'),function(req,res){
-    res.rd.render('member/login');
+    res.rd.render('client-member/login');
   })
   .post(pChecker.passIf('member','logout'),checkEmailForm,function(req,res){
     var obj = new Model();

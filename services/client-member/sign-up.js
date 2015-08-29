@@ -29,7 +29,7 @@ var router = app.Router();
 router
   .route('/registSMS')
   .get(function(req,res){
-    res.rd.render('member/regist');
+    res.rd.render('client-member/regist');
   })
   .post(checkCellForm,function(req,res){
     var aMember = new Model(req.body);
@@ -38,7 +38,7 @@ router
     delete aMember.code;
     aMember.signUpVerifyCell(token,function(err,obj){
       if(err) return res.rd.errorBack(err.message,req.xhr);
-      return res.rd.successRender('member/regist_verified',obj,req.xhr);;
+      return res.rd.successRender('client-member/regist_verified',obj,req.xhr);;
     });
   });
 
@@ -46,14 +46,14 @@ router
 router
   .route('/regist')
   .get(function(req,res){
-    res.rd.render('member/regist');
+    res.rd.render('client-member/regist');
   })
   .post(checkCode,checkEmailForm,function(req,res){
     var aMember = new Model(req.body);
     aMember.signUpSendEmailLink(function(err,obj){
       if(err) logger.info(err);
       if(err) return res.rd.errorBack(err.message,req.xhr);
-      res.rd.successRender('member/regist_success',obj,req.xhr);
+      res.rd.successRender('client-member/regist_success',obj,req.xhr);
     });
   });
 
@@ -68,7 +68,7 @@ router
     var token = {value:req.body.token,type:Model.TYPE.signUp};
     aMember.checkVerifyEmailLink(token,function(err,obj){
       if(err) return res.rd.errorRender('client/errorMsg',err.message,req.xhr);
-      return res.rd.successRender('member/regist_verified',obj,req.xhr);
+      return res.rd.successRender('client-member/regist_verified',obj,req.xhr);
     });
   });
 
