@@ -19,7 +19,6 @@ var checkCode= exports.checkCode = function(req,res,next){
   delete req.body.code;//删除body中的验证码，免得存入数据库。
 
   rfSession.get({sid:req.sessionID},function(err,data){
-    var originCode = data.code.toLowerCase();
     if(!data.code){
       logger.trace('checking','服务器没有生成验证码');
       return res.rd.errorBack('服务器没有生成验证码',ajax);
@@ -28,6 +27,7 @@ var checkCode= exports.checkCode = function(req,res,next){
       logger.trace('checking','提交的表单没有找到验证码项');
       return res.rd.errorBack('提交的表单没有找到验证码项',ajax);
     }
+    var originCode = data.code.toLowerCase();
     if(originCode === code)
       next();
     else{

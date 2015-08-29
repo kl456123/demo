@@ -23,7 +23,7 @@ var cfg = {
     staticDir:'/images/upload/'
   },
   db: { 
-    db: 'demo', 
+    name: 'demo', 
     host: '127.0.0.1', 
     port: 27017
   },
@@ -49,6 +49,10 @@ var UPDIR = settings.uploadPath;
 // engine plugins
 var pluginGlobals = require('ligle-plugin-globals');
 pluginGlobals(ligle);
+
+// model extensions
+var member = require('ligle-model-member');
+member(ligle);
 
 ligle.start(function(){
 //  // 为了兼容考虑，先这么写
