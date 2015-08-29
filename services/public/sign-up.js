@@ -22,7 +22,7 @@ var checkToken = fieldChecker({
 });
 
 
-var Model = require('../model/member.js');
+var Model = ligle.model.Member;
 
 // 路由
 var router = app.Router();
