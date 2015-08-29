@@ -265,7 +265,7 @@ var Model = module.exports = ligle.model.ModelBase.extend({
       if(!obj) return callback('not found user');
       var info = obj[infoField];
       var token = info.token;
-      if(token.signUp.status !== STATUS.verified) 
+      if(token.signUp.status !== STATUS.verified)
         return callback('unverified user');
       if(!obj._checkLoginPwd(pwd)) 
         return callback('incorrect password');
