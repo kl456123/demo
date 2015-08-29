@@ -67,7 +67,7 @@ router
     var aMember = new Model();
     var token = {value:req.body.token,type:Model.TYPE.signUp};
     aMember.checkVerifyEmailLink(token,function(err,obj){
-      if(err) return res.rd.errorRender('errorMsg',err.message,req.xhr);
+      if(err) return res.rd.errorRender('client/errorMsg',err.message,req.xhr);
       return res.rd.successRender('member/regist_verified',obj,req.xhr);
     });
   });
