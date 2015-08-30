@@ -3,7 +3,8 @@ var ligle = require('../index.js').ligle;
 var logger = ligle.util.logger('member-page');
 
 var pChecker = require('../midware/permission-checker.js');
-var fieldChecker = require('../midware/field-checker.js');
+
+var fieldChecker = ligle.midware.makeFieldChecker;
 var checkPhone = fieldChecker({
   cellphone:'cellphone',
 });

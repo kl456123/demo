@@ -2,7 +2,7 @@ var app = require('../../app.js');
 var ligle = require('../index.js').ligle;
 var logger = ligle.util.logger('login','TRACE');
 
-var fieldChecker = require('../midware/field-checker.js');
+var fieldChecker = ligle.midware.makeFieldChecker;
 var checkForm = fieldChecker({
   //cellphone:'cellphone',
   password:'password'

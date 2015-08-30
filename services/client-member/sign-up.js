@@ -8,7 +8,7 @@ var config = require('../config.js');
 var verifyCode = require('../midware/verify-code.js');
 var checkCode = verifyCode.checkCode;
 
-var fieldChecker = require('../midware/field-checker.js');
+var fieldChecker = ligle.midware.makeFieldChecker;
 var checkCellForm = fieldChecker({
   cellphone:'cellphone',
   password:'password'
