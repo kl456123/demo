@@ -7,23 +7,26 @@ function exportFrom(dir){
   };
 };
 
-// public part
+// client part
 [
   'home',
+  'status',
+  'get-code',
+].forEach(exportFrom('./client/'));
+
+// client-member part
+[
   'login',
   'logout',
   'sign-up',
   'forgot-pw',
-  'status',
   'member',
-  'get-code'
-].forEach(exportFrom('./public/'));
+].forEach(exportFrom('./client-member/'));
 
-
-// admin part
+// console part
 [
-  'admin',
-  'admin-basic',
-  'admin-member',
-].forEach(exportFrom('./admin/'));
+  'console',
+  'console-basic',
+  'console-member',
+].forEach(exportFrom('./console/'));
 

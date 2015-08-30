@@ -22,14 +22,14 @@ var checkToken = fieldChecker({
 });
 
 // 路由
-var Model = require('../model/member.js');
+var Model = ligle.model.Member;
 var router = app.Router();
 
 // 手机找回密码
 router
   .route(config.cell.routes.reset) 
   .get(function(req,res){
-    res.rd.render('member/findPW');
+    res.rd.render('client-member/findPW');
   })
   .post(checkCellForm,function(req,res){
     var aMember = new Model(req.body);
@@ -38,7 +38,7 @@ router
     delete aMember.code;
 
     aMember.resetVerifyCell(token,function(err,obj){
-      res.rd.renderEO('member/findPW','member/changedPW',err,obj);
+      res.rd.renderEO('client-member/findPW','client-member/changedPW',err,obj);
     });
   });
 
@@ -46,13 +46,13 @@ router
 router
   .route(config.email.routes.reset)
   .get(function(req,res){
-    res.rd.render('member/findPW');
+    res.rd.render('client-member/findPW');
   })
   .post(checkEmailForm,function(req,res){
     var aMember = new Model(req.body);
 
     aMember.resetSendEmailLink(function(err,obj){
-      res.rd.renderEO('member/findPW','member/sentPW',err,obj);
+      res.rd.renderEO('client-member/findPW','client-member/sentPW',err,obj);
     });
   });
 
@@ -68,7 +68,7 @@ router
     var token = {value:req.body.token,type:Model.TYPE.reset};
     aMember.checkEmailLink(token,function(err,obj){
       if(obj) obj.token = req.body.token;
-      res.rd.renderEO('member/errorMsg','member/newPW',err,obj);
+      res.rd.renderEO('client-member/errorMsg','client-member/newPW',err,obj);
     });
   })
   .post(checkPwdForm,function(req,res){
@@ -78,7 +78,7 @@ router
     aMember.setPwdEmailLink(token,function(err,obj){
       obj = obj ||{};
       obj.token = req.body.token;
-      res.rd.renderEO('member/newPW','member/changedPW',err,obj);
+      res.rd.renderEO('client-member/newPW','client-member/changedPW',err,obj);
     });
   });
 

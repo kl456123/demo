@@ -1,8 +1,8 @@
 var app = require('../../app.js');
 var ligle = require('../index.js').ligle;
-var logger = ligle.util.logger('admin-member');
-var Model = require('../model/member.js');
-var pageCalculate = require('../common').pageCalculate;
+var logger = ligle.util.logger('console-member');
+var Model = ligle.model.Member;
+var pageCalculate = require('../util').pageCalculate;
 
 // 路由
 var router = app.Router();

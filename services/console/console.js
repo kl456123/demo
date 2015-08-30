@@ -1,6 +1,6 @@
 var app = require('../../app.js');
 var ligle = require('../index.js').ligle;
-var logger = ligle.util.logger('admin');
+var logger = ligle.util.logger('console');
 
 var router = app.Router();
 

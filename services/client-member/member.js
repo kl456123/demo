@@ -13,14 +13,14 @@ var checkReset = fieldChecker({
   newpassword:'password',
 });
 
-var tool = require('../common');
+var tool = require('../util');
 
-var Model = require('../model/member.js');
+var Model = ligle.model.Member;
 var router = app.Router();
 router
   .route('/member')
   .get(pChecker.passIf('member','login'),function(req,res){
-    res.rd.render('member/member',{data:req.session.user});
+    res.rd.render('client-member/member',{data:req.session.user});
   })
   .post(pChecker.passIf('member','login'),checkPhone,function(req,res){
     var obj = new Model();
@@ -59,21 +59,21 @@ router
 router
   .route('/changeEmail')
   .get(function(req,res){
-    res.rd.render('member/changeEmail');
+    res.rd.render('client-member/changeEmail');
   });
 router
   .route('/changeCellphone')
   .get(function(req,res){
-    res.rd.render('member/changeCellphone');
+    res.rd.render('client-member/changeCellphone');
   });
 router
   .route('/change_expired')
   .get(function(req,res){
-    res.rd.render('member/change_expired');
+    res.rd.render('client-member/change_expired');
   });
 router
   .route('/change_success')
   .get(function(req,res){
-    res.rd.render('member/change_success');
+    res.rd.render('client-member/change_success');
   });
 module.exports = router;
