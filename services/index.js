@@ -20,6 +20,7 @@ function exportFrom(dir){
   'logout',
   'sign-up',
   'forgot-pw',
+  'member',
 ].forEach(exportFrom('./client-member/'));
 
 // console part
