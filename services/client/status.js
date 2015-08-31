@@ -2,7 +2,7 @@ var app = require('../../app.js');
 var ligle = require('../index.js').ligle;
 var logger = ligle.util.logger('status');
 
-var pChecker = require('../midware/permission-checker.js');
+var pChecker = ligle.addon.permission;
 
 // 路由
 var router = app.Router();

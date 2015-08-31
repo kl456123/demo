@@ -5,8 +5,7 @@ var moment = require('moment');//设置验证码过期时间
 var ms = require('ms');
 var config = require('../config.js');
 
-var verifyCode = require('../midware/verify-code.js');
-var checkCode = verifyCode.checkCode;
+var checkCode = ligle.addon.captcha.midware.checkCode;
 
 var fieldChecker = ligle.midware.makeFieldChecker;
 var checkCellForm = fieldChecker({

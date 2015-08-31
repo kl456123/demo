@@ -47,20 +47,16 @@ var UPDIR = settings.uploadPath;
 // start. such as: open database
 
 // engine plugins
-var pluginGlobals = require('ligle-plugin-globals');
-pluginGlobals(ligle);
+require('ligle-plugin-globals')(ligle);
+
+// engine addons
+require('ligle-addon-captcha')(ligle);
+require('ligle-addon-permission')(ligle);
 
 // model extensions
-var member = require('ligle-model-member');
-member(ligle);
+require('ligle-model-member')(ligle);
 
 ligle.start(function(){
-//  // 为了兼容考虑，先这么写
-//  ligle.base = {};
-//  ligle.base.db = ligle.db;
-//  ligle.base.model = ligle.model;
-//  ligle.base.midware = ligle.midware;
-  
   // init some globals config
   ligle.globals.userCount = ligle.globals.userCount || 0;
   ligle.globals.userPrefix = ligle.globals.userPrefix || 'user';
@@ -92,9 +88,9 @@ ligle.start(function(){
   // new framework
   app.use(ligle.midware.addRenderer);
 
-  // engine里面的服务，并没有完成，因此先不要使用，先自己开发。
-  // var globalService = ligle.service;
-  // app.use(globalService.basic);
+  // addons
+  app.use(ligle.addon.captcha.route);
+
 
   // 自定义的服务。
 

@@ -2,7 +2,7 @@ var app = require('../../app.js');
 var ligle = require('../index.js').ligle;
 var logger = ligle.util.logger('basic');
 var Model = require('../model/basic.js');
-var pageCalculate = require('../util').pageCalculate;
+var pageCalculate = ligle.util.pageCalculate;
 
 // 路由
 var router = app.Router();

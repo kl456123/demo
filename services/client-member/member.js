@@ -2,7 +2,7 @@ var app = require('../../app.js');
 var ligle = require('../index.js').ligle;
 var logger = ligle.util.logger('member-page');
 
-var pChecker = require('../midware/permission-checker.js');
+var pChecker = ligle.addon.permission;
 
 var fieldChecker = ligle.midware.makeFieldChecker;
 var checkPhone = fieldChecker({
@@ -14,7 +14,7 @@ var checkReset = fieldChecker({
   newpassword:'password',
 });
 
-var tool = require('../util');
+var tool = ligle.util;
 
 var Model = ligle.model.Member;
 var router = app.Router();
