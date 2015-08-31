@@ -2,7 +2,7 @@ var app = require('../../app.js');
 var ligle = require('../index.js').ligle;
 var logger = ligle.util.logger('login','TRACE');
 
-var fieldChecker = require('../midware/field-checker.js');
+var fieldChecker = ligle.midware.makeFieldChecker;
 var checkForm = fieldChecker({
   //cellphone:'cellphone',
   password:'password'
@@ -12,7 +12,7 @@ var checkEmailForm = fieldChecker({
   password:'password'
 });
 
-var pChecker = require('../midware/permission-checker.js');
+var pChecker = ligle.addon.permission;
 
 var Model = ligle.model.Member;
 var router = app.Router();
@@ -25,8 +25,8 @@ router
     var obj = new Model();
     obj.logInCell(req.body.cellphone,req.body.password,function(err,member){
       if(err) return res.rd.errorBack(err.message, req.xhr);
-      req.session.group='member';
-      req.session.status='login';
+      req.session.group  = 'member';
+      req.session.status = 'login';
       req.session.user = member;
       res.redirect(req.query.redirect);
     });
@@ -41,8 +41,8 @@ router
     obj.logInEmail(req.body.email,req.body.password,function(err,member){
       logger.trace('error:'+ err);
       if(err) return res.rd.errorBack(err,req.xhr);
-      req.session.group='member';
-      req.session.status='login';
+      req.session.group  = 'member';
+      req.session.status = 'login';
       req.session.user = member;
       res.redirect(req.query.redirect);
     });

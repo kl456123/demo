@@ -3,10 +3,9 @@ var ligle = require('../index.js').ligle;
 var logger = ligle.util.logger('forgot-pw');
 var config = require('../config.js');
 
-var verifyCode = require('../midware/verify-code.js');
-var checkCode = verifyCode.checkCode;
+var checkCode = ligle.addon.captcha.midware.checkCode;
 
-var fieldChecker = require('../midware/field-checker.js');
+var fieldChecker = ligle.midware.makeFieldChecker;
 var checkCellForm = fieldChecker({
   cellphone:'cellphone',
   password:'password'
