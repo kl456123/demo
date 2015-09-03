@@ -17,7 +17,7 @@
 
     <script src="/common/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min.js"></script>
-    <script src="/common/summernote/summernote.js"></script>
+    <script src="/common/summernote/summernote.min.js"></script>
     <!--表单验证-->
     <script src="/common/validform/validform.min.js"></script>
     <script src="/common/link_select/link_select.js" type="text/javascript"></script>
@@ -29,10 +29,6 @@
                 location.href = url;
         }
         $(document).ready(function () {
-            $('#summernote').summernote({  //富文本编辑器
-                //set editor height
-                height: 300
-            });
             $(".demoform").Validform({  //表单检测
                 //添加检测的数据类型
                 datatype:{
@@ -55,6 +51,55 @@
                 }
             }
         });
+
+        //富文本编辑器
+        $(document).ready(function(){
+            $('#summernote').summernote({
+                height: 300,
+                onImageUpload: function(files, editor, welEditable) {
+                    console.log('files:'+files);
+                    sendFile(files, editor, welEditable);
+                }
+            });
+        });
+
+        function sendFile(files, editor, welEditable) {
+            console.log('files: ', files);
+            data = new FormData();
+            for(o in files){
+                console.log(o);
+                if(!checkFileSize(files[o]))
+                    return alert('上传图片大小不能超过1M');
+                data.append("file", files[o]);
+            };
+            $.ajax({
+                data: data,
+                type: "POST",
+                url: "/richTextImgUpload",
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(url) {
+                    console.log('success-url: ', url);
+                    url.forEach(function(o, i){
+                        editor.insertImage(welEditable, o);
+                    });
+                },
+                error: function(err) {
+                    alert('图片上传失败，请重试');
+                }
+            });
+        };
+
+        function checkFileSize(file){
+            var maxFileSize = 1024*1024*1; //1M
+            if(file instanceof Object){
+                if(file.size>maxFileSize)
+                    return false;
+            }
+            return true;
+        }
+
     </script>
 </head>
 
