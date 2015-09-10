@@ -15,23 +15,9 @@ var log4js = require('log4js');
 var errorHandler = require('errorhandler');
 var serveStatic = require('serve-static');
 var mongoStore = require('connect-mongo')(session);
-var settings = require('./settings');
-var cfg = {
-  loggerLevel:'DEBUG',
-  model:{
-    upDir:'./public/images/upload/',
-    staticDir:'/images/upload/'
-  },
-  db: { 
-    name: 'demo', 
-    host: '127.0.0.1', 
-    port: 27017
-  },
-  midware: {
-  }
-};
 
-var ligle = require('ligle-engine')(cfg);
+var cfg = require('./config.js');
+var ligle = require('ligle-engine')(cfg.engine);
 
 var logger = ligle.util.logger('normal','TRACE');
 
@@ -41,7 +27,8 @@ exports.appname = 'demo';// 应用名称，发邮件的时候会使用。
 exports.Router = express.Router.bind(express);
 exports.ligle = ligle;
 
-var UPDIR = settings.uploadPath;
+var settings = cfg.settings;
+var UPDIR = cfg.engine.model.upDir;
 
 // wrap app into callback, so that we can do something before we
 // start. such as: open database
