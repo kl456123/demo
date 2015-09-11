@@ -1,4 +1,4 @@
-
+var argv = require('minimist')(process.argv.slice(2)); // 命令行解析
 var express = require('express');
 var http = require('http');
 var path = require('path');
@@ -47,7 +47,7 @@ var init = require('./init.js');
 
 ligle.start(function(){
   // do some initialize works.  can force init by passing second argument
-  init(ligle);
+  init(ligle,argv.reset);
 
   var app = express();
 
