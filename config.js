@@ -1,20 +1,43 @@
 
 ////////////////////////// ligle engine的配置文件
+var engine = {
+  loggerLevel:'DEBUG'
+};
 
-var engine = exports.engine = {
-  loggerLevel:'TRACE'
-};
-///// 每个配置都可以忽略，将使用默认配置
-///// 具体每个模块的配置
-engine.model={
-  upDir:'./public/images/upload/',
-  staticDir:'/images/upload/'
-};
 engine.db={ 
   name: 'demo', 
   host: '127.0.0.1', 
   port: 27017
 };
+
+engine.model={
+  upDir:'./public/images/upload/',
+  staticDir:'/images/upload/'
+};
+
+//// app 的相关配置
+engine.app = {
+  cookie:{
+    life: 1000*60*60*24,  // cookie生存期，单位ms
+    secret: 'ligle-demo' // cookie加密
+  },
+  root:{
+    name: 'root',    // z最高权限管理员账号名称
+    password: '123'
+  },
+  http:{
+    port: 4000
+  },
+  favicon:{
+    path:'./public/images/favicon.ico'    // w网站图标路径
+  },
+  upload:{
+    path:engine.model.upDir
+  }
+};
+
+///// 每个配置都可以忽略，将使用默认配置
+///// 具体每个模块的配置
 engine.midware={
 };
 
@@ -107,16 +130,4 @@ engine.util.sms={
   useFake:false
 };
 
-
-////////////////////////// 原settings
-
-exports.settings = {
-  host: '127.0.0.1',          // s设置数据库IP，如果你不够高端，请不要修改
-  cookieLife: 1000*60*60*24,  // cookie生存期，单位ms
-  cookieSecret: 'ligleEngine',      // cookie设置，建议于工程同名
-	db: 'ligleEngine',                // s数据库名称，建议与工程同名
-  adminname: 'ligleEngine',    // z最高权限管理员账号名称，该账号应由程序直接写入数据库，其他账号应由注册生成
-  port: 4000,
-  faviconPath: '/public/images/favicon.ico',    // w网站图标路径
-  uploadPath: './public/images/upload/'   // 图片上传路径
-};
+module.exports = engine;

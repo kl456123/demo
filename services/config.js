@@ -1,3 +1,6 @@
+/// 这里的config是开发者开发业务自定义的config。
+
+// 引擎功能的config提供在父文件夹中
 
 module.exports = {
   email:{
