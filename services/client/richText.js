@@ -4,6 +4,7 @@ var ligle = require('../index.js').ligle;
 var Model = require('../model/richText.js');
 var logger = ligle.util.logger('richText');
 var basicModel = require('../model/basic.js');
+var fs = require('fs');
 
 var router = app.Router();
 
@@ -29,11 +30,10 @@ router
 router
   .route('/test')
   .get(function(req, res){
-    var imgTags = getImgTags(basicModel);
-    logger.trace('1111111111111111111111111111');
-    logger.trace('imgTags: ', imgTags);
-    var imgPaths = getImgPaths(imgTags);
-    logger.trace(imgPaths);
+    getImgTags(basicModel);
+    //logger.trace('imgTags: ', imgTags);
+    //var imgPaths = getImgPaths(imgTags);
+    //logger.trace(imgPaths);
     res.end();
   });
 
@@ -53,32 +53,43 @@ var getImgTags = function(Model){
       for(var j = 0;j<imgTagsTemp.length;j++){
         imgTags.push(imgTagsTemp[j]);
       }
-
     });
     logger.trace(imgTags);
-    return imgTags;
+    getImgPaths(imgTags);
   });
 }
 
 var getImgPaths = function(imgTags){
-  logger.trace('2222222222222222222222222222');
   var imgPaths = [];
   for(var i=0;i<imgTags.length;i++){
     var temp = getPath(imgTags[i]);
+    logger.trace('temp: ', temp);
     imgPaths.push(temp);
   }
   logger.trace(imgPaths);
+  removeRichTextImg(imgPaths);
 }
 
 var getPath = function(o){
-  var imgSrcReg = /src=\"([^\s\"]*)\"/g;
+  var imgSrcReg = /src=\"\/images\/upload\/richText\/([^\s\"]*)\"/g;
   var matched = o.match(imgSrcReg);
   if(matched === null) return;
-  matched.forEach(function(m, i){
-    return m.replace(imgSrcReg,"\"$1\"");
-  });
+  var path = matched[0].replace(imgSrcReg,"$1");
+  logger.trace('path: ', path);
+  return path;
 }
 
 var removeRichTextImg = function(paths){
-
+  var obj = new Model();
+  var upLoadDir = obj.getUploadDir();
+  logger.trace('uploadDir: ', upLoadDir);
+  fs.readdir(upLoadDir, function(err, files){
+    logger.trace('files: ',files);
+    files.forEach(function(filename, i){
+      if(paths.indexOf(filename) === -1){
+        logger.trace(filename);
+        fs.unlinkSync(upLoadDir+filename);
+      }
+    });
+  });
 }
