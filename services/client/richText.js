@@ -5,6 +5,8 @@ var Model = require('../model/richText.js');
 var logger = ligle.util.logger('richText');
 var basicModel = require('../model/basic.js');
 var fs = require('fs');
+var moment = require('moment');
+var async = require('async');
 
 var router = app.Router();
 
@@ -27,57 +29,55 @@ router
     return res.send(filePaths);
   })
 
+
 router
   .route('/test')
   .get(function(req, res){
-    getImgTags(basicModel);
-    //logger.trace('imgTags: ', imgTags);
-    //var imgPaths = getImgPaths(imgTags);
-    //logger.trace(imgPaths);
+    clearImgPath([basicModel]);
     res.end();
   });
+
 
 module.exports = router;
 
 
 //[{model: Model, richTextName: textarea}, {}, ]
 
-var getImgTags = function(Model){
-  var obj = new Model();
-  var imgHtmlReg = /<img[^>]*>/g;      //匹配img标签 <img ...>
-  var imgTags = [];
-  obj.getList({textarea: imgHtmlReg}, function(err, objs){ //匹配出所有含img的条目
-    objs.forEach(function(o, i){       //textarea: "<p><img src= ><p>..."
-      var imgTagsTemp = o.textarea.match(imgHtmlReg);   //[ <img >, <img>,  ]
-      logger.trace('imgTagsTemp: ', imgTagsTemp);
-      for(var j = 0;j<imgTagsTemp.length;j++){
-        imgTags.push(imgTagsTemp[j]);
-      }
-    });
-    logger.trace(imgTags);
-    getImgPaths(imgTags);
+var clearImgPath = function(ModelArray){
+  async.map(ModelArray, getImgPaths, function(err, results){
+    if(err) results = [];
+    logger.trace('results: ', err, results[0]);
+    removeRichTextImg(results[0]);
   });
-}
+};
 
-var getImgPaths = function(imgTags){
+var getImgPaths = function(Model, cb){
+  var obj = new Model();
+  var imgHtmlReg = /<img[^>]*>/g;
   var imgPaths = [];
-  for(var i=0;i<imgTags.length;i++){
-    var temp = getPath(imgTags[i]);
-    logger.trace('temp: ', temp);
-    imgPaths.push(temp);
-  }
-  logger.trace(imgPaths);
-  removeRichTextImg(imgPaths);
-}
+  obj.getList({textarea: imgHtmlReg}, function(err, objs){ //匹配出所有含img的条目
+    objs.forEach(function(o, i){
+      var imgTags = o.textarea.match(imgHtmlReg);  //[]
+      logger.trace('imgTags: ', imgTags);
+      for(var j = 0;j<imgTags.length;j++){
+        var tempImgPath = getPath(imgTags[j]);   //获取所有<img>标签的src路径
+        imgPaths.push(tempImgPath);
+      };
+    });
+    //logger.trace(imgTags);
+    cb(null, imgPaths);
+  });
+};
 
-var getPath = function(o){
-  var imgSrcReg = /src=\"\/images\/upload\/richText\/([^\s\"]*)\"/g;
-  var matched = o.match(imgSrcReg);
+var getPath = function(path){
+  var imgSrcReg = /src=\"([^\s\"]*)\"/g;
+  var matched = path.match(imgSrcReg);
   if(matched === null) return;
   var path = matched[0].replace(imgSrcReg,"$1");
-  logger.trace('path: ', path);
+  //logger.trace('path: ', path);
   return path;
 }
+
 
 var removeRichTextImg = function(paths){
   var obj = new Model();
@@ -86,8 +86,9 @@ var removeRichTextImg = function(paths){
   fs.readdir(upLoadDir, function(err, files){
     logger.trace('files: ',files);
     files.forEach(function(filename, i){
-      if(paths.indexOf(filename) === -1){
-        logger.trace(filename);
+      var temp = obj.upload2HostPath(upLoadDir)+filename;
+      logger.trace('temp: ', temp);
+      if(paths.indexOf(temp) === -1){
         fs.unlinkSync(upLoadDir+filename);
       }
     });
