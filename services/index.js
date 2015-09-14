@@ -11,6 +11,7 @@ function exportFrom(dir){
 [
   'home',
   'status',
+  'basic',
 ].forEach(exportFrom('./client/'));
 
 // client-member part

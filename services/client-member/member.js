@@ -56,25 +56,4 @@ router
     });
   });
 
-//测试用的路由
-router
-  .route('/changeEmail')
-  .get(function(req,res){
-    res.rd.render('client-member/changeEmail');
-  });
-router
-  .route('/changeCellphone')
-  .get(function(req,res){
-    res.rd.render('client-member/changeCellphone');
-  });
-router
-  .route('/change_expired')
-  .get(function(req,res){
-    res.rd.render('client-member/change_expired');
-  });
-router
-  .route('/change_success')
-  .get(function(req,res){
-    res.rd.render('client-member/change_success');
-  });
 module.exports = router;

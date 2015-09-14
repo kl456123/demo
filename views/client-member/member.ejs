@@ -33,23 +33,20 @@
                         <tr>
                             <th>会员ID：</th>
                             <td>
-                                <input type="text" class="ligle-input-md" value="ligle123456789" disabled="disabled"
-                                       style="border: 0px;background-color: #ffffff">
+                                <input type="text" class="ligle-input-md" value="<%=data.userName%>" disabled="disabled">
                             </td>
                         </tr>
                         <tr>
                             <th>手机：</th>
                             <td>
-                                <input type="text" class="ligle-input-md" value="<%=data.cellphone%>" disabled="disabled"
-                                       style="border: 0px;background-color: #ffffff"> |
+                                <input type="text" class="ligle-input-md" value="<%=data.cellphone%>" disabled="disabled"> |
                                 <a href="/changeCellphone">更改/绑定手机号码</a>
                             </td>
                         </tr>
                         <tr>
                             <th>邮箱：</th>
                             <td>
-                                <input type="text" class="ligle-input-md" value="<%=data.email%>" disabled="disabled"
-                                       style="border: 0px;background-color: #ffffff"> |
+                                <input type="text" class="ligle-input-md" value="<%=data.email%>" disabled="disabled"> |
                                 <a href="/changeEmail">更改/绑定登陆邮箱</a>
                             </td>
                         </tr>
@@ -61,7 +58,7 @@
                         <tr>
                             <th>昵称：</th>
                             <td>
-                                <input type="text" name="nickname"  value="<%=data.nickname%>">
+                                <input type="text" name="nickname" value="<%=data.nickname%>">
                             </td>
                         </tr>
                         <tr>
@@ -90,7 +87,7 @@
                 </form>
             </div>
 
-            <div class="bs-docs-section">
+            <div>
 		        <%= (!!locals.error)?error:'' %>
                 <form method="post" enctype='multipart/form-data'>
                     <table>

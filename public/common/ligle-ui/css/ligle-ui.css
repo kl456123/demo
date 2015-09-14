@@ -1,6 +1,9 @@
 input{
     margin: 3px;
 }
+.ligle-border{
+    border: solid 1px #c5c5c5;
+}
 .ligle-footer{
     border-top:solid 1px #000000 ;
     margin-top: 50px;
@@ -63,4 +66,20 @@ input{
 }
 .ligle-checkbox{
 
+}
+.ligle-alert {
+    text-align: center;
+    width: 100%;
+    position: fixed;
+    bottom: 50px;
+    height: auto;
+    z-index: 9;
+    opacity: 0.8;
+}
+
+.ligle-alert p {
+    text-align: center;
+    font-size: 26px;
+    color: #ffffff;
+    background-color: #000000;
 }
