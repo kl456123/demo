@@ -40,6 +40,7 @@
     function HtmlDecode(s) {
         return $('<div>').html(s).text();
     }
+//    表单验证规则
     $(".demoform").Validform({
         datatype: {
             "*6-20": /^[^\s]{6,20}$/,
@@ -54,41 +55,7 @@
         extend: ['skin/moon/style.css'], //加载新皮肤
         skin: 'layer-ext-myskin' //一旦设定，所有弹层风格都采用此主题。
     });
-
-    $('#layerTest').on('click', function(){
-        layer.open('1111111111111');
-    });
     /*------------------------END:使用layer实现弹出框---------------------------------*/
-
-    //Q:这两个函数是用来写懒加载的吗？
-    function submit(urlStr,method,datatoup,callback){
-        $.ajax({
-            url:urlStr,
-            // data:$("#testPost").serialize(),
-            data:datatoup,
-            type:method,
-            success:function(data){
-                callback(data);
-            },
-            error:function(err){
-                console.log(err);
-            }
-        });
-    }
-    //Q:cn, tn, t, q 分别代表什么？
-    function getMore(cn, tn, t, q, callback){
-        var query = '';
-        if(q && typeof q == 'object' && q != {}){
-            for(var key in q)
-                query += key + '=' + q[key] + '&';
-        }
-        query = query.substr(0, query.length - 1);
-        var url = '/moreitem/' + t + '/' + cn + '/' + tn;
-        submit(url, 'get', query, function(data){
-            callback(data);
-        });
-    }
-
     //Ajax获取手机验证短信
     function getSmsByForm(url,d,succCB,errCB){
         $.ajax({
@@ -103,8 +70,6 @@
             }
         });
     }
-
-
 </script>
 
 </body>

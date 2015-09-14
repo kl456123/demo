@@ -15,11 +15,9 @@ router
   .get(function(req,res){
     res.rd.render('client/instructions');
   });
-
 router
   .route('/ligleui')
   .get(function(req,res){
-    var rd = res.ligle.renderer;
     res.rd.render('client/ligleui');
   });
 
