@@ -3,6 +3,10 @@ var ligle = require('../index.js').ligle;
 var logger = ligle.util.logger('basic');
 var Model = require('../model/basic.js');
 var pageCalculate = ligle.util.pageCalculate;
+var util = require('../util');
+var createUpDirRefer = util.createUpDirRefer;
+var handleRichTextUpImgs = util.handleUpImgs;
+var deleteImgsUpDir = util.deleteImgsUpDir;
 
 // 路由
 var router = app.Router();
@@ -14,8 +18,13 @@ router
   .post(function(req,res){
     var obj = new Model();
 
+    var upDirRefer = createUpDirRefer();
+    logger.trace('upDirRefer: ', upDirRefer);
+    req.body.upDirRefer = upDirRefer;
+
     obj.addData(req.body);
     obj.processFiles(req.files);
+    obj.textarea = handleRichTextUpImgs(obj.textarea, upDirRefer);
     obj.save(function(err,savedObj){
       var msg = err? err:'success saved!';
       logger.trace('saved Id',savedObj._id);
@@ -36,8 +45,16 @@ router
     var obj = new Model();
     obj.get({_id:req.params.id},function(err,getObj){
       if(err) req.redirect('back');
+
+      if(!getObj.upDirRefer){
+        var upDirRefer = createUpDirRefer();
+        logger.trace('have refer: ', upDirRefer);
+      }
+      req.body.upDirRefer = getObj.upDirRefer || upDirRefer;
       getObj.addData(req.body);
       getObj.processFiles(req.files);
+      getObj.textarea = handleRichTextUpImgs(getObj.textarea, getObj.upDirRefer);
+
       getObj.save(function(err,savedObj){
         res.rd.renderEO('console/a_basic_detail',err,{data:getObj});
       });
@@ -64,7 +81,9 @@ router
   .get(function(req,res){
     var obj = new Model();
     obj.delete({_id:req.params.id},function(err,getObj){
-      req.flash('error',err);
+      if(err) req.flash('error',err);
+      var refer = getObj.value.upDirRefer || '';
+      deleteImgsUpDir(refer);
       res.redirect('/a_basic');
     });
   })
