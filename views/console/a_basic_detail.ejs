@@ -1,6 +1,12 @@
 <%- include a_header %>
+<style>
+    .thb{
+        width: 200px;
+    }
+</style>
+
 <!--START:main-->
-<div class="col-sm-6" id="content">
+<div class="col-sm-9" id="content">
     <div class="row">
         <p class="ligle-page-title">
             基本
@@ -24,11 +30,12 @@
                             <tr>
                                 <th>图片：</th>
                                 <td>
-                                    <input type="file" name="cover" datatype="*">
                                     <img class="thb" src="<%= data.cover?data.cover.path:'' %>" alt="无图" align="middle">
+                                    <br />
                                     <% if(data.cover){ %>
-                                    &nbsp;&nbsp;&nbsp;图片名称：<%= data.cover.origin %>
+                                    图片名称：<%= data.cover.origin %>
                                     <% } %>
+                                    <input type="file" name="cover" datatype="*">
                                 </td>
                             </tr>
                             <tr>
@@ -56,8 +63,12 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th>详情：</th>
-                                <td><textarea id="summernote" class="summernote" name="textarea" datatype=""><%= data.textarea %></textarea></td>
+                                <th colspan="2">详情：</th>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <textarea id="summernote" class="summernote" name="textarea" datatype=""><%= data.textarea %></textarea>
+                                </td>
                             </tr>
                             <tr>
                                 <th></th>
