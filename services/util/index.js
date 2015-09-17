@@ -56,6 +56,7 @@ var replaceImgSrc = function(html, refer){
 //<img src="/images/upload/richText/temp/93a717d6d197a59214fc1a4e40a45fed.png">
 //匹配html中所有src路径，返回 []
 var matchImgSrc = function(html){
+  if(!html) html="";
   var showPaths = [];
   var imgSrcReg = /<img src=\"([^\s\"]*)\"[^>]*>/g;
   var matched = html.match(imgSrcReg);
