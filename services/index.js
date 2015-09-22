@@ -5,14 +5,14 @@ function exportFrom(dir){
   return function(o){
     exports[o] = require(dir+o);
   };
-};
+}
 
 // client part
 [
   'home',
   'status',
   'basic',
-  'richText'
+  'richText',
 ].forEach(exportFrom('./client/'));
 
 // client-member part

@@ -13,12 +13,12 @@ router
   .post(function(req, res){
     var obj = new Model();
     var filePaths = [];
-    logger.trace('req.files: ', req.files);
-
     //create temp文件夹
     var tempUpDir = obj.getUploadDir() + 'temp';
     var tempHostDir = obj.getHostDir() + 'temp';
-    if(!fs.existsSync(tempUpDir)) fs.mkdirSync(tempUpDir);
+    if(!fs.existsSync(tempUpDir)) {
+      fs.mkdirSync(tempUpDir);
+    }
 
     //save temp pics to temp directory
     var fieldname = 'file';
@@ -37,9 +37,7 @@ router
       fs.renameSync(o.path,newPath);
       filePaths.push(showPath);
     });
-
-    logger.trace('filePaths: ', filePaths);
     return res.send(filePaths);
-  })
+  });
 
 module.exports = router;

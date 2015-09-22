@@ -5,13 +5,17 @@ var path = require('path');
 
 // depends on ligle.globals
 var init = function(ligle,bReset){
-  if(!ligle.globals) throw Error('need ligle globals plugin');
+  if(!ligle.globals) {
+    throw Error('need ligle globals plugin');
+  }
   var logger = ligle.util.logger('init','TRACE');
   if(bReset){
     logger.trace('....force initialization....');
     ligle.globals.bInit = false; // provide options to force init
   }
-  if(ligle.globals.bInit) return;
+  if(ligle.globals.bInit) {
+    return;
+  }
   ligle.globals.bInit = true;
 
   // used for creating userName

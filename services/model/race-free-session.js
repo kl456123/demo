@@ -9,5 +9,5 @@ module.exports = ligle.model.ModelBase.extend({
     this._super(obj);
   },
   coll:{name:'rf-session',fields:{}},
-  rest:{}
+  rest:{},
 });
