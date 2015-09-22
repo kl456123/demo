@@ -5,11 +5,11 @@ var logger = ligle.util.logger('login','TRACE');
 var fieldChecker = ligle.midware.makeFieldChecker;
 var checkForm = fieldChecker({
   //cellphone:'cellphone',
-  password:'password'
+  password:'password',
 });
 var checkEmailForm = fieldChecker({
   //email:'email',
-  password:'password'
+  password:'password',
 });
 
 var pChecker = ligle.addon.permission;
@@ -24,7 +24,9 @@ router
   .post(pChecker.passIf('member','logout'),checkForm,function(req,res){
     var obj = new Model();
     obj.logInCell(req.body.cellphone,req.body.password,function(err,member){
-      if(err) return res.rd.errorBack(err.message, req.xhr);
+      if(err) {
+        return res.rd.errorBack(err.message, req.xhr);
+      }
       req.session.group  = 'member';
       req.session.status = 'login';
       req.session.user = member;
@@ -40,7 +42,9 @@ router
     var obj = new Model();
     obj.logInEmail(req.body.email,req.body.password,function(err,member){
       logger.trace('error:'+ err);
-      if(err) return res.rd.errorBack(err,req.xhr);
+      if(err) {
+        return res.rd.errorBack(err,req.xhr);
+      }
       req.session.group  = 'member';
       req.session.status = 'login';
       req.session.user = member;

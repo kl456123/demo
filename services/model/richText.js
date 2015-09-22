@@ -9,5 +9,5 @@ module.exports = ligle.model.ModelBase.extend({
   init:function(obj){
     this._super(obj);
   },
-  coll:{name:'richText',fields:{}}
+  coll:{name:'richText',fields:{}},
 });

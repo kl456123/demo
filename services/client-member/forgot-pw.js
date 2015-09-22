@@ -8,16 +8,16 @@ var checkCode = ligle.addon.captcha.midware.checkCode;
 var fieldChecker = ligle.midware.makeFieldChecker;
 var checkCellForm = fieldChecker({
   cellphone:'cellphone',
-  password:'password'
+  password:'password',
 });
 var checkEmailForm = fieldChecker({
-  email:'email'
+  email:'email',
 });
 var checkPwdForm = fieldChecker({
-  password:'password'
+  password:'password',
 });
 var checkToken = fieldChecker({
-  token:'uuid'
+  token:'uuid',
 });
 
 // 路由
@@ -26,7 +26,7 @@ var router = app.Router();
 
 // 手机找回密码
 router
-  .route(config.cell.routes.reset) 
+  .route(config.cell.routes.reset)
   .get(function(req,res){
     res.rd.render('client-member/findPW');
   })
@@ -66,7 +66,9 @@ router
     var aMember = new Model();
     var token = {value:req.body.token,type:Model.TYPE.reset};
     aMember.checkEmailLink(token,function(err,obj){
-      if(obj) obj.token = req.body.token;
+      if(obj) {
+        obj.token = req.body.token;
+      }
       res.rd.renderEO('client-member/errorMsg','client-member/newPW',err,obj);
     });
   })

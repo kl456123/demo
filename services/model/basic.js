@@ -10,5 +10,5 @@ module.exports = ligle.model.ModelBase.extend({
     this._super(obj);
   },
   coll:{name:'basic',fields:{}},
-  rest:{}
+  rest:{},
 });

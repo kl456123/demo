@@ -20,7 +20,9 @@ router
   .post(function(req,res){
     var obj = new Model();
     obj.get({_id:req.params.id},function(err,getObj){
-      if(err) req.redirect('back');
+      if(err) {
+        req.redirect('back');
+      }
       getObj.addData(req.body);
       getObj.processFiles(req.files);
       getObj.save(function(err,savedObj){
@@ -35,11 +37,18 @@ router
     var obj = new Model();
     var curPage = req.query.page?parseInt(req.query.page):1;
     obj.count({}, function(err, totalNum){
-      if(err) totalNum = 0;
+      if(err) {
+        totalNum = 0;
+      }
       var pObj = pageCalculate(curPage, totalNum);
-      obj.getList({},{sort:{_time:-1}, skip:pObj.skipNum, limit:pObj.limitNum}, function(err,objs){
-        res.rd.render('console/a_member',{data:objs, curPage:pObj.curPage, totalPage:pObj.totalPage});
-      });
+      obj.getList(
+        {},
+        {sort:{_time:-1}, skip:pObj.skipNum, limit:pObj.limitNum},
+        function(err,objs){
+          res.rd.render(
+            'console/a_member',
+            {data:objs, curPage:pObj.curPage, totalPage:pObj.totalPage});
+        });
     });
   });
 

@@ -14,7 +14,7 @@ var log4js = require('log4js');
 
 var errorHandler = require('errorhandler');
 var serveStatic = require('serve-static');
-var mongoStore = require('connect-mongo')(session);
+var MongoStore = require('connect-mongo')(session);
 
 var cfg = require('./config.js');
 var ligle = require('ligle-engine')(cfg);
@@ -45,7 +45,9 @@ require('ligle-model-member')(ligle);
 // init function
 var init = require('./init.js');
 
+/* jshint ignore:start */
 ligle.start(function(){
+  /* jshint ignore:end */
   // do some initialize works.  can force init by passing second argument
   init(ligle,argv.reset);
 
@@ -57,19 +59,20 @@ ligle.start(function(){
   app.set('view engine', 'ejs');
 
   app.use(favicon(cfg.app.favicon.path));
-  app.use(methodOverride()); 
+  app.use(methodOverride());
   app.use(log4js.connectLogger(logger, {level:log4js.levels.INFO}));
   app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: false }));// false to use querystring
+  // bodyParser: false to use querystring
+  app.use(bodyParser.urlencoded({ extended: false }));
   app.use(multer({ dest: UPDIR}));
   app.use(cookieParser(cfg.app.cookie.secret));
   app.use(session({
-	  secret: cfg.app.cookie.secret,
-	  name: cfg.db.name,
-	  cookie: {maxAge: cfg.app.cookie.life},
-	  store: new mongoStore({db: cfg.db.name}),
+    secret: cfg.app.cookie.secret,
+    name: cfg.db.name,
+    cookie: {maxAge: cfg.app.cookie.life},
+    store: new MongoStore({db: cfg.db.name}),
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
   }));
   app.use(flash()); // used to save message into req temporarily
 
@@ -96,12 +99,12 @@ ligle.start(function(){
   app.use(serveStatic(path.join(__dirname, 'public')));
 
   app.use(function(req,res){
-	  res.rd.render('part/error');
+    res.rd.render('part/error');
   });
 
   // development only
   var env = process.env.NODE_ENV || 'development';
-  if ('development' == env) {
+  if ('development' === env) {
     // configure stuff here
     app.use(errorHandler());
   }
@@ -110,5 +113,9 @@ ligle.start(function(){
   http.createServer(app).listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));
   });
+
+  /* jshint ignore:start */
 });
+/* jshint ignore:end */
+
 

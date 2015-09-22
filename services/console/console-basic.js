@@ -44,7 +44,9 @@ router
   .post(function(req,res){
     var obj = new Model();
     obj.get({_id:req.params.id},function(err,getObj){
-      if(err) req.redirect('back');
+      if(err) {
+        req.redirect('back');
+      }
 
       if(!getObj.upDirRefer){
         var upDirRefer = createUpDirRefer();
@@ -53,7 +55,8 @@ router
       req.body.upDirRefer = getObj.upDirRefer || upDirRefer;
       getObj.addData(req.body);
       getObj.processFiles(req.files);
-      getObj.textarea = handleRichTextUpImgs(getObj.textarea, getObj.upDirRefer);
+      getObj.textarea = handleRichTextUpImgs(
+        getObj.textarea, getObj.upDirRefer);
 
       getObj.save(function(err,savedObj){
         res.rd.renderEO('console/a_basic_detail',err,{data:getObj});
@@ -67,12 +70,19 @@ router
     var obj = new Model();
     var curPage = req.query.page?parseInt(req.query.page):1;
     obj.count({}, function(err, totalNum){
-      if(err) totalNum = 0;
+      if(err) {
+        totalNum = 0;
+      }
       var pObj = pageCalculate(curPage, totalNum);
       logger.trace('pObj:'+ pObj);
-      obj.getList({},{sort:{_time: -1}, skip:pObj.skipNum, limit:pObj.limitNum}, function(err,objs){
-        res.rd.render('console/a_basic',{basic:objs, curPage:pObj.curPage, totalPage:pObj.totalPage});
-      });
+      obj.getList(
+        {},
+        {sort:{_time: -1}, skip:pObj.skipNum, limit:pObj.limitNum},
+        function(err,objs){
+          res.rd.render(
+            'console/a_basic',
+            {basic:objs, curPage:pObj.curPage, totalPage:pObj.totalPage});
+        });
     });
   });
 
@@ -81,12 +91,14 @@ router
   .get(function(req,res){
     var obj = new Model();
     obj.delete({_id:req.params.id},function(err,getObj){
-      if(err) req.flash('error',err);
+      if(err) {
+        req.flash('error',err);
+      }
       var refer = getObj.value.upDirRefer || '';
       deleteImgsUpDir(refer);
       res.redirect('/a_basic');
     });
-  })
+  });
 
 module.exports = router;
 
