@@ -1,0 +1,27 @@
+before_script:
+  - "echo skipped! npm install"
+  - "which node"
+  - "node --version"
+  - "cat /etc/issue"
+  - "uname -a"
+  - "id"
+
+test:grunt:
+  script:
+    - "npm install"
+    - grunt
+  tags:
+    - public
+  stage: test
+
+deploy:test-server:
+  script: "echo deploy skipped!"
+  only:
+    - master
+    - release
+  stage: deploy
+
+stages:
+  - build
+  - test
+  - deploy
