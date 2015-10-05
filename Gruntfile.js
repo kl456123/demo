@@ -160,6 +160,10 @@ module.exports = function(grunt) {
 	configFile: 'test/front/karma.conf.js',
       },
     },
+    exec: {
+      npm: 'npm install',
+      bower: 'bower install',
+    },
   });
 
   grunt.loadNpmTasks('grunt-mocha-test');
@@ -174,6 +178,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-karma');
+  grunt.loadNpmTasks('grunt-exec');
 
   grunt.registerTask('dist',[
     'jshint:dist',
@@ -181,6 +186,12 @@ module.exports = function(grunt) {
     'concat:dist', 
     'uglify:dist',
     'copy:dist',
+  ]);
+
+  grunt.registerTask('install',[
+    'exec:npm',
+    'exec:bower',
+    'bower:install',
   ]);
 
   grunt.registerTask('test',[
