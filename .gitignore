@@ -238,3 +238,13 @@ public/images/upload/*/*.bmp
 *.log.*
 doc*
 coverage*
+bower_components*
+
+public/**/*.*
+# the following should be removed in the future
+# and resources should be controlled by another way
+!public/images/
+!public/javascripts/
+!public/common/
+!public/stylesheets/
+
