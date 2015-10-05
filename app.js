@@ -87,7 +87,7 @@ ligle.start(function(){
 
   // 这里的语句不能放在文件开头，因为services也依赖app.js。（好好思索一
   // 下，为什么必须放在这里，以及模块互相依赖的时候，是如何加载的）
-  var localService = require('./services');
+  var localService = require('./back');
   for(var s  in localService){
     var router = localService[s];
     if(router instanceof Function){

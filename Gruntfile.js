@@ -1,33 +1,93 @@
+/* jshint ignore:start */
 module.exports = function(grunt) {
-  grunt.loadNpmTasks('grunt-mocha-test');
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-blanket');
-  grunt.loadNpmTasks('grunt-jscs');
-  grunt.loadNpmTasks('grunt-jsdoc');
-
+  /* jshint ignore:end */
   grunt.initConfig({
-    jshint: {
-      files: ['*.js','services/**/*.js','test/**/*.js'],
+    // Metadata.
+    pkg: grunt.file.readJSON('package.json'),
+    banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
+      '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
+      '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
+      '* Copyright (c) <%= grunt.template.today("yyyy") %>' +
+      ' <%= pkg.author.name %>;' +
+      ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
+    // Task configuration.
+    concat: {
       options: {
-        jshintrc: '.jshintrc',
+        banner: '<%= banner %>',
+        stripBanners: true,
+      },
+      dist: {
+        src: ['front/js/*.js'],
+        dest: 'public/js/<%= pkg.name %>.js',
       },
     },
-    watch: {
-      scripts: {
-        files: '<%= jshint.files %>',
-        tasks: ['jshint','jscs'],
+    uglify: {
+      options: {
+        banner: '<%= banner %>',
+      },
+      dist: {
+        src: '<%= concat.dist.dest %>',
+        dest: 'public/js/<%= pkg.name %>.min.js',
+      },
+    },
+    jshint: {
+      front:{
+        src: ['front/**/*.js','test/front/**/*.js'],
         options: {
-          spawn: false,
+          jshintrc: '.jshintrc',
+        },
+      },
+      back:{
+        src: ['*.js','back/**/*.js','test/back/**/*.js'],
+        options: {
+          jshintrc: '.jshintrc',
+        },
+      },
+      dist:{
+        src: ['front/**/*.js'],
+        options: {
+          jshintrc: '.jshintrc',
         },
       },
     },
     jscs: {
-      src: '<%= jshint.files %>',
-      options: {
-        config: '.jscsrc',
+      front:{
+        src: '<%= jshint.front.src %>',
+        options: {
+          config: '.jscsrc',
+        },
+      },
+      back:{
+        src: '<%= jshint.back.src %>',
+        options: {
+          config: '.jscsrc',
+        },
+      },
+      dist:{
+        src: '<%= jshint.dist.src %>',
+        options: {
+          config: '.jscsrc',
+        },
+      },
+    },
+    watch: {
+      front:{
+        scripts: {
+          files: '<%= jshint.front.files %>',
+          tasks: ['jshint','jscs'],
+          options: {
+            spawn: false,
+          },
+        },
+      },
+      back:{
+        scripts: {
+          files: '<%= jshint.back.files %>',
+          tasks: ['jshint','jscs'],
+          options: {
+            spawn: false,
+          },
+        },
       },
     },
     clean: {
@@ -40,11 +100,21 @@ module.exports = function(grunt) {
         src: ['test/**/*.js'],
         dest: 'coverage/',
       },
+      dist:{
+        files:[
+          {
+            src:['**/*.html','**/*.css','**/*.json'],
+            dest:'public/',
+            expand: true,
+            cwd: 'front/',
+          },
+        ],
+      },
     },
     blanket: {
       coverage: {
-        src: ['lib/'],
-        dest: 'coverage/lib/',
+        src: ['services/'],
+        dest: 'coverage/services/',
       },
     },
     mochaTest: {
@@ -72,14 +142,64 @@ module.exports = function(grunt) {
         },
       },
     },
+    bower: {
+      install: {
+        options: {
+          targetDir: './public/lib',
+          layout: 'byComponent',
+          install: true,
+          verbose: false,
+          cleanTargetDir: false,
+          cleanBowerDir: false,
+          bowerOptions: {},
+        },
+      },
+    },
+    karma: {
+      unit: {
+	configFile: 'test/front/karma.conf.js',
+      },
+    },
   });
 
-  grunt.registerTask(
-    'default',
-    ['jshint','jscs','clean', 'blanket', 'copy', 'mochaTest']);
-  grunt.registerTask(
+  grunt.loadNpmTasks('grunt-mocha-test');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-blanket');
+  grunt.loadNpmTasks('grunt-jscs');
+  grunt.loadNpmTasks('grunt-jsdoc');
+  grunt.loadNpmTasks('grunt-bower-task');
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-karma');
+
+  grunt.registerTask('dist',[
+    'jshint:dist',
+    'jscs:dist',
+    'concat:dist', 
+    'uglify:dist',
+    'copy:dist',
+  ]);
+
+  grunt.registerTask('test',[
+    'jshint',
+    'jscs',
+    'clean', 
+    'blanket', 
+    'copy', 
+    'mochaTest',
+  ]);
+
+  // default used for ci
+  grunt.registerTask('default',[
     'test',
-    ['jshint','jscs','clean', 'blanket', 'copy', 'mochaTest']);
+  ]);
 
   grunt.registerTask('doc',['jsdoc']);
+  /* jshint ignore:start */
 };
+/* jshint ignore:end */
+
+
