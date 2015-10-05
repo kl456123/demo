@@ -1,3 +1,6 @@
+# demo
+- master build: [![build status](https://ci.gitlab.com/projects/9/status.svg?ref=master)](https://ci.gitlab.com/projects/9?ref=master)
+- develop build:[![build status](https://ci.gitlab.com/projects/9/status.svg?ref=develop)](https://ci.gitlab.com/projects/9?ref=develop)
 
 # 简介
 这个是个demo的例子，新项目基于这个项目的写法。

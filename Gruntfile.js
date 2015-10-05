@@ -97,7 +97,7 @@ module.exports = function(grunt) {
     },
     copy: {
       coverage: {
-        src: ['test/**/*.js'],
+        src: ['test/back/**/*.js'],
         dest: 'coverage/',
       },
       dist:{
@@ -113,8 +113,8 @@ module.exports = function(grunt) {
     },
     blanket: {
       coverage: {
-        src: ['services/'],
-        dest: 'coverage/services/',
+        src: ['back/'],
+        dest: 'coverage/back/',
       },
     },
     mochaTest: {
@@ -123,7 +123,7 @@ module.exports = function(grunt) {
           reporter: 'spec',
           clearRequireCache: true,
         },
-        src: ['coverage/test/**/*.js'],
+        src: ['coverage/test/back/*.js'],
       },
       coverage: {
         options: {
@@ -131,7 +131,7 @@ module.exports = function(grunt) {
           quiet: true,
           captureFile: 'coverage.html',
         },
-        src: ['coverage/test/**/*.js'],
+        src: ['coverage/test/back/*.js'],
       },
     },
     jsdoc: {
@@ -157,7 +157,7 @@ module.exports = function(grunt) {
     },
     karma: {
       unit: {
-	configFile: 'test/front/karma.conf.js',
+        configFile: 'test/front/karma.conf.js',
       },
     },
     exec: {
@@ -183,7 +183,7 @@ module.exports = function(grunt) {
   grunt.registerTask('dist',[
     'jshint:dist',
     'jscs:dist',
-    'concat:dist', 
+    'concat:dist',
     'uglify:dist',
     'copy:dist',
   ]);
@@ -197,9 +197,9 @@ module.exports = function(grunt) {
   grunt.registerTask('test',[
     'jshint',
     'jscs',
-    'clean', 
-    'blanket', 
-    'copy', 
+    'clean',
+    'blanket',
+    'copy',
     'mochaTest',
   ]);
 
