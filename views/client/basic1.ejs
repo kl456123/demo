@@ -1,0 +1,22 @@
+<%- include header %>
+
+<div class="container comment">
+    <h1>
+        评论和留言
+    </h1>
+    <%=locals.msg?locals.msg:''%>
+</div>
+
+<div class="content1">
+    <form method="post">
+        用户名:<input type="text" name="title1" datatype="*"/>
+        <br/>
+
+        <textarea  name="text1" datatype="*"></textarea>
+        <br/>
+        <input type="submit" value="留言"/>
+        <input type="reset" value="重置"/>
+    </form>
+</div>
+
+<%- include footer %>

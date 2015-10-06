@@ -10,6 +10,7 @@ function exportFrom(dir){
 // client part
 [
   'home',
+  'basic1',
   'status',
   'basic',
   'richText',
@@ -28,6 +29,8 @@ function exportFrom(dir){
 [
   'console',
   'console-basic',
+  'console-basic1',
+  'console-post',
   'console-member',
 ].forEach(exportFrom('./console/'));
 

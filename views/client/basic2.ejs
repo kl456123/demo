@@ -1,0 +1,32 @@
+<%- include header %>
+
+<div class="container comment">
+    <h1>评论列表</h1>
+</div>
+
+
+<div class="content2">
+    <% data.forEach(function(o, i){ %>
+        <h6>用户名：<%= o.title1 %></h6>
+        <!--<a href="/detail/basic1/<%= o._id %>">
+            <h6><%= o.title1 %></h6>
+        </a>-->
+     <div class="date1">
+         <h6>评论时间：<%=o.time%></h6>
+     </div>
+
+    <div class="caption">
+        <h6>评论内容：<%= o.text1 %></h6>
+    </div>
+    <div class="caption1">
+        <a class="btn btn-xs" href="/delete1/basic1/<%= o._id %>">删除</a>
+    </div>
+    <br/>
+    <% }); %>
+</div>
+
+<div class="content4">
+    <p><a href="/test">我要评论。。。</a></p>
+</div>
+
+<%- include footer %>

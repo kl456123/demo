@@ -1,0 +1,15 @@
+<%- include header %>
+<div class="content_test">
+    <div class="container_test">
+        <h1>查看</h1>
+    </div>
+</div>
+
+<div class="container_test1">
+    <% data1.forEach(function(o, i){ %>
+    题目：<%=o.title2 %> | <a class="test1" href="/delete1/post/<%= o._id %>">删除</a> |
+    <a class="test2" href="/detail/post/<%= o._id %>">查看</a>
+    <br/>
+    <% }); %>
+</div>
+<%- include footer %>

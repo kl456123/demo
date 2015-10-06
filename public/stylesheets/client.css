@@ -2,9 +2,11 @@
 .CAPTCHA{
     height: 30px;
 }
+
 input#code{
-    width: 80px;
-}
+     width: 80px;
+ }
+
 
 /*-----------------------START:TAB-------------------------*/
 #tab{
@@ -33,6 +35,41 @@ input#code{
     border-bottom: solid 1px #000000;
 }
 
+.comment{
+    text-align: center;
+    padding-bottom: 50px;
+    border-bottom: solid 1px #000000;
+}
+
+.date1{
+    text-align:center;
+}
+
+.content1 .content2 .content4{
+    width: 85%;
+    font-family: "Microsoft YaHei", SimSun;
+    padding-top:10px;
+    padding-bottom: 50px;
+    border-bottom: solid 1px #000000;
+    margin: 1px auto 20px auto;
+
+}
+.content1{
+    text-align:center;
+}
+
+.content2{
+    text-align:left;
+}
+ .content4{
+     text-align:center;
+ }
+
+.content1 input{
+    width:60px;
+    height:30px;
+}
+
 #content{
     width: 85%;
     text-align: center;
@@ -41,3 +78,11 @@ input#code{
     border-bottom: solid 1px #000000;
     margin: 1px auto 20px auto;
 }
+
+.content_test .container_test1{
+    text-align: center;
+    padding-bottom: 50px;
+    border-bottom: solid 1px #000000;
+}
+
+

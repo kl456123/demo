@@ -21,5 +21,6 @@ router
     res.rd.render('client/ligleui');
   });
 
+
 module.exports = router;
 
