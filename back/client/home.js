@@ -1,8 +1,10 @@
-var app = require('../../app.js');
-var ligle = app.ligle;
+var index = require('../index');
+var express = require('express');
+
+var ligle = index.ligle;
 
 // 路由
-var router = app.Router();
+var router = express.Router();
 router
   .route('/')
   .get(function(req,res){

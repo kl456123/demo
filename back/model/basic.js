@@ -1,5 +1,4 @@
-
-var ligle = require('../index.js').ligle;
+var ligle = require('ligle-engine')();
 var logger = ligle.util.logger('basic.js');
 
 // 模型

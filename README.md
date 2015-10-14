@@ -1,13 +1,21 @@
-# demo
-- master build:[![build status](https://git.hijack.moe/ci/projects/9/status.png?ref=master)](https://git.hijack.moe/ci/projects/9?ref=master)
-- develop build:[![build status](https://git.hijack.moe/ci/projects/9/status.png?ref=develop)](https://git.hijack.moe/ci/projects/9?ref=develop)
-# 简介
-这个是个demo的例子，新项目基于这个项目的写法。
+demo
+====================
+[![Build Status](https://travis-ci.org/a-oak/demo.svg?branch=master)](https://travis-ci.org/a-oak/demo)
+[![Build Status](https://travis-ci.org/a-oak/demo.svg?branch=develop)](https://travis-ci.org/a-oak/demo)
+Copyright (c) 2015 [A-Oak](http://a-oak.com/) Co. Ltd. under MIT LICENSE.
 
-1. app.js里面应用了两个服务，一个是ligle-engine里面的basic服务。一个是
-   自己定义的test服务。
-2. 请在services的文件夹里面开发。每个业务建立两个文件，一个是xxxModel.js，一
-   个是xxx.js。开发完之后，统一在index.js里面export。
-3. app.js里面自动装载services导出的服务。
-4. engine里面的服务，是高度抽象的服务，目前并不是一个稳定完善的模块。
-   所以，先不用engine提供的服务，先自己写。
+
+## 安装
+
+配置中使用了`phantomjs`，如果无法成功安装，请参照项目中的
+`install_phanthomjs.sh`脚本。
+
+1. front, end 分别是前后端工作文件夹。
+2. Gruntfile.js中写了前后端自动化的任务。
+3. `npm install`成功后。使用`npm start`启动服务。
+4. 目前项目并不十分完善。正在调整优化中。欢迎提交issue。
+5. 项目完善后，将基于项目开发脚手架。
+6. wiki也会不断完善一些关于参与项目的开发的细节。
+
+## LICENSE
+Copyright (c) 2015 [A-Oak](http://a-oak.com/) Co. Ltd. under MIT LICENSE.
