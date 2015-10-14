@@ -6,6 +6,7 @@
     "prestart": "grunt dist",
     "start": "node app.js",
     "pretest": "grunt dist",
+    "postinstall": "grunt install",
     "test": "grunt test",
     "test-single-run": "node node_modules/karma/bin/karma start test/front/karma.conf.js  --single-run",
     "preupdate-webdriver": "npm install",
@@ -89,7 +90,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://git.hijack.moe/crackhopper/demo.git"
+    "url": "https://github.com/a-oak/demo.git"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/a-oak/demo/issues"
+  },
+  "homepage": "https://github.com/a-oak/demo"
 }

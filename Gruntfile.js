@@ -37,7 +37,7 @@ module.exports = function(grunt) {//jshint ignore:line
         banner: '<%= banner %>',
       },
       front: {
-        src: '<%= concat.dist.dest %>',
+        src: '<%= concat.front.dest %>',
         dest: 'public/js/<%= pkg.name %>.min.js',
       },
     },
