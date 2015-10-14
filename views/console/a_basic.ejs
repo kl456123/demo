@@ -1,0 +1,70 @@
+<%- include a_header %>
+
+<!--START:main box-->
+<div class="col-sm-12" id="content">
+    <div class="row">
+        <p class="ligle-page-title">
+            基本 | <a href="/a_add/basic" class="btn btn-default">添加基本类型</a>
+        </p>
+
+        <div class="col-lg-9">
+            <div class="panel panel-default">
+                <!--本单元标题-->
+                <div class="panel-heading">列表</div>
+                <!--本单元内容-->
+                <div class="panel-body">
+                    <table class="table table-hover" style="width: 100%">
+                        <thead>
+                        <tr>
+                            <th>编号</th>
+                            <th>标题</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <% basic.forEach(function(o, i){ %>
+                        <tr>
+                            <td><%= o.number %></td>
+                            <td><%= o.text %></td>
+                            <td>
+                                <a class="btn btn-success btn-sm" href="/a_detail/basic/<%= o._id %>">查看</a>
+                                <a class="btn btn-xs" onclick="cfm('/a_del/basic/<%= o._id %>');">删除</a>
+                            </td>
+                        </tr>
+                        <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <%- include ../part/page %>
+        </div>
+
+        <div class="col-lg-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">筛选</div>
+                <div class="panel-body">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search for...">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" style="position: relative;top: 2px">搜索</button>
+                            </span>
+                    </div><!-- /input-group -->
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<!--END:main box-->
+
+<script>
+    var clearRichTextImg = function(){
+        $.get('/test', function(err, data){
+            console.log(err, data);
+        });
+    }
+</script>
+
+<%- include a_footer %>

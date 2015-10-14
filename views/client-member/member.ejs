@@ -1,0 +1,138 @@
+<%- include header %>
+
+<!--START:main-->
+<!-- Docs page layout -->
+<div id="content">
+    <div class="container">
+        <h1>会员中心</h1>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+
+        <div class="col-md-2">
+            <div class="hidden-print hidden-xs hidden-sm" role="complementary">
+                <ul class="nav">
+                    <li><a href="#bookmark-1">基本信息</a></li>
+                    <li><a href="#bookmark-2">账号安全</a></li>
+                    <li><a class="back-to-top" href="#top">返回顶部</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-8" role="main">
+            <div>
+                <form method="post" enctype='multipart/form-data'>
+                    <table>
+                        <tr>
+                            <th colspan="2">
+                                <h3>账户信息</h3>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>会员ID：</th>
+                            <td>
+                                <input type="text" class="ligle-input-md" value="<%=data.userName%>" disabled="disabled">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>手机：</th>
+                            <td>
+                                <input type="text" class="ligle-input-md" value="<%=data.cellphone%>" disabled="disabled"> |
+                                <a href="/changeCellphone">更改/绑定手机号码</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>邮箱：</th>
+                            <td>
+                                <input type="text" class="ligle-input-md" value="<%=data.email%>" disabled="disabled"> |
+                                <a href="/changeEmail">更改/绑定登陆邮箱</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="2">
+                                <h3>基本信息</h3>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>昵称：</th>
+                            <td>
+                                <input type="text" name="nickname" value="<%=data.nickname%>">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>姓名：</th>
+                            <td>
+                                <input type="text" name="relname" value="<%=data.relname%>">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>性别：</th>
+                            <td>男/女</td>
+                        </tr>
+                        <tr>
+                            <th>生日：</th>
+                            <td><input type="text" name="birth" value="yyyy-mm-dd"></td>
+                        </tr>
+                        <tr>
+                            <th>签名档：</th>
+                            <td><textarea class="form-control" name="signature"><%=data.signature%></textarea></td>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <td><input type="submit" value="保存修改" class="btn btn-info"></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+
+            <div>
+		        <%= (!!locals.error)?error:'' %>
+                <form method="post" enctype='multipart/form-data'>
+                    <table>
+                        <tr>
+                            <th colspan="2">
+                                <h3>重设密码</h3>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>原密码：</th>
+                            <td><input type="password" name="password"></td>
+                        </tr>
+                        <tr>
+                            <th>新密码：</th>
+                            <td><input type="password" name="newpassword"></td>
+                        </tr>
+                        <tr>
+                            <th>确认新密码：</th>
+                            <td><input type="password"></td>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <td><input type="submit" value="保存修改" class="btn btn-danger btn-md"></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--END:main-->
+
+<script type="text/javascript">
+    $(function () {
+        var area = "/common/link_select/area.json";
+        var initArea = [
+	"<%= data.pro %>",
+	"<%= data.city %>",
+	"<%= data.dis %>"
+        ];
+        initLinkSelect(
+                ".selectList_area",
+                area,
+                initArea);
+    });
+</script>
+
+<%- include footer %>

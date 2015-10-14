@@ -1,0 +1,39 @@
+<%- include header %>
+<!--START:main-->
+<!-- Docs page layout -->
+<div id="content">
+    <div class="container">
+        <h1>基础类型</h1>
+        <p>全部其他基础类型都由它派生</p>
+    </div>
+</div>
+
+<div class="container">
+    <a href="/list/basic">返回列表</a>
+    <div class="row">
+        <h3 class="page-header"><%= data.title %></h3>
+        <div class="row">
+            <div class="col-md-6">
+                <img src="<%= data.cover ? data.cover.path : '' %>" alt="<%= data.title %>">
+            </div>
+            <div class="col-md-6">
+                <p>名称：<%= data.title %></p>
+                <p>编号：<%= data.number %></p>
+            </div>
+        </div>
+    </div>
+    <div>
+        <h3 class="page-header">详情</h3>
+        <p id="basic-detail"></p>
+    </div>
+</div>
+<!--END:main-->
+
+<script type="text/javascript">
+//load and decode rich text
+$(function () {
+    $("#basic-detail").html(HtmlDecode("<%= data.textarea %>"));
+});
+</script>
+
+<%- include footer %>

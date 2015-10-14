@@ -1,0 +1,75 @@
+<%- include a_header %>
+
+<!--START:main-->
+<div class="col-sm-12" id="content">
+    <div class="row">
+        <p class="ligle-page-title">
+            基本
+        </p>
+        <%=locals.msg?locals.msg:''%>
+        <div class="col-lg-8">
+            <div class="panel panel-default">
+                <!--本单元标题-->
+                <div class="panel-heading">添加</div>
+                <!--本单元内容-->
+                <div class="panel-body">
+                    <form method="post" enctype='multipart/form-data' class="demoform" action="/a_add/basic">
+                        <table class="table table-hover">
+                            <tr>
+                                <th>编号:</th>
+                                <td><input type="text" name="number" datatype="*"></td>
+                            </tr>
+                            <tr>
+                                <th>标题:</th>
+                                <td><input type="text" name="title" datatype="*"></td>
+                            </tr>
+                            <tr>
+                                <th>图片：</th>
+                                <td><input type="file" name="cover" datatype="*"></td>
+                            </tr>
+                            <tr>
+                                <th>类别：</th>
+                                <td>
+                                    <select name="cat">
+                                        <option value="a">a</option>
+                                        <option value="b">b</option>
+                                        <option value="c">c</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>所在地：</th>
+                                <td>
+                                    <div class="selectList_area">
+                                        <select class="level1" name="pro">
+                                        </select>
+                                        <select class="level2" name="city">
+                                        </select>
+                                        <select class="level3" name="dis">
+                                        </select>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th colspan="2">详情：</th>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><textarea id="summernote" class="summernote" name="textarea" datatype="*"></textarea></td>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <td>
+                                    <input type="submit" class="btn btn-info btn-md" value="保 存"/>
+                                    <input type="reset"  class="btn btn-default btn-xs" value="重 置" />
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--END:main-->
+<%- include a_footer %>
+

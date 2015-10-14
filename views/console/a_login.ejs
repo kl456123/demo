@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>login</title>
+    <meta charset="UTF-8">
+    <title>ligleEngine-控制台</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/common/summernote/summernote.css" rel="stylesheet">
+    <link href="/common/validform/validform.css" rel="stylesheet">
+
+    <link href="/common/ligle-ui/css/ligle-ui.css" rel="stylesheet" type="text/css">
+    <link href="/common/ligle-ui/css/ligle-ui-console.css" rel="stylesheet" type="text/css">
+
+    <script src="/common/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min.js"></script>
+    <script src="/common/summernote/summernote.js"></script>
+    <!--表单验证-->
+    <script src="/common/validform/validform.min.js"></script>
+    <script src="/common/link_select/link_select.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        //删除确认
+        function cfm(url) {
+            if (confirm("确认要进行此项操作吗？"))
+                location.href = url;
+        }
+        //富文本编辑器
+        $(document).ready(function () {
+            $('#summernote').summernote({  //富文本编辑器
+                //set editor height
+                height: 300
+            });
+            $(".demoform").Validform({  //表单检测
+                //添加检测的数据类型
+                datatype:{
+                    //6~20个任意字符
+                    "*6-20": /^[^\s]{6,20}$/,
+                    //2~4个汉字
+                    "z2-4" : /^[\u4E00-\u9FA5\uf900-\ufa2d]{2,4}$/
+                }
+            });
+        });
+        //上传图片
+        $("#uploadImage").on("change", function () {
+            var files = !!this.files ? this.files : [];
+            if (!files.length || !window.FileReader) return;
+            if (/^image/.test(files[0].type)) {
+                var reader = new FileReader();
+                reader.readAsDataURL(files[0]);
+                reader.onloadend = function () {
+                    $("#uploadPreview").css("background-image", "url(" + this.result + ")");
+                }
+            }
+        });
+    </script>
+    <style>
+        *{
+            border: 0;
+            margin:0;
+            font-family: Arial;
+        }
+        body{
+            background-color: #1b2447;
+            background-image: url("images/base/oak.jpg");
+            background-size: 100% auto;
+            background-repeat:repeat;
+        }
+        .login-box{
+            padding: 30px 0px;
+            color: #dbdbdb;
+            margin: 150px auto;
+            border: solid #000000 0px
+        }
+        .bg-mask{
+            width: 100%;
+            height: 250px;
+            padding: 30px 0px;
+            background-color:#000000;
+            opacity: 0.7;
+            position: absolute;
+            top: 150px;
+            z-index: -1;
+        }
+        .title{
+            font-size: 23px;
+            text-align: center;
+            font-family: "microsoft yahei";
+        }
+    </style>
+</head>
+<body>
+
+<!--START:header bar-->
+<% if (success) { %>
+<div class="alert alert-warning alert-dismissible" role="alert">
+    <%= success %>
+</div>
+<% } %>
+<% if (error) { %>
+<div class="alert alert-warning alert-dismissible" role="alert">
+    <%= error %>
+</div>
+<% } %>
+
+<div  class="col-md-12 login-box">
+    <p class="title">Ligle控制台[console]</p>
+    <form method="post">
+        <table style="margin:auto auto;">
+            <tr>
+                <td>账号</td>
+                <td><input class="form-control" type="text" name="name" placeholder="输入账号"></td>
+            </tr>
+            <tr>
+                <td>密码</td>
+                <td><input class="form-control" type="password" name="password" placeholder="输入密码"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td ><input type="submit" class="btn-lg btn-info ligle-input-lg" value="进入控制台"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><i>请妥善保管好您的登陆密码！</i></td>
+            </tr>
+
+        </table>
+
+    </form>
+</div>
+
+<div class="bg-mask">
+</div>
+
+</body>
+</html>

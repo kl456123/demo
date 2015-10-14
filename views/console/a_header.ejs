@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ligleEngine-控制台</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--
+    <link href="/common/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css">
+    -->
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/common/summernote/summernote.css" rel="stylesheet">
+    <link href="/common/validform/validform.css" rel="stylesheet">
+
+    <link href="/common/ligle-ui/css/ligle-ui.css" rel="stylesheet" type="text/css">
+    <link href="/common/ligle-ui/css/ligle-ui-console.css" rel="stylesheet" type="text/css">
+
+    <script src="/common/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min.js"></script>
+    <script src="/common/summernote/summernote.min.js"></script>
+    <!--表单验证-->
+    <script src="/common/validform/validform.min.js"></script>
+    <script src="/common/link_select/link_select.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        //删除确认
+        function cfm(url) {
+            if (confirm("确认要进行此项操作吗？"))
+                location.href = url;
+        }
+        $(document).ready(function () {
+            $(".demoform").Validform({  //表单检测
+                //添加检测的数据类型
+                datatype:{
+                    //6~20个任意字符
+                    "*6-20": /^[^\s]{6,20}$/,
+                    //2~4个汉字
+                    "z2-4" : /^[\u4E00-\u9FA5\uf900-\ufa2d]{2,4}$/
+                }
+            });
+        });
+
+        $("#uploadImage").on("change", function () {
+            var files = !!this.files ? this.files : [];
+            if (!files.length || !window.FileReader) return;
+            if (/^image/.test(files[0].type)) {
+                var reader = new FileReader();
+                reader.readAsDataURL(files[0]);
+                reader.onloadend = function () {
+                    $("#uploadPreview").css("background-image", "url(" + this.result + ")");
+                }
+            }
+        });
+
+        //富文本编辑器
+        $(document).ready(function(){
+            $('#summernote').summernote({
+                height: 300,
+                onImageUpload: function(files, editor, welEditable) {
+                    console.log('files:'+files);
+                    sendFile(files, editor, welEditable);
+                }
+            });
+        });
+
+        function sendFile(files, editor, welEditable) {
+            console.log('files: ', files);
+            data = new FormData();
+            for(o in files){
+                console.log(o);
+                if(!checkFileSize(files[o]))
+                    return alert('上传图片大小不能超过1M');
+                data.append("file", files[o]);
+            };
+            $.ajax({
+                data: data,
+                type: "POST",
+                url: "/richTextImgUpload",
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(url) {
+                    console.log('success-url: ', url);
+                    url.forEach(function(o, i){
+                        editor.insertImage(welEditable, o);
+                    });
+                },
+                error: function(err) {
+                    alert('图片上传失败，请重试');
+                }
+            });
+        };
+
+        function checkFileSize(file){
+            var maxFileSize = 1024*1024*1; //1M
+            if(file instanceof Object){
+                if(file.size>maxFileSize)
+                    return false;
+            }
+            return true;
+        }
+
+    </script>
+</head>
+
+<body>
+<!--START:header bar-->
+<header class="header-console">
+    <a href="" target="_blank" class="appName">Application Name</a>
+    <ul class="nav-right">
+        <li>
+            <a><i class="fa fa-sign-out fa-fw"></i></a>
+        </li>
+        <li>
+            <a><i class="fa  fa-info fa-fw"></i></a>
+        </li>
+    </ul>
+</header>
+<!--END:header bar-->
+<!--START:menu bar-->
+    <div class="sidebar-wrapper">
+        <div class="logo-ligle">
+            <img src="/images/base/logo-ligle.png"><span>-Console</span>
+        </div>
+        <ul class="nav-sidebar">
+            <li>
+                <a class="shortcuts-project" data-placement="right" href="/console" title="Project">
+                    <i class="fa fa-dashboard fa-fw"></i>
+                    <span>仪表盘</span>
+                </a>
+            </li>
+            <li>
+                <a class="shortcuts-project" data-placement="right" href="/a_basic" title="Project">
+                    <i class="fa fa-edit fa-fw"></i>
+                    <span>内容编辑</span>
+                </a>
+            </li>
+            <li>
+                <a class="shortcuts-project" data-placement="right" href="/a_member" title="Project">
+                    <i class="fa fa-users fa-fw"></i>
+                    <span>会员管理</span>
+                </a>
+            </li>
+            <li>
+                <a class="shortcuts-project" data-placement="right" href="/a_pics" title="Project">
+                    <i class="fa fa-picture-o fa-fw"></i>
+                    <span>图库</span>
+                </a>
+            </li>
+            <li>
+                <a class="shortcuts-project" data-placement="right" href="/a_admin" title="Project">
+                    <i class="fa fa-shield fa-fw"></i>
+                    <span>管理员</span>
+                </a>
+            </li>
+            <li>
+                <a class="shortcuts-project" data-placement="right" href="/a_changePW" title="Project">
+                    <i class="fa fa-key fa-fw"></i>
+                    <span>修改密码</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="content-wrapper">
+        <div class="content">
+

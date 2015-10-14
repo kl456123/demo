@@ -1,0 +1,36 @@
+<%- include header %>
+
+<!--START:main-->
+<!-- Docs page layout -->
+<div id="content">
+    <div class="container">
+        <h1>注册新会员</h1>
+    </div>
+</div>
+
+<div class="container">
+     链接已失效，重新发送验证邮件。
+    <form method="post" enctype='multipart/form-data' action="/regist/resend-verification">
+        <table>
+            <tr>
+                <td>邮箱：</td>
+                <td><input type="text" name="email"></td>
+            </tr>
+            <tr>
+                <td>验证码：</td>
+                <td>
+                    <input class="ligle-input-md" type="text" name="code" maxlengtd="4">
+                    <img class="CAPTCHA" src="/getCode" alt="验证码"/>
+                    <div id='smsMsg'></div>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" class="btn-info" value="发送验证邮件"></td>
+            </tr>
+        </table>
+    </form>
+</div>
+<!--END:main-->
+
+<%- include footer %>

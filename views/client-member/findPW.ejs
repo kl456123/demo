@@ -1,0 +1,104 @@
+<%- include header %>
+
+
+<!--START:main-->
+<!-- Docs page layout -->
+<div id="content">
+    <div class="container">
+        <h1>找回密码</h1>
+    </div>
+</div>
+<div class="container">
+    <div class="col-md-6">
+        <h1>
+            YOUR LOGO
+        </h1>
+    </div>
+    <%= (!!locals.error)?error:'' %>
+    <div class="col-md-6">
+        <form method="post" class="ligle-form mode-cellphone" enctype='multipart/form-data' action="/forgotPwSMS">
+            <table>
+                <tr>
+                    <td>手机号：</td>
+                    <td><input type="text" name="cellphone" id='cellphone'></td>
+                </tr>
+                <tr>
+                    <td>验证码：</td>
+                    <td>
+                        <input type="text" name="code" id='code'>
+                        <img  class="CAPTCHA" src="/getCode"  alt="验证码" />
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <div id='smsMsg'></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>短信验证码：</td>
+                    <td>
+                        <input id='code' type="text" name="codeSMS" maxlengtd="6">
+                        <a id="getSMS" class="btn-info btn btn-sm" href="javascript: getResetSMS();">获取短信验证码</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>设置新密码：</td>
+                    <td><input type="password" name="password"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input type="submit" class="ligle-input-lg btn-success" value="完成"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><a class="switch-mode btn-default btn-xs btn">使用邮箱找回密码</a></td>
+                </tr>
+            </table>
+        </form>
+        <form method="post" class="ligle-form mode-email" enctype='multipart/form-data' action="/forgot-password" style="display: none">
+            <table>
+                <tr>
+                    <td>邮箱：</td>
+                    <td><input type="email" name="email"></td>
+                </tr>
+                <tr>
+                    <td>验证码：</td>
+                    <td>
+                        <input type="text" name="code" id='code'>
+                        <img  class="CAPTCHA" src="/getCode"  alt="验证码" />
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input type="submit" class="btn-warning" value="发送验证邮件"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><a class="switch-mode btn-default btn-xs btn">使用手机号码找回密码</a></td>
+                </tr>
+            </table>
+
+        </form>
+    </div>
+</div>
+
+<!--END:main-->
+<script>
+    function getSucc(obj){
+        console.log('succ',obj);
+        document.getElementById('smsMsg').innerHTML = '验证码已经发送到手机';
+    }
+    function getErr(obj){
+        console.log('err',obj);
+        document.getElementById('smsMsg').innerHTML = '错误：'+obj.error;
+    }
+    function getResetSMS(){
+        var d={};
+        d.cellphone = document.getElementById('cellphone').value;
+        d.code = document.getElementById('code').value;
+        d.type = 'reset';
+        getSmsByForm('/getResetSMS',d,getSucc,getErr);
+    }
+</script>
+<%- include footer %>

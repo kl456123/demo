@@ -1,4 +1,4 @@
-
+var argv = require('minimist')(process.argv.slice(2)); // 命令行解析
 var express = require('express');
 var http = require('http');
 var path = require('path');
@@ -14,89 +14,80 @@ var log4js = require('log4js');
 
 var errorHandler = require('errorhandler');
 var serveStatic = require('serve-static');
-var mongoStore = require('connect-mongo')(session);
-var settings = require('./settings');
-var cfg = {
-//  logLevel:'DEBUG', // TODO add log control
-  'ligle-model':{
-    upDir:'./public/images/upload/',
-    staticDir:'/images/upload/'
-  },
-  'ligle-db': { 
-    db: 'ligleEngine', 
-    host: '127.0.0.1', 
-    port: 27017
-  },
-  'ligle-routes': {
-  }
-};
+var MongoStore = require('connect-mongo')(session);
 
+var cfg = require('./config.js');
 var ligle = require('ligle-engine')(cfg);
-ligle.appname = 'demo';// 应用名称，发邮件的时候会使用。
 
 var logger = ligle.util.logger('normal','TRACE');
-// export something to use for other modules
-exports.ligle = ligle;
-var getLogger = exports.getLogger = ligle.util.logger;
 
-// to suppress the verbose log
-/*
-getLogger('ligle-base','INFO');
-getLogger('ligle-middware','INFO');
-getLogger('ligle-routes','INFO');
-getLogger('ligle-model','INFO');
-getLogger('ligle-db','INFO');
-*/
-var UPDIR = settings.uploadPath;
+// export for services to use
+exports.getLogger = ligle.util.logger;
+exports.appname = 'demo';// 应用名称，发邮件的时候会使用。
+exports.Router = express.Router.bind(express);
+exports.ligle = ligle;
+
+var UPDIR = cfg.app.upload.path;
 
 // wrap app into callback, so that we can do something before we
 // start. such as: open database
 
 // engine plugins
-var pluginGlobals = require('ligle-plugin-globals');
-pluginGlobals(ligle);
+require('ligle-plugin-globals')(ligle);
 
+// engine addons
+require('ligle-addon-captcha')(ligle);
+require('ligle-addon-permission')(ligle);
+
+// model extensions
+require('ligle-model-member')(ligle);
+
+// init function
+var init = require('./init.js');
+
+/* jshint ignore:start */
 ligle.start(function(){
-  // init some globals config
-  ligle.globals.userCount = ligle.globals.userCount || 0;
-  ligle.globals.userPrefix = ligle.globals.userPrefix || 'user';
+  /* jshint ignore:end */
+  // do some initialize works.  can force init by passing second argument
+  init(ligle,argv.reset);
 
   var app = express();
 
   // all environments
-  app.set('port', process.env.PORT || settings.port);
+  app.set('port', process.env.PORT || cfg.app.http.port);
   app.set('views', path.join(__dirname, 'views'));
   app.set('view engine', 'ejs');
 
-
-  app.use(favicon(settings.faviconPath ? __dirname + '/public/images/favicon.ico' : ''));
-  app.use(methodOverride()); 
+  app.use(favicon(cfg.app.favicon.path));
+  app.use(methodOverride());
   app.use(log4js.connectLogger(logger, {level:log4js.levels.INFO}));
   app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: false }));// false to use querystring
+  // bodyParser: false to use querystring
+  app.use(bodyParser.urlencoded({ extended: false }));
   app.use(multer({ dest: UPDIR}));
-  app.use(cookieParser(settings.cookieSecret));
+  app.use(cookieParser(cfg.app.cookie.secret));
   app.use(session({
-	  secret: settings.cookieSecret,
-	  name: settings.db,
-	  cookie: {maxAge: settings.cookieLife},
-	  store: new mongoStore({db: settings.db}),
+    secret: cfg.app.cookie.secret,
+    name: cfg.db.name,
+    cookie: {maxAge: cfg.app.cookie.life},
+    store: new MongoStore({db: cfg.db.name}),
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
   }));
   app.use(flash()); // used to save message into req temporarily
 
   // new framework
+  app.use(ligle.midware.addRenderer);
 
-  // engine里面的服务，并没有完成，因此先不要使用，先自己开发。
-  // var globalService = ligle.service;
-  // app.use(globalService.basic);
+  // addons
+  app.use(ligle.addon.captcha.route);
+
 
   // 自定义的服务。
 
   // 这里的语句不能放在文件开头，因为services也依赖app.js。（好好思索一
   // 下，为什么必须放在这里，以及模块互相依赖的时候，是如何加载的）
-  var localService = require('./services');
+  var localService = require('./back')(ligle);
   for(var s  in localService){
     var router = localService[s];
     if(router instanceof Function){
@@ -108,12 +99,12 @@ ligle.start(function(){
   app.use(serveStatic(path.join(__dirname, 'public')));
 
   app.use(function(req,res){
-	  res.ligle.renderer.render('error');
+    res.rd.render('part/error');
   });
 
   // development only
   var env = process.env.NODE_ENV || 'development';
-  if ('development' == env) {
+  if ('development' === env) {
     // configure stuff here
     app.use(errorHandler());
   }
@@ -122,5 +113,9 @@ ligle.start(function(){
   http.createServer(app).listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));
   });
+
+  /* jshint ignore:start */
 });
+/* jshint ignore:end */
+
 

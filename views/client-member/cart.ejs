@@ -1,0 +1,59 @@
+<%- include header %>
+
+<!--START:main-->
+<!-- Docs page layout -->
+<div id="content">
+    <div class="container">
+        <h1>购物车</h1>
+    </div>
+</div>
+
+<div class="container">
+    <table class="table table-hover" style="width: 100%">
+        <thead>
+        <tr>
+            <th>名称</th>
+            <th>单价</th>
+            <th>数量</th>
+            <th>小计</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody style="font-size: 16px">
+        <tr>
+            <td style="width: 250px">
+                <a href="#">
+                    <img src="" style="width: 200px;height: 100px;background-color: #a1a1a1"><br />
+                </a>
+                商品的标题
+            </td>
+            <td>
+                8
+            </td>
+            <td>
+                <input type="number" value="2" class="inputNumber" name="amount">
+            </td>
+            <td>
+                <span><%= 8*2 %></span>
+            </td>
+            <td>
+                <a onclick="cfm('');">delete</a>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+                <span style="font-size: 20px">合计：16元</span>
+            </td>
+            <td>
+                <a class="btn btn-info btn-md" href="/order">去结算</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<!--END:main-->
+
+<%- include footer %>

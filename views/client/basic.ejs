@@ -1,0 +1,35 @@
+<%- include header %>
+<!--START:main-->
+<!-- Docs page layout -->
+<div id="content">
+    <div class="container">
+        <h1>基础类型</h1>
+        <p>全部其他基础类型都由它派生</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-9" role="main">
+            <h3 id="bookmark-detail-1" class="page-header">内容列表</h3>
+            <div class="row">
+                <% data.forEach(function(o, i){ %>
+                <div class="col-sm-6 col-md-4">
+                    <div class="thumbnail">
+                        <a href="/detail/basic/<%= o._id %>">
+                            <img src="<%= o.cover ? o.cover.path : '' %>" alt="...">
+                        </a>
+                        <div class="caption">
+                            <h3><%= o.title %></h3>
+                            <p><%= o.number %></p>
+                        </div>
+                    </div>
+                </div>
+                <% }); %>
+            </div>
+        </div>
+    </div>
+</div>
+<!--END:main-->
+
+<%- include footer %>
