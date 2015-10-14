@@ -1,6 +1,12 @@
-/* jshint ignore:start */
-module.exports = function(grunt) {
-  /* jshint ignore:end */
+module.exports = function(grunt) {//jshint ignore:line
+  var semver = require('semver');
+  var util = require('util');
+  var pkg = grunt.file.readJSON('package.json');
+  var major = semver.major(pkg.version);
+  var minor = semver.minor(pkg.version);
+  var patch = semver.patch(pkg.version);
+
+  var previousTag = util.format('v%d.%d.%d',major,minor,0);
   grunt.initConfig({
     // Metadata.
     pkg: grunt.file.readJSON('package.json'),
@@ -12,95 +18,76 @@ module.exports = function(grunt) {
       ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
     // Task configuration.
     concat: {
-      options: {
-        banner: '<%= banner %>',
-        stripBanners: true,
-      },
-      dist: {
+      front: {
+        options: {
+          banner: '<%= banner %>',
+          stripBanners: true,
+        },
         src: ['front/js/*.js'],
         dest: 'public/js/<%= pkg.name %>.js',
+      },
+      // for creating changelog
+      change:{
+        src:['changelog.txt','CHANGE.md'],
+        dest:'CHANGE.md',
       },
     },
     uglify: {
       options: {
         banner: '<%= banner %>',
       },
-      dist: {
+      front: {
         src: '<%= concat.dist.dest %>',
         dest: 'public/js/<%= pkg.name %>.min.js',
       },
     },
     jshint: {
+      options: {
+        jshintrc: '.jshintrc',
+      },
       front:{
         src: ['front/**/*.js','test/front/**/*.js'],
-        options: {
-          jshintrc: '.jshintrc',
-        },
       },
       back:{
-        src: ['*.js','back/**/*.js','test/back/**/*.js'],
-        options: {
-          jshintrc: '.jshintrc',
-        },
+        src: ['back/**/*.js','test/back/**/*.js'],
       },
-      dist:{
-        src: ['front/**/*.js'],
-        options: {
-          jshintrc: '.jshintrc',
-        },
+      gruntfile: {
+        src: 'Gruntfile.js',
       },
     },
     jscs: {
+      options: {
+        config: '.jscsrc',
+      },
       front:{
         src: '<%= jshint.front.src %>',
-        options: {
-          config: '.jscsrc',
-        },
       },
       back:{
         src: '<%= jshint.back.src %>',
-        options: {
-          config: '.jscsrc',
-        },
       },
-      dist:{
-        src: '<%= jshint.dist.src %>',
-        options: {
-          config: '.jscsrc',
-        },
+      gruntfile: {
+        src: '<%= jshint.gruntfile.src %>',
       },
     },
     watch: {
+      options: {
+        spawn: false,
+      },
       front:{
         scripts: {
           files: '<%= jshint.front.files %>',
-          tasks: ['jshint','jscs'],
-          options: {
-            spawn: false,
-          },
+          tasks: ['jshint:front','jscs:front'],
         },
       },
       back:{
         scripts: {
           files: '<%= jshint.back.files %>',
-          tasks: ['jshint','jscs'],
-          options: {
-            spawn: false,
-          },
+          tasks: ['jshint:back','jscs:back'],
         },
       },
     },
-    clean: {
-      coverage: {
-        src: ['coverage/'],
-      },
-    },
     copy: {
-      coverage: {
-        src: ['test/back/**/*.js'],
-        dest: 'coverage/',
-      },
-      dist:{
+      front:{
         files:[
           {
             src:['**/*.html','**/*.css','**/*.json'],
@@ -111,37 +98,15 @@ module.exports = function(grunt) {
         ],
       },
     },
-    blanket: {
-      coverage: {
-        src: ['back/'],
-        dest: 'coverage/back/',
-      },
-    },
     mochaTest: {
-      test: {
-        options: {
-          reporter: 'spec',
-          clearRequireCache: true,
-        },
-        src: ['coverage/test/back/*.js'],
+      options: {
+        reporter: 'spec',
       },
-      coverage: {
-        options: {
-          reporter: 'html-cov',
-          quiet: true,
-          captureFile: 'coverage.html',
-        },
-        src: ['coverage/test/back/*.js'],
+      back: {
+        src: ['test/back/**/*.js'],
       },
     },
-    jsdoc: {
-      dist: {
-        src: ['lib/*.js', 'test/*.js'],
-        options: {
-          destination: 'doc',
-        },
-      },
-    },
+    ///////// front-end test
     bower: {
       install: {
         options: {
@@ -163,7 +128,84 @@ module.exports = function(grunt) {
     exec: {
       npm: 'npm install',
       bower: 'bower install',
+      frontUnit:'node '+
+        'node_modules/karma/bin/karma '+
+        'start test/front/karma.conf.js --single-run',
     },
+
+    /////////////////// start - code coverage settings
+    env: {
+      coverage: {
+        APP_DIR_FOR_CODE_COVERAGE: '../coverage/instrument/',
+      },
+    },
+    clean: {
+      coverage: {
+        src: ['test/coverage/'],
+      },
+    },
+    instrument: {
+      files: ['front/**/*.js','back/**/*.js'],
+      options: {
+        lazy: true,
+        basePath: 'test/coverage/instrument/',
+      },
+    },
+    storeCoverage: {
+      options: {
+        dir: 'test/coverage/reports',
+      },
+    },
+    makeReport: {
+      src: 'test/coverage/reports/**/*.json',
+      options: {
+        type: 'lcov',
+        dir: 'test/coverage/reports',
+        print: 'detail',
+      },
+    },
+    ///////////// end - code coverage settings
+    // bump version
+    bump: {
+      options: {
+        files: ['package.json'],
+        updateConfigs: ['pkg'],
+        commit: true,
+        commitMessage: 'Release v%VERSION%',
+        commitFiles: ['package.json','CHANGE.md'],
+        createTag: true,
+        tagName: 'v%VERSION%',
+        tagMessage: 'Version %VERSION%',
+        push: true,
+        pushTo: 'origin',
+        gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d',
+        globalReplace: false,
+        prereleaseName: false,
+        regExp: false,
+      },
+    },
+
+    // change log
+    changelog: {
+      sample: {
+        options: {
+          after:previousTag,
+          fileHeader: '\n# v<%= pkg.version%>\n',
+        },
+      },
+      normal:{
+      },
+    },
+
+    // grunt-git begin
+    gitpush: {
+      dev: {
+        options: {
+          all:true,
+        },
+      },
+    },
+    // grunt-git end
   });
 
   grunt.loadNpmTasks('grunt-mocha-test');
@@ -171,25 +213,27 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-blanket');
   grunt.loadNpmTasks('grunt-jscs');
-  grunt.loadNpmTasks('grunt-jsdoc');
   grunt.loadNpmTasks('grunt-bower-task');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-exec');
+  grunt.loadNpmTasks('grunt-istanbul');
+  grunt.loadNpmTasks('grunt-env');
+  grunt.loadNpmTasks('grunt-bump');
+  grunt.loadNpmTasks('grunt-changelog');
+  grunt.loadNpmTasks('grunt-git');
 
   grunt.registerTask('dist',[
-    'jshint:dist',
-    'jscs:dist',
-    'concat:dist',
-    'uglify:dist',
-    'copy:dist',
+    'jshint:front',
+    'jscs:front',
+    'concat:front',
+    'uglify:front',
+    'copy:front',
   ]);
 
   grunt.registerTask('install',[
-    'exec:npm',
     'exec:bower',
     'bower:install',
   ]);
@@ -197,20 +241,45 @@ module.exports = function(grunt) {
   grunt.registerTask('test',[
     'jshint',
     'jscs',
-    'clean',
-    'blanket',
-    'copy',
     'mochaTest',
+    'exec:frontUnit',
   ]);
 
-  // default used for ci
+  grunt.registerTask('coverage', [
+    'jshint', 'jscs',
+    'clean:coverage', 'env:coverage',
+    'instrument', 'mochaTest',
+    'storeCoverage', 'makeReport',
+  ]);
+
   grunt.registerTask('default',[
     'test',
   ]);
 
-  grunt.registerTask('doc',['jsdoc']);
-  /* jshint ignore:start */
+  grunt.registerTask('push',[
+    'test',
+    'gitpush:dev',
+  ]);
+
+  grunt.registerTask('patch',[
+    'test',
+    'bump:patch',
+    'bump-commit',
+  ]);
+
+  grunt.registerTask('minor',[
+    'test',
+    'bump-only:minor',
+    'changelog',
+    'concat:change',
+    'bump-commit',
+  ]);
+
+  grunt.registerTask('major',[
+    'test',
+    'bump-only:major',
+    'changelog',
+    'concat:change',
+    'bump-commit',
+  ]);
 };
-/* jshint ignore:end */
-
-

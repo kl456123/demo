@@ -1,5 +1,4 @@
-
-var ligle = require('../index.js').ligle;
+var ligle = require('ligle-engine')();
 var logger = ligle.util.logger('richText.js');
 
 // 模型

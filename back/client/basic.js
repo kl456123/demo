@@ -1,10 +1,12 @@
-var app = require('../../app.js');
-var ligle = require('../index.js').ligle;
-var logger = ligle.util.logger('basic');
+var index = require('../index');
+var express = require('express');
 var Model = require('../model/basic.js');
 
+var ligle = index.ligle;
+var logger = ligle.util.logger('basic');
+
 // 路由
-var router = app.Router();
+var router = express.Router();
 
 router
   .route('/list/basic')

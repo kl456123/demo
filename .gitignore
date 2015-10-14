@@ -248,3 +248,5 @@ public/**/*.*
 !public/common/
 !public/stylesheets/
 
+changelog.txt
+test/coverage
