@@ -11,3 +11,5 @@ module.exports = ligle.model.ModelBase.extend({
   coll:{name:'basic',fields:{}},
   rest:{},
 });
+
+module.exports.dir = 'basic';
