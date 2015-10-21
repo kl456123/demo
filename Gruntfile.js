@@ -242,7 +242,7 @@ module.exports = function(grunt) {//jshint ignore:line
     'jshint',
     'jscs',
     'mochaTest',
-    'exec:frontUnit',
+//    'exec:frontUnit',
   ]);
 
   grunt.registerTask('coverage', [
