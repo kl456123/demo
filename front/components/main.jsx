@@ -5,7 +5,7 @@ class Main extends React.Component {
   render() {
     return (
       <div>
-        <h1>Example</h1>
+        <h1>Oh TESTING</h1>
         <Link to='/example'>Go to the Example page...</Link>
       </div>
     );

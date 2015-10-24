@@ -9,7 +9,7 @@ module.exports = {
   target: 'web',
   cache: true,
   entry: {
-    module:  'module',
+    module: ['webpack-hot-middleware/client', 'module'],
     common: ['react', 'react-router', 'alt']
   },
   resolve: {
@@ -18,7 +18,7 @@ module.exports = {
     modulesDirectories: ['node_modules', 'front']
   },
   output: {
-    path: path.join(__dirname, 'tmp'),
+    path: path.join(__dirname, 'public'),
     publicPath: '',
     filename: '[name].js',
     library: ['Example', '[name]'],
@@ -26,11 +26,17 @@ module.exports = {
   },
   module: {
     loaders: [
-      {test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel?cacheDirectory'}
+      {
+        test: /\.jsx?$/,
+        loaders: ['react-hot', 'babel?cacheDirectory'],
+        include: path.join(__dirname, 'front') 
+      },
     ]
   },
   plugins: [
     new webpack.optimize.CommonsChunkPlugin('common', 'common.js'),
+    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       inject: true,
       template: 'front/index.html'
@@ -41,7 +47,7 @@ module.exports = {
   debug: true,
   devtool: 'eval-cheap-module-source-map',
   devServer: {
-    contentBase: './tmp',
+    contentBase: './',
     historyApiFallback: true
   }
 };

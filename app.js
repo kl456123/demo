@@ -16,6 +16,10 @@ var errorHandler = require('errorhandler');
 var serveStatic = require('serve-static');
 var MongoStore = require('connect-mongo')(session);
 
+var webpack = require('webpack');
+var webpackConfig = require('./webpack.config');
+var compiler = webpack(webpackConfig);
+
 var cfg = require('./config.js');
 var ligle = require('ligle-engine')(cfg);
 
@@ -75,6 +79,11 @@ ligle.start(function(){
     saveUninitialized: false,
   }));
   app.use(flash()); // used to save message into req temporarily
+
+  app.use(require("webpack-dev-middleware")(compiler, {
+    noInfo: true, publicPath: webpackConfig.output.publicPath
+  }));
+  app.use(require("webpack-hot-middleware")(compiler));
 
   // new framework
   app.use(ligle.midware.addRenderer);
