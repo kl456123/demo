@@ -1,54 +1,48 @@
 'use strict';
 
-require('ligle-util')({
-  loggerLevel:'INFO',
-});
-
 var requireHelper = require('../require-helper');
-var odm = requireHelper('index')({
-  server:'localhost/ligle-test',
+var ligle = require('ligle-engine')({
   loggerLevel:'INFO',
+  odm:{
+    server:'localhost/demo-test',
+  },
 });
-
 
 require('chai').should();
 require('mocha-generators').install();
 
-
-class Post extends odm.Model {
-
-}
+var Basic = requireHelper('basic');
 
 
-describe('Mongorito', function () {
+describe('Backend Unit Test', function () {
   before(function * () {
-    odm.connect();
+    ligle.odm.connect();
   });
   beforeEach(function * () {
-    yield* Post.remove();
+    yield* Basic.remove();
   });
-  it('test something', function * () {
-    let post = new Post({
+  it('demo Test', function * () {
+    let post = new Basic({
       title: 'Node.js with --harmony rocks!',
       body: 'Long post body',
       author: {
         name: 'John Doe',
       },
     });
-
     yield post.save();
-    let posts = yield Post.find();
+
+    let posts = yield Basic.find();
     posts.length.should.equal(1);
     posts[0].get('title').should.equal('Node.js with --harmony rocks!');
 
     post.set('title', 'Post got a new title!');
-
     yield post.save();
-    posts = yield Post.find();
+
+    posts = yield Basic.find();
     posts.length.should.equal(1);
     posts[0].get('title').should.equal('Post got a new title!');
   });
   after(function () {
-    odm.disconnect();
+    ligle.odm.disconnect();
   });
 });

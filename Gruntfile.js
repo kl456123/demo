@@ -1,10 +1,13 @@
-module.exports = function(grunt) {//jshint ignore:line
+var path = require('path');
+module.exports = function(grunt) {//eslint-disable-line
   var semver = require('semver');
   var util = require('util');
   var pkg = grunt.file.readJSON('package.json');
   var major = semver.major(pkg.version);
   var minor = semver.minor(pkg.version);
-  var patch = semver.patch(pkg.version);
+  var cfg = require('./config.js');
+
+//  var patch = semver.patch(pkg.version);
 
   var previousTag = util.format('v%d.%d.%d',major,minor,0);
   grunt.initConfig({
@@ -41,18 +44,29 @@ module.exports = function(grunt) {//jshint ignore:line
         dest: 'public/js/<%= pkg.name %>.min.js',
       },
     },
-    jshint: {
+    express: {
       options: {
-        jshintrc: '.jshintrc',
+        port: cfg.app.http.port,
+        server: path.resolve('./app.js'),
       },
+    },
+    eslint: {                   
       front:{
-        src: ['front/**/*.js','test/front/**/*.js'],
+        src: [
+          'front/**/*.jsx',
+        ],
+        options: {
+          configFile: ".eslintrc1",
+        },
       },
       back:{
-        src: ['back/**/*.js','test/back/**/*.js'],
-      },
-      gruntfile: {
-        src: 'Gruntfile.js',
+        src: [
+          'back/**/*.es6.js',
+          'test/**/*.es6.js',
+        ],
+        options: {
+          configFile: ".eslintrc2",
+        },
       },
     },
     jscs: {
@@ -60,13 +74,10 @@ module.exports = function(grunt) {//jshint ignore:line
         config: '.jscsrc',
       },
       front:{
-        src: '<%= jshint.front.src %>',
+        src: '<%= eslint.front.src %>',
       },
       back:{
-        src: '<%= jshint.back.src %>',
-      },
-      gruntfile: {
-        src: '<%= jshint.gruntfile.src %>',
+        src: '<%= eslint.back.src %>',
       },
     },
     watch: {
@@ -75,14 +86,14 @@ module.exports = function(grunt) {//jshint ignore:line
       },
       front:{
         scripts: {
-          files: '<%= jshint.front.files %>',
-          tasks: ['jshint:front','jscs:front'],
+          files: '<%= eslint.front.files %>',
+          tasks: ['eslint:front','jscs:front'],
         },
       },
       back:{
         scripts: {
-          files: '<%= jshint.back.files %>',
-          tasks: ['jshint:back','jscs:back'],
+          files: '<%= eslint.back.files %>',
+          tasks: ['eslint:back','jscs:back'],
         },
       },
     },
@@ -103,7 +114,7 @@ module.exports = function(grunt) {//jshint ignore:line
         reporter: 'spec',
       },
       back: {
-        src: ['test/back/**/*.js'],
+        src: ['test/back/**/*.es6.js'],
       },
     },
     ///////// front-end test
@@ -131,6 +142,7 @@ module.exports = function(grunt) {//jshint ignore:line
       frontUnit:'node '+
         'node_modules/karma/bin/karma '+
         'start test/front/karma.conf.js --single-run',
+      webpack:'webpack',
     },
 
     /////////////////// start - code coverage settings
@@ -211,9 +223,7 @@ module.exports = function(grunt) {//jshint ignore:line
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-jscs');
   grunt.loadNpmTasks('grunt-bower-task');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -224,13 +234,28 @@ module.exports = function(grunt) {//jshint ignore:line
   grunt.loadNpmTasks('grunt-bump');
   grunt.loadNpmTasks('grunt-changelog');
   grunt.loadNpmTasks('grunt-git');
+  grunt.loadNpmTasks("gruntify-eslint");
+  grunt.loadNpmTasks('grunt-jscs');
+  grunt.loadNpmTasks('grunt-express');
+
+  grunt.registerTask('startServer', 'Start server', function() {
+    var done = this.async();
+    var app = require('./app.js')
+    app.ligle.start(()=>{
+      app.starter();
+      done();
+    });
+  });
+  grunt.registerTask('closeServer', 'close server', function() {
+    var done = this.async();
+    var app = require('./app.js')
+    app.ligle.close(done);
+  });
 
   grunt.registerTask('dist',[
-    'jshint:front',
+    'eslint:front',
     'jscs:front',
-    'concat:front',
-    'uglify:front',
-    'copy:front',
+//    'exec:webpack',
   ]);
 
   grunt.registerTask('install',[
@@ -239,14 +264,17 @@ module.exports = function(grunt) {//jshint ignore:line
   ]);
 
   grunt.registerTask('test',[
-    'jshint',
+    'eslint',
     'jscs',
+    'express',
+    'startServer',
     'mochaTest',
+    'closeServer',
 //    'exec:frontUnit',
   ]);
 
   grunt.registerTask('coverage', [
-    'jshint', 'jscs',
+    'eslint', 'jscs',
     'clean:coverage', 'env:coverage',
     'instrument', 'mochaTest',
     'storeCoverage', 'makeReport',

@@ -6,7 +6,6 @@ var favicon = require('serve-favicon');
 var methodOverride = require('method-override');
 var session = require('express-session');
 var bodyParser = require('body-parser');
-var qs = require('querystring');
 var multer = require('multer');
 var flash = require('connect-flash');
 var cookieParser = require('cookie-parser');
@@ -22,6 +21,9 @@ var compiler = webpack(webpackConfig);
 
 var cfg = require('./config.js');
 var ligle = require('ligle-engine')(cfg);
+
+var app = express();
+var server;
 
 var logger = ligle.util.logger('normal','TRACE');
 
@@ -49,14 +51,11 @@ require('ligle-model-member')(ligle);
 // init function
 var init = require('./init.js');
 
-/* jshint ignore:start */
-ligle.start(function(){
-  /* jshint ignore:end */
+exports.starter = function(){ // eslint-disable-line
   // do some initialize works.  can force init by passing second argument
   init(ligle,argv.reset);
-
-  var app = express();
-
+  ligle.odm.connect();
+  
   // all environments
   app.set('port', process.env.PORT || cfg.app.http.port);
   app.set('views', path.join(__dirname, 'views'));
@@ -107,6 +106,15 @@ ligle.start(function(){
 
   app.use(serveStatic(path.join(__dirname, 'public')));
 
+  var defaultRouter = express.Router();
+  defaultRouter
+    .route('/rest/*')
+    .all(function(req,res){
+      res.json({error:'not implemented api'})
+    });
+
+  app.use(defaultRouter);
+
   app.use(function(req,res){
     res.rd.render('part/error');
   });
@@ -119,12 +127,23 @@ ligle.start(function(){
   }
 
 
-  http.createServer(app).listen(app.get('port'), function(){
+  server = http.createServer(app).listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));
   });
+}
 
-  /* jshint ignore:start */
-});
-/* jshint ignore:end */
+function clearCache() {
+  for (var key in require.cache) {
+    if (key.indexOf(__dirname + '/node_modules/') == -1) {
+      delete require.cache[key];
+    }
+  }
+}
 
-
+ligle.close = function(done){
+  if (server !== null) {
+    server.close();
+    clearCache();
+    done();
+  }
+}

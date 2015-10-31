@@ -1,12 +1,14 @@
 import React from 'react'
 import { Router, Route, Link } from 'react-router'
+import ReactDOM from 'react-dom'
 
-import Main from 'components/main';  
-import Example from 'components/example';
+import Main from 'components/main';
+import Basic from 'components/basic';
 
-React.render((
+ReactDOM.render((
   <Router>
     <Route path="/" component={Main} />
-    <Route path="example" component={Example} />
+    <Route path="detail/basic" component={Basic} />
+    <Route path="list/basic" component={Basic} />
   </Router>
-), document.getElementById('content'));
+), document.getElementById('REACT'));
