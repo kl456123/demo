@@ -1,0 +1,19 @@
+{
+  "extends": "defaults/configurations/eslint.js",
+  "parser":"babel-eslint",
+  "ecmaFeatures": {
+    "jsx": true,
+    "modules":true
+  },
+  "env": {
+    "es6": true,
+    "node": true,
+    "mocha":true,
+    "browser":true
+  },
+  "rules": {
+    "comma-dangle":[2, "always-multiline"],
+    "no-unused-vars":0,
+    "max-statements":[2,20]
+  }
+}

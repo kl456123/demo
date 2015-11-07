@@ -35,6 +35,7 @@ module.exports = function(ligle){
   [
     'console',
     'console-basic',
+    'console-basic.es6',
     'console-member',
   ].forEach(exportFrom('./console/'));
 
