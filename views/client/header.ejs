@@ -34,6 +34,35 @@
             });
         });
     </script>
+    <script>
+        $(document).ready(function(){
+    $('#ajax').click(function(event) {
+        /* Act on the event */
+        // alert('helloworld');
+        // $.ajax({
+        //     url: '/ajax',
+        //     // type: 'default GET (Other values: POST)',
+        //     dataType: 'json',
+        //     // dataType: 'default: Intelligent Guess (Other values: xml, json, script, or html)',
+        //     data: {'name': 'breakpoint'},
+        // })
+        // .done(function() {
+        //     console.log("success");
+        // })
+        // .fail(function() {
+        //     console.log("error");
+        // })
+        // .always(function() {
+        //     console.log("complete");
+        // });
+        $.get('/ajax', function(data) {
+            /*optional stuff to do after success */
+            console.log('helloworld');
+            console.log(data);
+        });
+    });
+});
+    </script>
 
 </head>
 <body>
@@ -56,6 +85,7 @@
                 <li><a href="/list/basic">基础条目</a></li>
                 <li><a href="/instructions">ligleEngine使用手册</a></li>
                 <li><a href="/ligleui">ligleUI</a></li>
+                <li id="ajax">ajax</li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <!--登陆前显示“登陆”、“注册”-->
