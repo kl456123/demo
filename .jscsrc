@@ -1,6 +1,6 @@
-
 {
     "disallowKeywords": ["with"],
+    "esnext": true,
     "disallowKeywordsOnNewLine": ["else"],
     "disallowMixedSpacesAndTabs": true,
     "disallowMultipleVarDecl": "exceptUndefined",
@@ -23,5 +23,5 @@
     },
     "validateIndentation": 2,
 //    "validateLineBreaks": "LF",
-    "validateQuoteMarks": "'"
+    "validateQuoteMarks": false
 }

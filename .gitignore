@@ -229,9 +229,6 @@ storage.bson
 ligle.0
 ligle.ns
 .DS_Store
-public/images/upload/*/*.jpg
-public/images/upload/*/*.png
-public/images/upload/*/*.bmp
 .tern-port
 
 *.log
@@ -243,10 +240,11 @@ bower_components*
 public/**/*.*
 # the following should be removed in the future
 # and resources should be controlled by another way
-!public/images/
-!public/javascripts/
-!public/common/
-!public/stylesheets/
+!public/images/**/*
+!public/javascripts/**/*
+!public/common/**/*
+!public/stylesheets/**/*
+!public/rest/**/*.json
 
 changelog.txt
 test/coverage
