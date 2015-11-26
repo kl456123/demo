@@ -24,7 +24,7 @@ router
   })
   .post(function(req,res){// create
     co(function*(){
-      var basic = new Basic(req.body.data);
+      var basic = new Basic(req.body);
       return yield basic.save();
     }).then(function(value){
       res.json({status:'success',value});
@@ -34,7 +34,7 @@ router
   })
   .get(function(req,res){// get
     co(function*(){
-      return yield Basic.findOne(req.body.options.query);
+      return yield Basic.findOne(req.query);
     }).then(function(value){
       res.json({status:'success',value});
     },function(err){

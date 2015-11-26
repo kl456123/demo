@@ -99,12 +99,7 @@ router
       res.redirect('/a_basic');
     });
   });
-router
-    .route('/ajax')
-    .get(function(req, res) {
-      res.end('breakpoint');
-      // res.redirect('/list/basic');
-    });
+
 
 module.exports = router;
 
