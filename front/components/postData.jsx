@@ -71,5 +71,8 @@ var PostData = React.createClass({
         );
     }
   },
+
+
+
 });
 export default PostData ;

@@ -10,6 +10,7 @@ class PostActions {
 	}
 
   postData(data){
+
     api.post(data)
 			.then((json) => {
       this.actions.getBack(json);
@@ -25,6 +26,7 @@ class PostActions {
   }
   getError(error){
   this.dispatch(error);
+
   }
 }
 
